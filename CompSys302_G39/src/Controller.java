@@ -3,42 +3,74 @@ import java.awt.event.ActionListener;
 import javax.swing.JFrame;
 
 public class Controller {
-	public void update(JFrame f, GameEngine Engine) {
-		MainMenuListen(Engine);
+	public void update(JFrame f, GameEngine Engine, Menu Main, Menu Options) {
+		switch (Engine.GetGameState()){
+		case 0:
+			MainMenuListen(Main, Engine); 
+			break;
+		case 1:
+			OptionsMenuListen(Options, Engine);
+			break;
+		case 2:
+			break;
+		case 3:
+			break;
+		case 4:
+			break;
+		}
 	}
 	
-	public void MainMenuListen(GameEngine Engine) {
-		Engine.GetButton(0).addActionListener(new ActionListener(){
+	public void MainMenuListen(Menu Main,GameEngine Engine) {
+		Main.GetButton(0).addActionListener(new ActionListener(){
 			@Override
 			public void actionPerformed(ActionEvent Event) {
-				Engine.ButtonPressed(Engine.GetButton(0).getName());
-				System.out.println("nice, you pressed " + Engine.GetButton(0).getName());
+				Engine.ButtonPressed(Main.GetButton(0).getName());
 			}
 		});
 		
-		Engine.GetButton(1).addActionListener(new ActionListener(){
+		Main.GetButton(1).addActionListener(new ActionListener(){
 			@Override
 			public void actionPerformed(ActionEvent Event) {
-				Engine.ButtonPressed(Engine.GetButton(1).getName());
-				System.out.println("nice, you pressed " + Engine.GetButton(1).getName());
+				Engine.ButtonPressed(Main.GetButton(1).getName());
 			}
 		});
 		
-		
-		Engine.GetButton(2).addActionListener(new ActionListener(){
+		Main.GetButton(2).addActionListener(new ActionListener(){
 			@Override
 			public void actionPerformed(ActionEvent Event) {
-				Engine.ButtonPressed(Engine.GetButton(2).getName());
-				System.out.println("nice, you pressed " + Engine.GetButton(2).getName());
+				Engine.ButtonPressed(Main.GetButton(2).getName());
 			}
 		});
 		
-		Engine.GetButton(3).addActionListener(new ActionListener(){
+		Main.GetButton(3).addActionListener(new ActionListener(){
 			@Override
 			public void actionPerformed(ActionEvent Event) {
-				Engine.ButtonPressed(Engine.GetButton(3).getName());
-				System.out.println("nice, you pressed " + Engine.GetButton(3).getName());
+				Engine.ButtonPressed(Main.GetButton(3).getName());
 			}
 		});
+	}
+	
+	private void OptionsMenuListen(Menu Options, GameEngine Engine) {
+		Options.GetButton(0).addActionListener(new ActionListener(){
+			@Override
+			public void actionPerformed(ActionEvent Event) {
+				Engine.ButtonPressed(Options.GetButton(0).getName());
+			}
+		});
+		
+		Options.GetButton(1).addActionListener(new ActionListener(){
+			@Override
+			public void actionPerformed(ActionEvent Event) {
+				Engine.ButtonPressed(Options.GetButton(1).getName());
+			}
+		});
+		
+		Options.GetButton(2).addActionListener(new ActionListener(){
+			@Override
+			public void actionPerformed(ActionEvent Event) {
+				Engine.ButtonPressed(Options.GetButton(2).getName());
+			}
+		});
+		
 	}
 }

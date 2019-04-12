@@ -6,21 +6,30 @@ import javax.swing.JButton;
 public class GameEngine {
 		private ArrayList<Enemy> ListOfEnemies = new ArrayList<Enemy>();
 		private ArrayList<Obstacle> ListOfObstacles = new ArrayList<Obstacle>();
-		private ArrayList<JButton> ListOfButtons = new ArrayList<JButton>();
 		
 		enum GameState{
-			MENU,
+			MAINMENU,
+			OptionsMENU,
 			SCENE,
 			CLOSE
 		}
 		
-		private GameState State = GameState.MENU;
+		private GameState State = GameState.MAINMENU;
 		private int CurrentTime = 0;
 		private int LastTime = 0;
 		
 	public void run() {
-		Clear();
-		
+		AddObstacle(100,100,0,0);
+		switch (State){
+			case MAINMENU:
+				break;
+			case OptionsMENU:
+				break;
+			case SCENE:
+				break;
+			case CLOSE:
+				break;
+		}
 	}
 	
 	public void Update(float deltaTime) {
@@ -34,11 +43,8 @@ public class GameEngine {
 		ListOfObstacles.clear();
 	}
 	
-	public void GameInit() {
-		MainMenu();
-	}
-	
 	public void ButtonPressed(String Button) {
+		
 		if(Button.compareTo("Start") == 0 ) {
 			State = GameState.SCENE;
 		}
@@ -46,30 +52,15 @@ public class GameEngine {
 			
 		}
 		else if(Button.compareTo("Options") == 0 ){
-			OptionsMenu();
+			State = GameState.OptionsMENU;
 		}
 		else if(Button.compareTo("Exit") == 0 ){
 			
 		}
-		else {
-			
+		else if(Button.compareTo("Back") == 0 ){
+			State = GameState.MAINMENU;
 		}
 	}
-	
-	//Menus
-	private void MainMenu() {
-		AddButton("Start", 100, 40, 50, 100);
-		AddButton("Continue", 100, 40, 100, 100);
-		AddButton("Options", 100, 40, 150, 100);
-		AddButton("Exit", 100, 40, 200, 100);
-	}
-	
-	private void OptionsMenu() {
-		AddButton("thing2", 100, 40, 50, 100);
-		AddButton("thing3", 100, 40, 100, 100);
-		AddButton("thing4", 100, 40, 150, 100);
-	}
-	
 	
 	//adds entities and menu items
 	private void AddEnemy() {
@@ -78,13 +69,6 @@ public class GameEngine {
 	
 	private void AddObstacle(int W, int H, int X, int Y) {
 		ListOfObstacles.add(new Obstacle(W,H,X,Y));
-	}
-	
-	private void AddButton(String Text, int W, int H, int X, int Y) {
-		JButton b = new JButton(Text);
-		b.setName(Text);
-		b.setAlignmentX(b.CENTER_ALIGNMENT);
-		ListOfButtons.add(b);
 	}
 	
 	//getter
@@ -96,9 +80,9 @@ public class GameEngine {
 		return ListOfObstacles.get(i);
 	}
 	
-	public JButton GetButton(int i) {
-		return ListOfButtons.get(i);
-	}
+	//public JButton GetButton(int i) {
+		//return ListOfButtons.get(i);
+	//}
 		
 	public int GetNumberOfEnemies() {
 		return ListOfEnemies.size();
@@ -108,7 +92,17 @@ public class GameEngine {
 		return ListOfObstacles.size();
 	}
 	
-	public int GetNumberOfButtons() {
-		return ListOfButtons.size();
+	public int GetGameState() {
+		switch (State){
+		case MAINMENU:
+			return 0;
+		case OptionsMENU:
+			return 1;
+		case SCENE:
+			return 3;
+		case CLOSE:
+			return 4;
+		}
+		return 0;
 	}
 }
