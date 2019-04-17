@@ -1,9 +1,6 @@
 
 public class MeleeEnemy extends Enemy{
-	int Health;
-	int Damage;
-	
-	
+
 	MeleeEnemy() {
 		Health = 100;
 		Damage = 20;

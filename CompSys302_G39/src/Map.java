@@ -5,7 +5,7 @@ import javax.swing.ImageIcon;
 public class Map {
 	
 	private Image Img;
-	int W, H,X,Y;
+	private int W, H,X,Y;
 	
 	public void init(){
 		LoadImage("sprites/Beach_1.png");
@@ -20,6 +20,14 @@ public class Map {
 	public void GetImageDimensions() {
 		W = Img.getWidth(null);
 		H = Img.getWidth(null);
+	}
+	
+	public void SetX(int x) {
+		X = x;
+	}
+	
+	public void SetY(int y) {
+		Y = y;
 	}
 	
 	//getters

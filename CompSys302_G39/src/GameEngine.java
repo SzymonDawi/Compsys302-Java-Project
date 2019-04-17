@@ -2,67 +2,61 @@ import java.util.ArrayList;
 
 import javax.swing.Box;
 import javax.swing.JButton;
+import javax.swing.JPanel;
 
-public class GameEngine {
-		private ArrayList<Enemy> ListOfEnemies = new ArrayList<Enemy>();
-		private ArrayList<Obstacle> ListOfObstacles = new ArrayList<Obstacle>();
+public class GameEngine{
+	//stores the current scene
+	private ArrayList<Enemy> ListOfEnemies = new ArrayList<Enemy>();
+	private ArrayList<Obstacle> ListOfObstacles = new ArrayList<Obstacle>();
+	private Player PlayerOne = new Player();
 		
-		enum GameState{
-			MAINMENU,
-			OptionsMENU,
-			SCENE,
-			CLOSE
-		}
+	enum GameState{
+		MAINMENU,
+		OPTIONSMENU,
+		SCENE,
+		CLOSE
+	}
 		
-		private GameState State = GameState.MAINMENU;
-		private int CurrentTime = 0;
-		private int LastTime = 0;
-		
+	private GameState State = GameState.SCENE;
+	private int CurrentTime = 0;
+	private int LastTime = 0;
+	private boolean IsRunning = true;
+	
 	public void run() {
-		AddObstacle(100,100,0,0);
+		//selects what functions to run depending on the state
 		switch (State){
 			case MAINMENU:
 				break;
-			case OptionsMENU:
+			case OPTIONSMENU:
 				break;
 			case SCENE:
+				AddObstacle(100,100,0,0);
+				//AddObstacle(100,100,500,0);
 				break;
 			case CLOSE:
+				IsRunning = false;
 				break;
 		}
 	}
-	
+		
 	public void Update(float deltaTime) {
+		//does nothing really
+		//just calls run
 		LastTime = CurrentTime;
 		CurrentTime = (int)deltaTime;
 		run();
 	}
 	
 	public void Clear() {
+		//clears the scene
 		ListOfEnemies.clear();
 		ListOfObstacles.clear();
 	}
 	
-	public void ButtonPressed(String Button) {
-		
-		if(Button.compareTo("Start") == 0 ) {
-			State = GameState.SCENE;
-		}
-		else if(Button.compareTo("Continue") == 0 ){
-			
-		}
-		else if(Button.compareTo("Options") == 0 ){
-			State = GameState.OptionsMENU;
-		}
-		else if(Button.compareTo("Exit") == 0 ){
-			
-		}
-		else if(Button.compareTo("Back") == 0 ){
-			State = GameState.MAINMENU;
-		}
+	public void MovePlayer(int DeltaX,int DeltaY) {
+		PlayerOne.Move(DeltaX, DeltaY);
 	}
-	
-	//adds entities and menu items
+	//adds entities
 	private void AddEnemy() {
 		ListOfEnemies.add(new MeleeEnemy());
 	}
@@ -71,7 +65,35 @@ public class GameEngine {
 		ListOfObstacles.add(new Obstacle(W,H,X,Y));
 	}
 	
+	private void AddPlayer() {
+		PlayerOne = new Player();
+	}
+	
+	//setters
+	public void SetState(int i) {
+		if(i == 0) {		
+			State = GameState.MAINMENU;
+		}
+		else if(i == 1) {
+			State = GameState.OPTIONSMENU;
+		}
+		else if(i == 2) {
+			State =GameState.SCENE;
+		}
+		else {
+			State =GameState.CLOSE;
+		}
+	}
+	
+	public void Close() {
+		IsRunning = false;
+	}
+	
 	//getter
+	
+	public boolean IsRunning() {
+		return IsRunning;
+	}
 	public Enemy GetEnemy(int i) {
 		return ListOfEnemies.get(i);
 	}
@@ -80,10 +102,6 @@ public class GameEngine {
 		return ListOfObstacles.get(i);
 	}
 	
-	//public JButton GetButton(int i) {
-		//return ListOfButtons.get(i);
-	//}
-		
 	public int GetNumberOfEnemies() {
 		return ListOfEnemies.size();
 	}
@@ -92,17 +110,21 @@ public class GameEngine {
 		return ListOfObstacles.size();
 	}
 	
+	public Player GetPlayer() {
+		return PlayerOne;
+	}
+	
 	public int GetGameState() {
 		switch (State){
 		case MAINMENU:
 			return 0;
-		case OptionsMENU:
+		case OPTIONSMENU:
 			return 1;
 		case SCENE:
-			return 3;
+			return 2;
 		case CLOSE:
-			return 4;
+			return 3;
 		}
-		return 0;
+		return -1;
 	}
 }
