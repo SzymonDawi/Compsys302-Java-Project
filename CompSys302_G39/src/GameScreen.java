@@ -16,19 +16,8 @@ public class GameScreen {
 		Controller Control = new Controller();
 		//MouseInput Mouse = new MouseInput();
 		
-		//init menus could be moved to a new method
-		Menu Main = new Menu();
-		Main.AddButton("Start", 100, 40, 50, 100);
-		Main.AddButton("Continue", 100, 40, 100, 100);
-		Main.AddButton("Options", 100, 40, 150, 100);
-		Main.AddButton("Exit", 100, 40, 200, 100);
-		
-		Menu Options = new Menu();
-		Options.AddButton("thing2", 100, 40, 50, 100);
-		Options.AddButton("thing3", 100, 40, 100, 100);
-		Options.AddButton("Back", 100, 40, 150, 100);
-		
-		RenderEngine Render = new RenderEngine(f, Game, Main.GetPanel(), Options.GetPanel());
+		Game.init();
+		RenderEngine Render = new RenderEngine(f, Game);
 		Render.init();
 		
 		long delta = 0;
@@ -38,9 +27,7 @@ public class GameScreen {
 			
 			long lastTime = System.nanoTime();
 
-			Control.update(f, Game, Main, Options);
-			
-			//f.addKeyListener(new KeyInput(Game));
+			Control.update(f, Game);
 			
 			Game.Update((float)(delta/1000000000.0));
 			

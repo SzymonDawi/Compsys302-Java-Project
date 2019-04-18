@@ -6,7 +6,7 @@ public class Player extends Character{
 		Alive = true;
 		X = 50;
 		Y = 50;
-		//Sprite.LoadSprite("Player1_Walk_Forward.png");
+		
 	}
 	
 //	public Player(int Player){

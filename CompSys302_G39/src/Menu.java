@@ -1,30 +1,44 @@
-import java.awt.Dimension;
 import java.util.ArrayList;
 
-import javax.swing.Box;
-import javax.swing.BoxLayout;
-import javax.swing.JButton;
-import javax.swing.JPanel;
-
 public class Menu{
-	private JPanel Panel = new JPanel();
-	private ArrayList<JButton> ListOfButtons = new ArrayList<JButton>();
+	private ArrayList<Button> ListOfButtons = new ArrayList<Button>();
+	private int Selected;
+	private int Location;
 	
-	public void AddButton(String Text, int W, int H, int X, int Y) {
-		Panel.add(Box.createRigidArea(new Dimension(0, 60)));
-		JButton b = new JButton(Text);
-		b.setName(Text);
-		b.setAlignmentX(b.CENTER_ALIGNMENT);
-		ListOfButtons.add(b);
-		Panel.add(b);
+	public void AddButton(String Text, int X, int Y) {
+		Button B = new Button(Text,X,Y);
+		ListOfButtons.add(B);
 	}
 	
-	public JButton GetButton(int i) {
+	private String ButtonSelected() {
+		for(int i =0; i < ListOfButtons.size(); i++) {
+			if(ListOfButtons.get(i).Selected()) {
+				Selected = i;
+				return ListOfButtons.get(i).GetName();
+			}
+		}
+		return null;
+	}
+	
+	public void Select(int Location) { 
+		if(ButtonSelected() != null) {
+			ListOfButtons.get(Selected).ToggleSelect();
+			ListOfButtons.get(Location).ToggleSelect();
+		}
+		ListOfButtons.get(Location).ToggleSelect();
+		
+	}
+	
+	//getters
+	public int GetSelected() {
+		return Selected;
+	}
+	public int GetNumberOfButtons() {
+		return ListOfButtons.size();
+	}
+	
+	public Button GetButton(int i) {
 		return ListOfButtons.get(i);
 	}
 	
-	public JPanel GetPanel() {
-		Panel.setLayout(new BoxLayout(Panel,BoxLayout.Y_AXIS));
-		return Panel;
-	}
 }

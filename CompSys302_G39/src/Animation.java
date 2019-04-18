@@ -17,7 +17,6 @@ public class Animation {
 		this.FrameDelay = FrameDelay;
 		this.Playing = false;
 		
-		
 		this.FrameCount = 0;
 		this.CurrentFrame = 0;
 		this.FrameAmount = this.Frames.size();
