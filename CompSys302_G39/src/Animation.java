@@ -6,7 +6,7 @@ public class Animation {
 	
 	private ArrayList<BufferedImage> frames;
 	
-	private long speed, timeBefore, previousTime;
+	private long speed, previousTime;
 	private int currentFrame, pausedFrame;
 	private volatile boolean running = false;
 	
@@ -22,17 +22,28 @@ public class Animation {
 	
 	public void start() {
 		running = true;
+		previousTime = 0;
+		pausedFrame = 0;
+		currentFrame = 0;
 	}
 	
 	public void pause() {
-		
+		pausedFrame = currentFrame;
+		running = false;
 	}
+	
 	public void stop() {
 	running = false;
+	previousTime = 0;
+	pausedFrame = 0;
+	currentFrame = 0;
 	}
-	public void resume() {
 	
+	public void resume() {
+	currentFrame = pausedFrame;
+	running = true;
 	}
+	
 	public void update(long time) {
 		while (running) {
 			if (time - previousTime >=speed) {

@@ -22,7 +22,7 @@ public class GameEngine{
 		CLOSE
 	}
 	
-	private GameState State = GameState.MAINMENU;
+	private GameState State = GameState.SCENE;
 	private int CurrentTime = 0;
 	private int LastTime = 0;
 	private boolean IsRunning = true;
