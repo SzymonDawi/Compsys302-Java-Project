@@ -3,55 +3,48 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Animation {
-	private int FrameCount;
-	private int FrameDelay;
-	private int CurrentFrame;
-	private int FrameAmount;
-	private int Length;
 	
-	private boolean Playing;
+	private ArrayList<BufferedImage> frames;
 	
-	private List<Frame> Frames = new ArrayList<Frame>();
+	private long speed, timeBefore, previousTime;
+	private int currentFrame, pausedFrame;
+	private volatile boolean running = false;
 	
-	public Animation(BufferedImage[] Frames, int FrameDelay) {
-		this.FrameDelay = FrameDelay;
-		this.Playing = false;
-		
-		this.FrameCount = 0;
-		this.CurrentFrame = 0;
-		this.FrameAmount = this.Frames.size();
+	public BufferedImage Sprite;
+	
+	public Animation(ArrayList<BufferedImage> frames) {
+		this.frames = frames;
 	}
 	
-	public void Play() {
-		if(Playing) {
-			return;
+	public void setSpeed(long speed) {
+		this.speed = speed;
+	}
+	
+	public void start() {
+		running = true;
+	}
+	
+	public void pause() {
+		
+	}
+	public void stop() {
+	running = false;
+	}
+	public void resume() {
+	
+	}
+	public void update(long time) {
+		while (running) {
+			if (time - previousTime >=speed) {
+				currentFrame++;
+				try {
+					Sprite = frames.get(currentFrame);
+				} catch(IndexOutOfBoundsException e) {
+					currentFrame = 0;
+					Sprite = frames.get(currentFrame);
+				}
+				previousTime = time;
+			}
 		}
-		
-		if(Frames.size() == 0) {
-			return;
-		}
-		
-		Playing = true;
 	}
-	
-	public void Stop() {
-		if(Frames.size() == 0) {
-			return;
-		}
-		
-		Playing = false;
-		CurrentFrame = 0;
-	}
-	
-	public void Reset() {
-		this.Playing = false;
-		this.FrameAmount = 0;
-		this.CurrentFrame = 0;
-	}
-	
-	public BufferedImage GetSprite() {
-		return Frames.get(CurrentFrame).GetFrame();
-	}
-	
-	
 }

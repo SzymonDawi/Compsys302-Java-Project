@@ -1,5 +1,16 @@
+import java.awt.image.BufferedImage;
 
 public class Player extends Character{
+	
+	
+	
+	spriteLoader playerSpriteSheet = new spriteLoader();
+	BufferedImage spriteSheet = playerSpriteSheet.loadSprite("player");
+	Sprite playerSprite = new Sprite(spriteSheet);
+	
+	
+	
+	
 	public Player() {
 		Health = 100;
 		Damage = 100;
@@ -37,4 +48,5 @@ public class Player extends Character{
 	public boolean IsAlive() {
 		return Alive;
 	}
+	
 }
