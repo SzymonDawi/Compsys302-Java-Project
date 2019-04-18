@@ -1,43 +1,50 @@
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.image.BufferStrategy;
+import java.awt.Graphics2D;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.Timer;
 
-public class RenderEngine {
+public class RenderEngine extends JPanel implements ActionListener{
 	private JFrame f = new JFrame();
 	private GameEngine Engine = new GameEngine();
-	//Double buffering
-	//private BufferedImage Screen = new BufferedImage(600,600,BufferedImage.TYPE_INT_RGB);
+	private Timer Timer = new Timer(1000/120,this);
 	RenderEngine(JFrame Frame, GameEngine Engine){
+		Timer.start();
 		f = Frame;
 		this.Engine = Engine;
 	}
-	private Graphics g;
+	
+	public void actionPerformed(ActionEvent e) {
+		if(e.getSource() == Timer) {
+			repaint();
+		}
+	}
 	//private Map Map = new Map();
 	private int i;
+	//private JPanel Panel = new JPanel();
+	@Override
+	public void paintComponent(Graphics g) {
+		super.paintComponent(g);
+		Render(g);
+	}
 	
-	public void render() {
-		f.setVisible(true);
-		BufferStrategy Buffer = f.getBufferStrategy();
-		if(Buffer == null) {
-			f.createBufferStrategy(3);
-			return;
-		}
-		
-		g = Buffer.getDrawGraphics();
+	private void Render(Graphics g) {
+		Graphics2D g2d= (Graphics2D) g;
 		
 		if(Engine.GetState() == 0) {
 			Menu Menu = Engine.GetMainMenu();
 			for(i=0;i< Menu.GetNumberOfButtons(); i++) {
-				g.setColor(Color.cyan);
+				g2d.setColor(Color.cyan);
 				if(Menu.GetButton(i).Selected()) {
-					g.setColor(Color.magenta);
+					g2d.setColor(Color.magenta);
 				}
-				g.fillRect(Menu.GetButton(i).GetX(), Menu.GetButton(i).GetY(), 200, 50);
-				g.setColor(Color.BLACK);
-				g.drawString(Menu.GetButton(i).GetName(), Menu.GetButton(i).GetX(), Menu.GetButton(i).GetY());
+				g2d.fillRect(Menu.GetButton(i).GetX(), Menu.GetButton(i).GetY(), 200, 50);
+				g2d.setColor(Color.BLACK);
+				g2d.drawString(Menu.GetButton(i).GetName(), Menu.GetButton(i).GetX(), Menu.GetButton(i).GetY());
 				//g.drawImage(img, x, y, observer)
 			}
 		}
@@ -46,7 +53,7 @@ public class RenderEngine {
 		}
 		else if(Engine.GetState() == 2) {
 			//Map
-			g.drawImage(Engine.Getlevel(),0,0,f);
+			g2d.drawImage(Engine.Getlevel(),0,0,f);
 			///Enemies
 			for(i=0;i <Engine.GetNumberOfEnemies(); i++) {
 				//use this for drawing an sprite
@@ -54,15 +61,9 @@ public class RenderEngine {
 			}
 			
 			//Player
-			g.setColor(Color.blue);
-			g.fillRect(Engine.GetPlayer().GetX(), Engine.GetPlayer().GetY(), 10, 10);	
+			g2d.setColor(Color.blue);
+			g2d.fillRect(Engine.GetPlayer().GetX(), Engine.GetPlayer().GetY(), 10, 10);	
 		}	
-		g.dispose();
-		Buffer.show();
-	}
-	
-	//Things that only need to be initialized once
-	public void init() {
-		
+		//Buffer.show();
 	}
 }

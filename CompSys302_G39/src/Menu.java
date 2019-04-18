@@ -10,23 +10,23 @@ public class Menu{
 		ListOfButtons.add(B);
 	}
 	
-	private String ButtonSelected() {
+	private void ButtonSelected() {
 		for(int i =0; i < ListOfButtons.size(); i++) {
 			if(ListOfButtons.get(i).Selected()) {
 				Selected = i;
-				return ListOfButtons.get(i).GetName();
+				System.out.println(i);
+				return;
 			}
 		}
-		return null;
+		Selected = -1;
 	}
 	
 	public void Select(int Location) { 
-		if(ButtonSelected() != null) {
-			ListOfButtons.get(Selected).ToggleSelect();
-			ListOfButtons.get(Location).ToggleSelect();
+		ButtonSelected();
+		if(Selected >= 0) {
+			ListOfButtons.get(Selected).ToggleSelect();	
 		}
-		ListOfButtons.get(Location).ToggleSelect();
-		
+		ListOfButtons.get(Location).ToggleSelect();	
 	}
 	
 	//getters

@@ -1,9 +1,4 @@
 import javax.swing.JFrame;
-import javax.swing.JPanel;
-import java.awt.image.BufferedImage;
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
 
 public class GameScreen {
 
@@ -14,26 +9,27 @@ public class GameScreen {
 		
 		GameEngine Game = new GameEngine();
 		Controller Control = new Controller();
-		//MouseInput Mouse = new MouseInput();
 		
 		Game.init();
 		RenderEngine Render = new RenderEngine(f, Game);
-		Render.init();
+		f.add(Render);
+		//f.setContentPane(Render);
 		
 		long delta = 0;
 		long timer = System.currentTimeMillis();
 		int frames = 0;
+		f.setVisible(true);
+		
 		while(Game.IsRunning()){
-			
 			long lastTime = System.nanoTime();
 
 			Control.update(f, Game);
 			
 			Game.Update((float)(delta/1000000000.0));
 			
+			//Render.repaint();
+			
 			delta = System.nanoTime() - lastTime;
-		
-			Render.render();
 			
 			frames ++;
 			if(System.currentTimeMillis() - timer > 1000) {
@@ -41,6 +37,7 @@ public class GameScreen {
 				System.out.println("FPS: " + frames/3);
 				frames = 0;
 			}
+			
 		}
 		f.setVisible(false);
 		f.dispose();

@@ -31,10 +31,9 @@ public class GameEngine{
 		//selects what functions to run depending on the state
 		switch (State){
 			case MAINMENU:
-				CurrentMenu = MainMenu;
+					CurrentMenu = MainMenu;	
 				break;
 			case OPTIONSMENU:
-				System.out.println("nice1");
 				CurrentMenu = OptionsMenu;
 				break;
 			case SCENE:
@@ -81,12 +80,7 @@ public class GameEngine{
 	}
 	
 	public void SwitchButton(int Delta) {
-		if(Delta <0 && CurrentMenu.GetSelected() >0) {
-			CurrentMenu.Select(CurrentMenu.GetSelected() + Delta);
-		}
-		else if(Delta >0 && CurrentMenu.GetSelected() < CurrentMenu.GetNumberOfButtons()) {
-			CurrentMenu.Select(CurrentMenu.GetSelected() + Delta);
-		}
+		CurrentMenu.Select(CurrentMenu.GetSelected() + Delta);	
 	}
 	
 	public void SelectButton() {
@@ -102,7 +96,6 @@ public class GameEngine{
 			case "Back":
 				SetState(0);
 		}
-		
 	}
 	
 	public void Update(float deltaTime) {
