@@ -2,6 +2,8 @@ import java.util.ArrayList;
 
 public class Menu{
 	private ArrayList<Button> ListOfButtons = new ArrayList<Button>();
+	
+	
 	private int Selected;
 	private int Location;
 	
@@ -12,6 +14,7 @@ public class Menu{
 	
 
 	public void Select(int Location) { 
+		
 		//ButtonSelected();
 		if(Selected >= 0) {
 			ListOfButtons.get(Selected).Deselect();	

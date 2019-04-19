@@ -17,15 +17,7 @@ public class Player extends Character{
 		
 	}
 	
-//	public Player(int Player){
-//		Health = 100;
-//		Damage = 100;
-//		Alive = true;
-//		X = 50;
-//		Y = 50;
-//		
-//	}
-//	
+
 	
 	public void Move(int DeltaX,int DeltaY) {
 		X += DeltaX;

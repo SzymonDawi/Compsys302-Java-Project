@@ -1,6 +1,7 @@
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
+import javax.sound.sampled.Clip;
 import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JPanel;
@@ -15,6 +16,8 @@ public class GameEngine{
 	private Menu OptionsMenu = new Menu();
 	private Menu CurrentMenu = new Menu();
 	private Sound buttonClick = new Sound();
+	private Sound buttonSwitch = new Sound();
+	private Sound MMMusic = new Sound();
 	private GameState State;
 	
 	enum GameState{
@@ -35,6 +38,7 @@ public class GameEngine{
 		switch (State){
 			case MAINMENU:
 				CurrentMenu = MainMenu;	
+				
 				break;
 			case OPTIONSMENU:
 				CurrentMenu = OptionsMenu;
@@ -55,7 +59,12 @@ public class GameEngine{
 		MainMenuInit();
 		OptionsMenuInit();
 		buttonClick.getSound("beep");
+		buttonSwitch.getSound("switchButton");
+		MMMusic.getSound("menu");
+		MMMusic.loopSound(Clip.LOOP_CONTINUOUSLY);
 		State = GameState.MAINMENU;
+
+		
 	}
 			
 	private void MainMenuInit() {
@@ -74,6 +83,7 @@ public class GameEngine{
 		OptionsMenu.AddButton("Back", (500/2-50), 400);
 		
 		OptionsMenu.Select(0);
+		
 	}
 	
 	private void Clear() {
@@ -83,6 +93,8 @@ public class GameEngine{
 	}
 	
 	public void SwitchButton(int Delta) {
+		buttonSwitch.playSound();
+		//MMMusic.playSound();
 		if(CurrentMenu.GetSelected() == 0 && Delta <0) {
 			return;
 		}
@@ -101,6 +113,7 @@ public class GameEngine{
 		
 			case "Play":
 				State = GameState.SCENE;
+				MMMusic.stopSound();
 				break;
 			case "Continue":
 				break;
@@ -112,6 +125,7 @@ public class GameEngine{
 				break;
 			case "Back":
 				State = GameState.MAINMENU;
+				
 				break;
 			
 		}
@@ -143,6 +157,7 @@ public class GameEngine{
 	public void SetState(int i) {
 		if(i == 0) {		
 			State = GameState.MAINMENU;
+			
 		}
 		else if(i == 1) {
 			State = GameState.OPTIONSMENU;

@@ -1,8 +1,11 @@
 import java.io.File;
+import java.io.IOException;
+
 
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
+
 
 public class Sound {
 
@@ -27,8 +30,16 @@ public class Sound {
 			clip.start();
 		}
 		
+		public void stopSound() {  // this plays the whole sound clip once
+			clip.stop();
+		}
+		
+		
 		public void loopSound(int count) { //loops sound file 'count' number of times. Type LOOP_CONTINUOUSLY to repeat forever
+			clip.setFramePosition(0);
+			clip.start();
 			clip.loop( count);
 
 		}
+		
 }
