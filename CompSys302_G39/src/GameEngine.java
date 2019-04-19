@@ -14,6 +14,7 @@ public class GameEngine{
 	private Menu MainMenu = new Menu();
 	private Menu OptionsMenu = new Menu();
 	private Menu CurrentMenu = new Menu();
+	private Sound buttonClick = new Sound();
 	private GameState State;
 	
 	enum GameState{
@@ -28,6 +29,7 @@ public class GameEngine{
 	private boolean IsRunning = true;
 	
 	public void run() {
+		
 		//selects what functions to run depending on the state
 		
 		switch (State){
@@ -52,6 +54,7 @@ public class GameEngine{
 		MainMap.init();
 		MainMenuInit();
 		OptionsMenuInit();
+		buttonClick.getSound("beep");
 		State = GameState.MAINMENU;
 	}
 			
@@ -93,7 +96,9 @@ public class GameEngine{
 	}
 	
 	public void SelectButton() {
+		buttonClick.playSound();
 		switch (CurrentMenu.CurrentButtonName()){
+		
 			case "Play":
 				State = GameState.SCENE;
 				break;
@@ -108,6 +113,7 @@ public class GameEngine{
 			case "Back":
 				State = GameState.MAINMENU;
 				break;
+			
 		}
 	}
 	

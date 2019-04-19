@@ -12,7 +12,7 @@ public class Sound {
 
 		public void getSound(String soundFileName) { //this loads in the sound file (must use full file path)
 			try {
-				File file = new File(soundFileName);
+				File file = new File("sounds/" + soundFileName + ".wav");
 				AudioInputStream sound = AudioSystem.getAudioInputStream(file);
 				clip = AudioSystem.getClip();
 				clip.open(sound);
