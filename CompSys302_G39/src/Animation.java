@@ -45,7 +45,7 @@ public class Animation {
 	}
 	
 	public void update(long time) {
-		while (running) {
+		if (running) {
 			if (time - previousTime >=speed) {
 				currentFrame++;
 				try {
