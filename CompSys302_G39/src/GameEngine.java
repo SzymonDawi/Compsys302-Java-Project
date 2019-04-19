@@ -14,6 +14,7 @@ public class GameEngine{
 	private Menu MainMenu = new Menu();
 	private Menu OptionsMenu = new Menu();
 	private Menu CurrentMenu = new Menu();
+	private GameState State;
 	
 	enum GameState{
 		MAINMENU,
@@ -22,28 +23,26 @@ public class GameEngine{
 		CLOSE
 	}
 	
-	private GameState State = GameState.SCENE;
 	private int CurrentTime = 0;
 	private int LastTime = 0;
 	private boolean IsRunning = true;
 	
 	public void run() {
 		//selects what functions to run depending on the state
+		
 		switch (State){
 			case MAINMENU:
-					CurrentMenu = MainMenu;	
+				CurrentMenu = MainMenu;	
 				break;
 			case OPTIONSMENU:
 				CurrentMenu = OptionsMenu;
 				break;
 			case SCENE:
-				System.out.println("nice");
 				MainMap.Update(PlayerOne.GetX(), PlayerOne.GetY());
 				//AddObstacle(100,100,0,0);
 				//AddObstacle(100,100,500,0);
 				break;
 			case CLOSE:
-				System.out.println("BYe");
 				IsRunning = false;
 				break;
 		}
@@ -53,6 +52,7 @@ public class GameEngine{
 		MainMap.init();
 		MainMenuInit();
 		OptionsMenuInit();
+		State = GameState.MAINMENU;
 	}
 			
 	private void MainMenuInit() {
@@ -80,23 +80,37 @@ public class GameEngine{
 	}
 	
 	public void SwitchButton(int Delta) {
-		CurrentMenu.Select(CurrentMenu.GetSelected() + Delta);	
+		if(CurrentMenu.GetSelected() == 0 && Delta <0) {
+			return;
+		}
+		else if(CurrentMenu.GetSelected() == CurrentMenu.GetNumberOfButtons()-1 && Delta >0) {
+			return;
+		}
+		CurrentMenu.Select(CurrentMenu.GetSelected() + Delta);
+		//else if(CurrentMenu.GetSelected() > CurrentMenu.GetNumberOfButtons()  && Delta <0) {
+			//CurrentMenu.Select(CurrentMenu.GetSelected() + Delta);
+		//}
 	}
 	
 	public void SelectButton() {
-		switch (CurrentMenu.GetButton(CurrentMenu.GetSelected()).GetName()){
+		switch (CurrentMenu.CurrentButtonName()){
 			case "Play":
-				SetState(2);
+				State = GameState.SCENE;
+				break;
 			case "Continue":
-				
+				break;
 			case "Options":
-				SetState(1);
+				State = GameState.OPTIONSMENU;
+				break;
 			case "Exit":
-				SetState(3);
+				State = GameState.CLOSE;
+				break;
 			case "Back":
-				SetState(0);
+				State = GameState.MAINMENU;
+				break;
 		}
 	}
+	
 	
 	public void Update(float deltaTime) {
 		//does nothing really

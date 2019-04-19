@@ -6,10 +6,7 @@ public class Player extends Character{
 	
 	spriteLoader playerSpriteSheet = new spriteLoader();
 	BufferedImage spriteSheet = playerSpriteSheet.loadSprite("player");
-	Sprite playerSprite = new Sprite(spriteSheet);
-	
-	
-	
+	//Sprite playerSprite = new Sprite(spriteSheet);
 	
 	public Player() {
 		Health = 100;

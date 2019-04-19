@@ -49,7 +49,17 @@ public class RenderEngine extends JPanel implements ActionListener{
 			}
 		}
 		else if(Engine.GetState() ==1) {
-			
+			Menu Menu = Engine.GetOptionsMenu();
+			for(i=0;i< Menu.GetNumberOfButtons(); i++) {
+				g2d.setColor(Color.cyan);
+				if(Menu.GetButton(i).Selected()) {
+					g2d.setColor(Color.magenta);
+				}
+				g2d.fillRect(Menu.GetButton(i).GetX(), Menu.GetButton(i).GetY(), 200, 50);
+				g2d.setColor(Color.BLACK);
+				g2d.drawString(Menu.GetButton(i).GetName(), Menu.GetButton(i).GetX(), Menu.GetButton(i).GetY());
+				//g.drawImage(img, x, y, observer)
+			}
 		}
 		else if(Engine.GetState() == 2) {
 			//Map

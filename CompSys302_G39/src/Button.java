@@ -11,10 +11,13 @@ public class Button {
 		this.Y = Y;
 	}
 	
-	public void ToggleSelect() {
-		IsSelected = !IsSelected;
+	public void Select() {
+		IsSelected = true;
 	}
 	
+	public void Deselect() {
+		IsSelected = false;
+	}
 	
 	//Getters
 	public boolean Selected() {

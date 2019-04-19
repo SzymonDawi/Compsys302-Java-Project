@@ -10,26 +10,20 @@ public class Menu{
 		ListOfButtons.add(B);
 	}
 	
-	private void ButtonSelected() {
-		for(int i =0; i < ListOfButtons.size(); i++) {
-			if(ListOfButtons.get(i).Selected()) {
-				Selected = i;
-				System.out.println(i);
-				return;
-			}
-		}
-		Selected = -1;
-	}
-	
+
 	public void Select(int Location) { 
-		ButtonSelected();
+		//ButtonSelected();
 		if(Selected >= 0) {
-			ListOfButtons.get(Selected).ToggleSelect();	
+			ListOfButtons.get(Selected).Deselect();	
 		}
-		ListOfButtons.get(Location).ToggleSelect();	
+		ListOfButtons.get(Location).Select();
+		Selected = Location;
 	}
 	
 	//getters
+	public String CurrentButtonName() {
+		return ListOfButtons.get(Selected).GetName();
+	}
 	public int GetSelected() {
 		return Selected;
 	}

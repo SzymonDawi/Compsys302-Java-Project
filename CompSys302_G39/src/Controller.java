@@ -19,17 +19,6 @@ public class Controller{
 		//If the game is in the main menu state, the controller will look for actions on the buttons
 		//if its in the options menu state it looks for the options button actions.
 		//if its in the scene state it looks for keyboard presses.
-//		switch (Engine.GetState()){
-//		case 0://main menu
-//			break;
-//		case 1://options menu
-//			break;
-//		case 2://Scene
-//			SceneListen(f);
-//			break;
-//		case 3://Exit
-//			break;
-//		}
 		SceneListen(f);
 	}
 		
@@ -75,7 +64,6 @@ public class Controller{
 		public void actionPerformed(ActionEvent e) {
 			if(Engine.GetState() == 0 || Engine.GetState() == 1 ) {
 				Engine.SwitchButton(-1);
-				System.out.println("up");
 			}
 			else if(Engine.GetState() == 2 ) {
 				Engine.MovePlayer(0, -5);
@@ -100,7 +88,6 @@ public class Controller{
 		public void actionPerformed(ActionEvent e) {
 			if(Engine.GetState() == 0 || Engine.GetState() == 1 ) {
 				Engine.SwitchButton(1);
-				System.out.println("Down");
 			}
 			else if(Engine.GetState() == 2 ) {
 				Engine.MovePlayer(0, 5);

@@ -40,6 +40,6 @@ public class GameScreen {
 			
 		}
 		f.setVisible(false);
-		f.dispose();
+		System.exit(0);
 	}
 }
