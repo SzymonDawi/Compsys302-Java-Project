@@ -13,16 +13,20 @@ public class GameEngine{
 	private Player PlayerOne = new Player();
 	private Map MainMap = new Map();
 	private Menu MainMenu = new Menu();
+	private Menu SoundMenu = new Menu();
 	private Menu OptionsMenu = new Menu();
 	private Menu CurrentMenu = new Menu();
 	private Sound buttonClick = new Sound();
 	private Sound buttonSwitch = new Sound();
 	private Sound MMMusic = new Sound();
 	private GameState State;
+	private GameState previousState;
+	private float prevousVolume;
 	
 	enum GameState{
 		MAINMENU,
 		OPTIONSMENU,
+		SOUNDMENU,
 		SCENE,
 		CLOSE
 	}
@@ -38,10 +42,12 @@ public class GameEngine{
 		switch (State){
 			case MAINMENU:
 				CurrentMenu = MainMenu;	
-				
 				break;
 			case OPTIONSMENU:
 				CurrentMenu = OptionsMenu;
+				break;
+			case SOUNDMENU:
+				CurrentMenu = SoundMenu;
 				break;
 			case SCENE:
 				MainMap.Update(PlayerOne.GetX(), PlayerOne.GetY());
@@ -58,10 +64,12 @@ public class GameEngine{
 		MainMap.init();
 		MainMenuInit();
 		OptionsMenuInit();
+		SoundMenuInit();
 		buttonClick.getSound("beep");
 		buttonSwitch.getSound("switchButton");
 		MMMusic.getSound("menu");
 		MMMusic.loopSound(Clip.LOOP_CONTINUOUSLY);
+		MMMusic.setVol( 0.50);
 		State = GameState.MAINMENU;
 
 		
@@ -77,12 +85,22 @@ public class GameEngine{
 	}
 	
 	private void OptionsMenuInit() {
-		OptionsMenu.AddButton("Option 1", (500/2-50), 100);
+		OptionsMenu.AddButton("Sound settings", (500/2-50), 100);
 		OptionsMenu.AddButton("Option 2", (500/2-50), 200);
 		OptionsMenu.AddButton("Option 3", (500/2-50), 300);
 		OptionsMenu.AddButton("Back", (500/2-50), 400);
 		
 		OptionsMenu.Select(0);
+		
+	}
+	
+	private void SoundMenuInit() {
+		SoundMenu.AddButton("<-", (500/4-25), 100);
+		SoundMenu.AddButton("->", (500-100), 100);
+		SoundMenu.AddButton("Mute", (500/2-50), 200);
+		SoundMenu.AddButton("Back", (500/2-50), 300);
+		
+		SoundMenu.Select(0);
 		
 	}
 	
@@ -94,7 +112,6 @@ public class GameEngine{
 	
 	public void SwitchButton(int Delta) {
 		buttonSwitch.playSound();
-		//MMMusic.playSound();
 		if(CurrentMenu.GetSelected() == 0 && Delta <0) {
 			return;
 		}
@@ -115,19 +132,51 @@ public class GameEngine{
 				State = GameState.SCENE;
 				MMMusic.stopSound();
 				break;
+				
 			case "Continue":
 				break;
+				
 			case "Options":
 				State = GameState.OPTIONSMENU;
+				previousState =  GameState.MAINMENU;
 				break;
+				
+			case "Sound settings":
+				State = GameState.SOUNDMENU;
+				previousState =  GameState.OPTIONSMENU;
+				break;
+				
 			case "Exit":
 				State = GameState.CLOSE;
 				break;
-			case "Back":
-				State = GameState.MAINMENU;
 				
+			case "Back":
+				State = previousState;
 				break;
-			
+		
+			case "<-":
+				if (MMMusic.isMute() == false) {
+				MMMusic.setVol(MMMusic.getVol() -0.02);
+				}
+				break;
+				
+			case "->":
+				if (MMMusic.isMute() == false) {
+				MMMusic.setVol(MMMusic.getVol() +0.02);
+				}
+				break;
+				
+			case "Mute":
+				if (MMMusic.isMute() == false) {
+					MMMusic.setVol(prevousVolume);
+					MMMusic.Mute(true);
+					MMMusic.stopSound();
+				} else {
+					MMMusic.loopSound(Clip.LOOP_CONTINUOUSLY);
+					MMMusic.setVol(prevousVolume);
+					MMMusic.Mute(false);
+				}
+				break;
 		}
 	}
 	
@@ -153,6 +202,15 @@ public class GameEngine{
 		ListOfObstacles.add(new Obstacle(W,H,X,Y));
 	}
 	
+	public String getVolume() {
+		int volumePercent = (int) (MMMusic.getVol()*100);
+		if(MMMusic.isMute()) {
+			return "0";
+		}
+		return Integer.toString(volumePercent);
+				
+	}
+	
 	//setters
 	public void SetState(int i) {
 		if(i == 0) {		
@@ -164,6 +222,9 @@ public class GameEngine{
 		}
 		else if(i == 2) {
 			State =GameState.SCENE;
+		}
+		else if(i == 3) {
+			State =GameState.SOUNDMENU;
 		}
 		else {
 			State =GameState.CLOSE;
@@ -181,6 +242,10 @@ public class GameEngine{
 	
 	public Menu GetOptionsMenu() {
 		return OptionsMenu;
+	}
+	
+	public Menu GetSoundMenu() {
+		return SoundMenu;
 	}
 	
 	public boolean IsRunning() {
@@ -219,8 +284,10 @@ public class GameEngine{
 			return 1;
 		case SCENE:
 			return 2;
-		case CLOSE:
+		case SOUNDMENU:
 			return 3;
+		case CLOSE:
+			return 4;
 		}
 		return -1;
 	}

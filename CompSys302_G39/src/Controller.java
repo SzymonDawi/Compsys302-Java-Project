@@ -50,7 +50,7 @@ public class Controller{
 	Action Enter = new AbstractAction() {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			if(Engine.GetState() == 0 || Engine.GetState() == 1 ) {
+			if(Engine.GetState() == 0 || Engine.GetState() == 1 || Engine.GetState() == 3) {
 				Engine.SelectButton();
 			}	
 			else if(Engine.GetState() == 2 ) {
@@ -62,7 +62,7 @@ public class Controller{
 	Action MoveW = new AbstractAction() {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			if(Engine.GetState() == 0 || Engine.GetState() == 1 ) {
+			if(Engine.GetState() == 0 || Engine.GetState() == 1 || Engine.GetState() == 3) {
 				Engine.SwitchButton(-1);
 			}
 			else if(Engine.GetState() == 2 ) {
@@ -80,6 +80,9 @@ public class Controller{
 			else if(Engine.GetState() == 2 ) {
 				Engine.MovePlayer(-5, 0);
 			}
+			else if(Engine.GetState() == 3 && Engine.GetSoundMenu().GetSelected() == 1) {
+				Engine.SwitchButton(-1);
+			}
 		}
 	};
 	
@@ -88,6 +91,15 @@ public class Controller{
 		public void actionPerformed(ActionEvent e) {
 			if(Engine.GetState() == 0 || Engine.GetState() == 1 ) {
 				Engine.SwitchButton(1);
+			}
+			else if(Engine.GetState() == 3) {
+				if(Engine.GetSoundMenu().GetSelected() == 0 ) {
+					Engine.SwitchButton(2);	
+				}
+				else {
+					Engine.SwitchButton(1);	
+				}
+				
 			}
 			else if(Engine.GetState() == 2 ) {
 				Engine.MovePlayer(0, 5);
@@ -103,6 +115,9 @@ public class Controller{
 			}
 			else if(Engine.GetState() == 2 ) {
 				Engine.MovePlayer(5, 0);
+			}
+			else if(Engine.GetState() == 3 && Engine.GetSoundMenu().GetSelected() == 0) {
+				Engine.SwitchButton(1);
 			}
 		}
 	};
