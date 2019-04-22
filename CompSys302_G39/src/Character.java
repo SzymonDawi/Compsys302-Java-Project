@@ -5,7 +5,6 @@ public class Character extends Entity{
 	protected int Speed;
 	protected boolean Alive;
 
-
 	public int GetHealth() {
 		return Health;
 	}

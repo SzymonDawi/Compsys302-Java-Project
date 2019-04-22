@@ -63,18 +63,24 @@ public class RenderEngine extends JPanel implements ActionListener{
 		}
 		else if(Engine.GetState() == 2) {
 			//Map
-			g2d.drawImage(Engine.Getlevel(),0,0,f);
-			///Enemies
+			g2d.drawImage(Engine.Getlevel().LoadMap(),0,0,f);
+			
+			//Enemies
 			for(i=0;i <Engine.GetNumberOfEnemies(); i++) {
 				//use this for drawing an sprite
 				//g.drawImage(img, x, y, observer)
+			}
+			
+			for(i=0;i <Engine.GetNumberOfObstacles(); i++) {
+				Obstacle O = Engine.GetObstacle(i);
+				g2d.setColor(Color.yellow);
+				g2d.fillRect(O.GetX(), O.GetY(), O.GetWidth(), O.GetHeight());
 			}
 			
 			//Player
 			g2d.setColor(Color.blue);
 			g2d.fillRect(Engine.GetPlayer().GetX(), Engine.GetPlayer().GetY(), 10, 10);	
 		}	
-		//Buffer.show();
 		
 		else if(Engine.GetState() ==3) {
 			Menu Menu = Engine.GetSoundMenu();
