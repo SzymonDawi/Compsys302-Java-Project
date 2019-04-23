@@ -1,3 +1,4 @@
+import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
@@ -8,20 +9,25 @@ import javax.swing.JPanel;
 
 public class GameEngine{
 	//stores the current scene
+	private String previousKeyPress = "S";
 	private ArrayList<Enemy> ListOfEnemies = new ArrayList<Enemy>();
 	private ArrayList<Obstacle> ListOfObstacles = new ArrayList<Obstacle>();
 	private Player PlayerOne = new Player();
 	private Map MainMap = new Map();
+	
 	private Menu MainMenu = new Menu();
 	private Menu SoundMenu = new Menu();
 	private Menu OptionsMenu = new Menu();
 	private Menu CurrentMenu = new Menu();
+	
 	private Sound buttonClick = new Sound();
 	private Sound buttonSwitch = new Sound();
 	private Sound MMMusic = new Sound();
+	private float prevousVolume;
+	
 	private GameState State;
 	private GameState previousState;
-	private float prevousVolume;
+	private Physics Physics = new Physics(ListOfEnemies,ListOfObstacles,PlayerOne,MainMap);
 	
 	enum GameState{
 		MAINMENU,
@@ -36,22 +42,21 @@ public class GameEngine{
 	private boolean IsRunning = true;
 	
 	public void run() {
-		
 		//selects what functions to run depending on the state
-		
 		switch (State){
 			case MAINMENU:
 				CurrentMenu = MainMenu;	
 				break;
 			case OPTIONSMENU:
+				previousState =  GameState.MAINMENU;
 				CurrentMenu = OptionsMenu;
 				break;
 			case SOUNDMENU:
+				previousState =  GameState.OPTIONSMENU;
 				CurrentMenu = SoundMenu;
 				break;
 			case SCENE:
-				MainMap.Update(PlayerOne.GetX(), PlayerOne.GetY());
-				//AddObstacle(100,100,0,0);
+				//AddObstacle(100,100,50,50);
 				//AddObstacle(100,100,500,0);
 				break;
 			case CLOSE:
@@ -71,8 +76,7 @@ public class GameEngine{
 		MMMusic.loopSound(Clip.LOOP_CONTINUOUSLY);
 		MMMusic.setVol( 0.50);
 		State = GameState.MAINMENU;
-
-		
+		AddObstacle(100,100,100,100);
 	}
 			
 	private void MainMenuInit() {
@@ -91,7 +95,6 @@ public class GameEngine{
 		OptionsMenu.AddButton("Back", (500/2-50), 400);
 		
 		OptionsMenu.Select(0);
-		
 	}
 	
 	private void SoundMenuInit() {
@@ -101,7 +104,6 @@ public class GameEngine{
 		SoundMenu.AddButton("Back", (500/2-50), 300);
 		
 		SoundMenu.Select(0);
-		
 	}
 	
 	private void Clear() {
@@ -119,9 +121,6 @@ public class GameEngine{
 			return;
 		}
 		CurrentMenu.Select(CurrentMenu.GetSelected() + Delta);
-		//else if(CurrentMenu.GetSelected() > CurrentMenu.GetNumberOfButtons()  && Delta <0) {
-			//CurrentMenu.Select(CurrentMenu.GetSelected() + Delta);
-		//}
 	}
 	
 	public void SelectButton() {
@@ -132,18 +131,14 @@ public class GameEngine{
 				State = GameState.SCENE;
 				MMMusic.stopSound();
 				break;
-				
 			case "Continue":
 				break;
-				
 			case "Options":
 				State = GameState.OPTIONSMENU;
-				previousState =  GameState.MAINMENU;
 				break;
 				
 			case "Sound settings":
 				State = GameState.SOUNDMENU;
-				previousState =  GameState.OPTIONSMENU;
 				break;
 				
 			case "Exit":
@@ -159,7 +154,7 @@ public class GameEngine{
 				MMMusic.setVol(MMMusic.getVol() -0.02);
 				}
 				break;
-				
+			
 			case "->":
 				if (MMMusic.isMute() == false) {
 				MMMusic.setVol(MMMusic.getVol() +0.02);
@@ -180,7 +175,6 @@ public class GameEngine{
 		}
 	}
 	
-	
 	public void Update(float deltaTime) {
 		//does nothing really
 		//just calls run
@@ -190,7 +184,28 @@ public class GameEngine{
 	}
 	
 	public void MovePlayer(int DeltaX,int DeltaY) {
-		PlayerOne.Move(DeltaX, DeltaY);
+		boolean MoveMap = false;
+		Rectangle Rect = new Rectangle(PlayerOne.GetX() + DeltaX, PlayerOne.GetY() + DeltaY, 10,10);
+				if(Rect.intersects(new Rectangle(9,9,480,445))){
+					if(!Physics.PlayerCollisions(DeltaX, DeltaY)) {
+						PlayerOne.Move(DeltaX, DeltaY);
+					}
+				}
+				else {
+					MoveMap = true;
+				}
+				
+				if(MoveMap && !Physics.PlayerCollisions(DeltaX, DeltaY)) {
+					MoveObstacles(DeltaX,DeltaY);
+					MainMap.Update(DeltaX,DeltaY);
+				}
+	}
+	
+	private void MoveObstacles(int DeltaX, int DeltaY) {
+		for(int i = 0; i < ListOfObstacles.size(); i++) {
+			Obstacle O = ListOfObstacles.get(i);
+			O.Move(-DeltaX, -DeltaY);
+		}
 	}
 	
 	//adds entities
@@ -208,14 +223,12 @@ public class GameEngine{
 			return "0";
 		}
 		return Integer.toString(volumePercent);
-				
 	}
 	
 	//setters
 	public void SetState(int i) {
 		if(i == 0) {		
 			State = GameState.MAINMENU;
-			
 		}
 		else if(i == 1) {
 			State = GameState.OPTIONSMENU;
@@ -229,6 +242,10 @@ public class GameEngine{
 		else {
 			State =GameState.CLOSE;
 		}
+	}
+	
+	public void SetCurrentPlayerDirrection(String keyLog) {
+		 previousKeyPress = keyLog;
 	}
 	
 	public void Close() {
@@ -272,8 +289,12 @@ public class GameEngine{
 		return PlayerOne;
 	}
 	
-	public BufferedImage Getlevel() {
-		return MainMap.LoadMap();
+	public Map Getlevel() {
+		return MainMap;
+	}
+	
+	public String GetCurrentPlayerDirrection() {
+		return previousKeyPress;
 	}
 	
 	public int GetState() {

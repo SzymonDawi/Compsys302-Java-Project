@@ -3,8 +3,8 @@ public class Character extends Entity{
 	protected int Health;
 	protected int Damage;
 	protected int Speed;
+	protected int AttSpeed;
 	protected boolean Alive;
-
 
 	public int GetHealth() {
 		return Health;
@@ -18,16 +18,24 @@ public class Character extends Entity{
 		return Speed;
 	}
 	
+	public int GetAttSpeed() {
+		return AttSpeed;
+	}
+	
 	public void SetHealth(int NewHealth) {
 		Health = NewHealth;
 	}
 	
 	public void SetDamage(int NewDamage) {
-		Health = NewDamage;
+		Damage = NewDamage;
 	}
 	
 	public void SetSpeed(int NewSpeed) {
-		Health = NewSpeed;
+		Speed = NewSpeed;
+	}
+	
+	public void SetAttSpeed(int NewAttSpeed) {
+		AttSpeed = NewAttSpeed;
 	}
 	
 }

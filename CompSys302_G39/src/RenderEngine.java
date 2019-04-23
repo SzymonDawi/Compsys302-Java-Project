@@ -2,6 +2,7 @@
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JFrame;
@@ -12,17 +13,41 @@ public class RenderEngine extends JPanel implements ActionListener{
 	private JFrame f = new JFrame();
 	private GameEngine Engine = new GameEngine();
 	private Timer Timer = new Timer(1000/120,this);
+	private String PlayerDirrection;
+	private Animation currentAnimation;
+	private Image playerSprite;
+
+	
+	
+	
+	
+	
+	
 	RenderEngine(JFrame Frame, GameEngine Engine){
 		Timer.start();
 		f = Frame;
 		this.Engine = Engine;
+		PlayerDirrection = "Forward";
+		currentAnimation = Engine.GetPlayer().getCurrentSprite(PlayerDirrection);
 	}
 	
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource() == Timer) {
+			PlayerDirrection = Engine.GetCurrentPlayerDirrection();
+			currentAnimation = Engine.GetPlayer().getCurrentSprite(PlayerDirrection);
 			repaint();
 		}
 	}
+	
+	public void drawPlayer (Graphics g){
+		if(currentAnimation != null) {
+			currentAnimation.update(System.currentTimeMillis());
+			g.drawImage(currentAnimation.Sprite, Engine.GetPlayer().GetX(),Engine.GetPlayer().GetY(), 32,32,null);
+			
+		}
+	}
+	
+	
 	//private Map Map = new Map();
 	private int i;
 	//private JPanel Panel = new JPanel();
@@ -30,6 +55,7 @@ public class RenderEngine extends JPanel implements ActionListener{
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		Render(g);
+		
 	}
 	
 	private void Render(Graphics g) {
@@ -62,19 +88,30 @@ public class RenderEngine extends JPanel implements ActionListener{
 			}
 		}
 		else if(Engine.GetState() == 2) {
+			
 			//Map
-			g2d.drawImage(Engine.Getlevel(),0,0,f);
-			///Enemies
+			g2d.drawImage(Engine.Getlevel().LoadMap(),0,0,f);
+			
+			//Player
+			g2d.drawImage(currentAnimation.Sprite, Engine.GetPlayer().GetX(),Engine.GetPlayer().GetY(), 32,32,null);
+			playerSprite = createImage(getWidth(),getHeight());
+			drawPlayer(playerSprite.getGraphics());
+			
+			//Enemies
 			for(i=0;i <Engine.GetNumberOfEnemies(); i++) {
 				//use this for drawing an sprite
 				//g.drawImage(img, x, y, observer)
 			}
 			
-			//Player
-			g2d.setColor(Color.blue);
-			g2d.fillRect(Engine.GetPlayer().GetX(), Engine.GetPlayer().GetY(), 10, 10);	
+			for(i=0;i <Engine.GetNumberOfObstacles(); i++) {
+				Obstacle O = Engine.GetObstacle(i);
+				g2d.setColor(Color.yellow);
+				g2d.fillRect(O.GetX(), O.GetY(), O.GetWidth(), O.GetHeight());
+			}
+			
+
+			
 		}	
-		//Buffer.show();
 		
 		else if(Engine.GetState() ==3) {
 			Menu Menu = Engine.GetSoundMenu();

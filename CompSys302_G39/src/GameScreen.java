@@ -31,12 +31,12 @@ public class GameScreen {
 			
 			delta = System.nanoTime() - lastTime;
 			
-			frames ++;
-			if(System.currentTimeMillis() - timer > 1000) {
-				timer +=1000;
-				System.out.println("FPS: " + frames/3);
-				frames = 0;
-			}
+//			frames ++;
+//			if(System.currentTimeMillis() - timer > 1000) {
+//				timer +=1000;
+//				System.out.println("FPS: " + frames/3);
+//				frames = 0;
+//			}
 			
 		}
 		f.setVisible(false);

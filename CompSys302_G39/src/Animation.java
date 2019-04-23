@@ -4,7 +4,7 @@ import java.util.List;
 
 public class Animation {
 	
-	private ArrayList<BufferedImage> frames;
+	private ArrayList<BufferedImage> frame;
 	
 	private long speed, previousTime;
 	private int currentFrame, pausedFrame;
@@ -12,8 +12,8 @@ public class Animation {
 	
 	public BufferedImage Sprite;
 	
-	public Animation(ArrayList<BufferedImage> frames) {
-		this.frames = frames;
+	public Animation(ArrayList<BufferedImage> newFrame) {
+		frame = newFrame;
 	}
 	
 	public void setSpeed(long speed) {
@@ -49,10 +49,10 @@ public class Animation {
 			if (time - previousTime >=speed) {
 				currentFrame++;
 				try {
-					Sprite = frames.get(currentFrame);
+					Sprite = frame.get(currentFrame);
 				} catch(IndexOutOfBoundsException e) {
 					currentFrame = 0;
-					Sprite = frames.get(currentFrame);
+					Sprite = frame.get(currentFrame);
 				}
 				previousTime = time;
 			}

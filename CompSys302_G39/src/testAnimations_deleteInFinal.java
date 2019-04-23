@@ -25,23 +25,24 @@ public class testAnimations_deleteInFinal extends JFrame{
 		spriteLoader loadedSprite = new spriteLoader();
 		BufferedImage sprite = null;
 		
-		sprite = loadedSprite.loadSprite("Player");  //change this to change sprite  sheet
+		sprite = loadedSprite.loadSprite("player/Player_Walk_Right");  //change this to change sprite  sheet
 		
 		Sprite testSprite = new Sprite(sprite);
 		
-		displaySprite = testSprite.getSprite(64, 0, 64, 64); // test: loads a single sprite
+		//displaySprite = testSprite.getSprite(0, 0, 64, 64); // test: loads a single sprite
 		
 		ArrayList<BufferedImage> attackBackSprites = new ArrayList<BufferedImage>(); //a list of all sprites used in the animation
 		
-		attackBackSprites.add(testSprite.getSprite(0, 59, 59, 64));  //frame 1
-		attackBackSprites.add(testSprite.getSprite(59, 59, 59, 64)); //frame 2
-		attackBackSprites.add(testSprite.getSprite(117, 59, 59, 64)); //frame 3
-		//attackBackSprites.add(testSprite.getSprite(176, 59, 59, 64)); //frame 4
+		attackBackSprites.add(testSprite.getSprite(0, 0, 32, 32));  //frame 1
+		attackBackSprites.add(testSprite.getSprite(32, 0, 32, 32)); //frame 2
+		attackBackSprites.add(testSprite.getSprite(64, 0, 32, 32)); //frame 3
+		attackBackSprites.add(testSprite.getSprite(96, 0, 32, 32)); //frame 4
+		//attackBackSprites.add(testSprite.getSprite(128, 0, 32, 32)); //frame 5
 		
 		
 		
 		attackBack = new Animation(attackBackSprites); //bundles the individual sprites into an animation array
-		attackBack.setSpeed(200); //animation seed delay in ms
+		//attackBack.setSpeed(200); //animation seed delay in ms
 		attackBack.start();
 		
 	}
