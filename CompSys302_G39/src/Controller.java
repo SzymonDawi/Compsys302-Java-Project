@@ -30,7 +30,6 @@ public class Controller{
 		AddKeyBind(Panel, "S", MoveS);
 		AddKeyBind(Panel, "D", MoveD);
 		AddKeyBind(Panel, "ENTER", Enter);
-		AddKeyBind(Panel, "X", attack);
 		AddKeyBind(Panel, "C", changeWeapon);
 		
 	}
@@ -57,7 +56,7 @@ public class Controller{
 				Engine.SelectButton();
 			}	
 			else if(Engine.GetState() == 2 ) {
-			
+				Engine.PlayerAttack();
 			}
 		}
 	};
@@ -126,16 +125,6 @@ public class Controller{
 			else if(Engine.GetState() == 3 && Engine.GetSoundMenu().GetSelected() == 0) {
 				Engine.SwitchButton(1);
 			}
-		}
-	};
-	
-	Action attack = new AbstractAction() {
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			 if(Engine.GetState() == 2 ) {
-				//attack
-				 Engine.PlayerSwapWeapon();
-			}	
 		}
 	};
 	

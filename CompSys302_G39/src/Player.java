@@ -170,7 +170,11 @@ public class Player extends Character{
 	
 	public int attack() {
 		if (currentWeapon == "ranged") {
+			if(ammo>0) {
 			ammo -= 1;
+			} else {
+				return 0;
+			}
 		} else {
 			//melee attack animation
 		}
@@ -196,15 +200,15 @@ public class Player extends Character{
 		break;
 			
 		case "Backwards":
-			temp = walkBack;
+				temp = walkBack;
 		break;
 			
 		case "Forward":
-			temp = walkFront;
+				temp = walkFront;
 		break;
 			
 		case "Right":
-			temp = walkRight;
+				temp = walkRight;
 		break;
 		}
 		return temp;

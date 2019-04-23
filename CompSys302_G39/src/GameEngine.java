@@ -24,6 +24,9 @@ public class GameEngine{
 	private Sound buttonSwitch = new Sound();
 	private Sound swapWeapon = new Sound();
 	private Sound MMMusic = new Sound();
+	private Sound meleeAttack = new Sound();
+	private Sound rangedAttack = new Sound();
+	private Sound noAmmo = new Sound();
 	private float prevousVolume;
 	
 	private GameState State;
@@ -74,6 +77,9 @@ public class GameEngine{
 		buttonClick.getSound("beep");
 		buttonSwitch.getSound("switchButton");
 		swapWeapon.getSound("Player_Swap_Weapons");
+		rangedAttack.getSound("Player_Ranged_Attack");
+		meleeAttack.getSound("Player_Melee_Attack");
+		noAmmo.getSound("noAmmo");
 		MMMusic.getSound("MMMusic_forgotten-toys");
 		MMMusic.loopSound(Clip.LOOP_CONTINUOUSLY);
 		MMMusic.setVol( 0.50);
@@ -295,11 +301,26 @@ public class GameEngine{
 		swapWeapon.playSound();
 		if(PlayerOne.getWeaponType() == "melee") {
 			 PlayerOne.setWeaponType("ranged");
-			 } else {
-				 PlayerOne.setWeaponType("melee");
-			 }
+		 } else {
+			 PlayerOne.setWeaponType("melee");
+		 }
 	}
 	
+	public void PlayerAttack() {
+		
+		if(PlayerOne.getWeaponType() == "melee") {
+			meleeAttack.playSound();
+			//insert attack melee animation
+		} else {
+			if (PlayerOne.getAmmo() == 0) {
+				noAmmo.playSound();
+			} else {
+				rangedAttack.playSound();
+				//insert attack ranged animation
+			}
+			
+		}
+	}
 	public Map Getlevel() {
 		return MainMap;
 	}
