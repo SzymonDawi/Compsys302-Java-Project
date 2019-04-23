@@ -5,6 +5,9 @@ public class Player extends Character{
 	
 	spriteLoader loadPlayer = new spriteLoader();
 	
+	protected int ammo;
+	protected int maxAmmo;
+	protected String currentWeapon;
 	Sprite currentSprite;
 	Animation attackFront;
 	Animation attackBack;
@@ -108,9 +111,13 @@ public class Player extends Character{
 	
 	public Player() {
 		initPlayerAnimations();
-		Health = 100;
-		Damage = 100;
+		maxAmmo = 20;
+		ammo = 20;
+		Health = 10;
+		MaxHealth = 10;
+		Damage = 2;
 		Alive = true;
+		currentWeapon = "melee";
 		AttSpeed = 200;
 		X = 300;
 		Y = 300;
@@ -128,6 +135,46 @@ public class Player extends Character{
 	
 	public boolean IsAlive() {
 		return Alive;
+	}
+	
+	public void SetAmmo(int AmmoDelta) {
+		ammo += AmmoDelta;
+		if (ammo > maxAmmo) {
+			ammo = maxAmmo;
+		}else if (ammo< 0) {
+			ammo = 0;
+		}
+	}
+	
+	public void SetMaxAmmo (int MaxAmmoDelta) {
+		maxAmmo += MaxAmmoDelta;
+	}
+	
+	public int getMaxAmmo () {
+		return maxAmmo;
+	}
+	
+	public int getAmmo () {
+		return ammo;
+	}
+	
+	public void setWeaponType (String weaponType) {
+		
+			currentWeapon = weaponType;
+		
+	}
+	
+	public String getWeaponType () {
+		return currentWeapon;
+	}
+	
+	public int attack() {
+		if (currentWeapon == "ranged") {
+			ammo -= 1;
+		} else {
+			//melee attack animation
+		}
+		return Damage;
 	}
 	
 	@Override

@@ -22,6 +22,7 @@ public class GameEngine{
 	
 	private Sound buttonClick = new Sound();
 	private Sound buttonSwitch = new Sound();
+	private Sound swapWeapon = new Sound();
 	private Sound MMMusic = new Sound();
 	private float prevousVolume;
 	
@@ -72,7 +73,8 @@ public class GameEngine{
 		SoundMenuInit();
 		buttonClick.getSound("beep");
 		buttonSwitch.getSound("switchButton");
-		MMMusic.getSound("menu");
+		swapWeapon.getSound("Player_Swap_Weapons");
+		MMMusic.getSound("MMMusic_forgotten-toys");
 		MMMusic.loopSound(Clip.LOOP_CONTINUOUSLY);
 		MMMusic.setVol( 0.50);
 		State = GameState.MAINMENU;
@@ -287,6 +289,15 @@ public class GameEngine{
 	
 	public Player GetPlayer() {
 		return PlayerOne;
+	}
+	
+	public void PlayerSwapWeapon() {
+		swapWeapon.playSound();
+		if(PlayerOne.getWeaponType() == "melee") {
+			 PlayerOne.setWeaponType("ranged");
+			 } else {
+				 PlayerOne.setWeaponType("melee");
+			 }
 	}
 	
 	public Map Getlevel() {

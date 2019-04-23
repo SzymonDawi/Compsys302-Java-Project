@@ -4,10 +4,15 @@ public class Character extends Entity{
 	protected int Damage;
 	protected int Speed;
 	protected int AttSpeed;
+	protected int MaxHealth;
 	protected boolean Alive;
 
 	public int GetHealth() {
 		return Health;
+	}
+	
+	public int GetMaxHealth() {
+		return MaxHealth;
 	}
 
 	public int GetDamage() {
@@ -24,6 +29,10 @@ public class Character extends Entity{
 	
 	public void SetHealth(int NewHealth) {
 		Health = NewHealth;
+	}
+	
+	public void SetMaxHealth(int NewMaxHealth) {
+		MaxHealth = NewMaxHealth;
 	}
 	
 	public void SetDamage(int NewDamage) {

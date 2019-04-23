@@ -16,7 +16,7 @@ public class RenderEngine extends JPanel implements ActionListener{
 	private String PlayerDirrection;
 	private Animation currentAnimation;
 	private Image playerSprite;
-
+	private Color HUD_Background = new Color(0f,0f,0f,.35f ); //new color of 25% opacity
 	
 	
 	
@@ -109,7 +109,15 @@ public class RenderEngine extends JPanel implements ActionListener{
 				g2d.fillRect(O.GetX(), O.GetY(), O.GetWidth(), O.GetHeight());
 			}
 			
-
+			//HUD
+			g2d.setColor(HUD_Background);
+			g2d.fillRect(100, 400, 300, 45);
+			g2d.setColor(Color.LIGHT_GRAY);
+			g2d.drawString("Health", 120, 415);
+			g2d.drawString(Engine.GetPlayer().GetHealth() + "/" +  Engine.GetPlayer().GetMaxHealth(), 120, 437);
+			g2d.drawString(Engine.GetPlayer().getWeaponType(), 220, 417);
+			g2d.drawString("AMMO", 320, 415);
+			g2d.drawString(Engine.GetPlayer().getAmmo() + "/" +  Engine.GetPlayer().getMaxAmmo(), 320, 437);
 			
 		}	
 		
