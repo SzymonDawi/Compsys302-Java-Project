@@ -40,6 +40,7 @@ public class ControllerAction extends AbstractAction implements ActionListener {
 			Control.HandleKeyEvent(-DeltaX, -DeltaY, true);
 			Control.GetInputMap().put(PressedKey, getValue(Action.NAME));
 			ListeningKey =true;
+			Control.SetKey(null);
 		}
 	}
 

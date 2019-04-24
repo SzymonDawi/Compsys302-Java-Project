@@ -51,8 +51,6 @@ public class Map {
 		}
 	}
 	
-	
-
 	//this needs to be changed
 	public void Update(int dX, int dY) {
 		X += dX;
