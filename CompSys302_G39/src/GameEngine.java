@@ -74,7 +74,7 @@ public class GameEngine{
 				break;
 			case SCENE:
 				//AddObstacle(100,100,50,50);
-				//AddObstacle(100,100,500,0);
+				//AddObstacle(100,100,1024,0);
 				break;
 			case CLOSE:
 				IsRunning = false;
@@ -101,28 +101,28 @@ public class GameEngine{
 	}
 			
 	private void MainMenuInit() {
-		MainMenu.AddButton("Play", (500/2-50), 100);
-		MainMenu.AddButton("Continue", (500/2-50), 200);
-		MainMenu.AddButton("Options", (500/2-50), 300);
-		MainMenu.AddButton("Exit", (500/2-50), 400);
+		MainMenu.AddButton("Play", (1024/2-100), 100);
+		MainMenu.AddButton("Continue", (1024/2-100), 200);
+		MainMenu.AddButton("Options", (1024/2-100), 300);
+		MainMenu.AddButton("Exit", (1024/2-100), 400);
 		
 		MainMenu.Select(0);
 	}
 	
 	private void OptionsMenuInit() {
-		OptionsMenu.AddButton("Sound settings", (500/2-50), 100);
-		OptionsMenu.AddButton("Option 2", (500/2-50), 200);
-		OptionsMenu.AddButton("Option 3", (500/2-50), 300);
-		OptionsMenu.AddButton("Back", (500/2-50), 400);
+		OptionsMenu.AddButton("Sound settings", (1024/2-100), 100);
+		OptionsMenu.AddButton("Option 2", (1024/2-100), 200);
+		OptionsMenu.AddButton("Option 3", (1024/2-100), 300);
+		OptionsMenu.AddButton("Back", (1024/2-100), 400);
 		
 		OptionsMenu.Select(0);
 	}
 	
 	private void SoundMenuInit() {
-		SoundMenu.AddButton("<-", (500/4-25), 100);
-		SoundMenu.AddButton("->", (500-100), 100);
-		SoundMenu.AddButton("Mute", (500/2-50), 200);
-		SoundMenu.AddButton("Back", (500/2-50), 300);
+		SoundMenu.AddButton("<-", (1024/4-25), 100);
+		SoundMenu.AddButton("->", (1024*3/4), 100);
+		SoundMenu.AddButton("Mute", (1024/2-50), 200);
+		SoundMenu.AddButton("Back", (1024/2-50), 300);
 		
 		SoundMenu.Select(0);
 	}

@@ -18,11 +18,6 @@ public class RenderEngine extends JPanel implements ActionListener{
 	private Image playerSprite;
 	private Color HUD_Background = new Color(0f,0f,0f,.35f ); //new color of 25% opacity
 	
-	
-	
-	
-	
-	
 	RenderEngine(JFrame Frame, GameEngine Engine){
 		Timer.start();
 		f = Frame;
@@ -126,7 +121,7 @@ public class RenderEngine extends JPanel implements ActionListener{
 			if (Engine.getVolume() == "0") {
 			g2d.drawString("Mute", 300, 100);
 			} else {
-				g2d.drawString(Engine.getVolume(), 300, 100);
+				g2d.drawString(Engine.getVolume(), 1024/2, 100);
 			}
 			for(i=0;i< Menu.GetNumberOfButtons(); i++) {
 				g2d.setColor(Color.cyan);

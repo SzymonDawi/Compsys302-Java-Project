@@ -5,7 +5,7 @@ public class GameScreen {
 	public static void main(String[] args) {
 		JFrame f = new JFrame();
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		f.setSize(500,500);
+		f.setSize(1024,768);
 		
 		GameEngine Game = new GameEngine();
 		Controller Control = new Controller(f, Game, 30);
