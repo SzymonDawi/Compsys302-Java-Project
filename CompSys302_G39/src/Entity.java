@@ -5,6 +5,8 @@ public class Entity {
 	protected int Y;
 	protected int W;
 	protected int H;
+	protected boolean exists;
+	
 
 	public void Move(int DeltaX,int DeltaY) {
 		X += DeltaX;
@@ -31,4 +33,23 @@ public class Entity {
 		return H;
 	}
 
+	public boolean getExists() {
+		return exists;
+	}
+	
+	public void setX(int newX) {
+		X = newX;
+	}
+	
+	public void setY(int newY) {
+		Y = newY;
+	}
+	
+	public void setExists(boolean newExists) {
+		 exists = newExists;
+	}
+	
+	public Entity() {
+		exists = true;
+	}
 }

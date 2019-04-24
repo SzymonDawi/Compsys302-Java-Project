@@ -33,6 +33,7 @@ public class Player extends Character{
 		attackFrontSprites.add(currentPlayerSprite.getSprite(64, 0, 32, 32)); //frame 3
 		attackFront = new Animation(attackFrontSprites); //attack facing forwards animation
 		attackFront.setSpeed(AttSpeed);
+		attackFront.start();
 		
 		
 		currentSpriteSheet = loadPlayer.loadSprite("player/Player_Attack_Backwards"); 
@@ -42,8 +43,9 @@ public class Player extends Character{
 		attackBackSprites.add(currentPlayerSprite.getSprite(32, 0, 32, 32)); //frame 2
 		attackBackSprites.add(currentPlayerSprite.getSprite(64, 0, 32, 32)); //frame 3
 		attackBackSprites.add(currentPlayerSprite.getSprite(96, 0, 32, 32)); //frame 4
-		attackBack = new Animation(attackFrontSprites); //attack facing backwards animation
+		attackBack = new Animation(attackBackSprites); //attack facing backwards animation
 		attackBack.setSpeed(AttSpeed);
+		attackBack.start();
 		
 		currentSpriteSheet = loadPlayer.loadSprite("player/Player_Attack_Left");  
 		currentPlayerSprite = new Sprite(currentSpriteSheet);
@@ -55,6 +57,7 @@ public class Player extends Character{
 		attackLeftSprites.add(currentPlayerSprite.getSprite(128, 0, 32, 32)); //frame 5
 		attackLeft = new Animation(attackLeftSprites); //attack facing left animation
 		attackLeft.setSpeed(AttSpeed);
+		attackLeft.start();
 		
 		currentSpriteSheet = loadPlayer.loadSprite("player/Player_Attack_Right");  
 		currentPlayerSprite = new Sprite(currentSpriteSheet);
@@ -66,6 +69,7 @@ public class Player extends Character{
 		attackRightSprites.add(currentPlayerSprite.getSprite(128, 0, 32, 32)); //frame 5
 		attackRight = new Animation(attackRightSprites); //attack facing right animation
 		attackRight.setSpeed(AttSpeed);
+		attackRight.start();
 		
 		currentSpriteSheet = loadPlayer.loadSprite("player/Player_Walk_Forward"); 
 		currentPlayerSprite = new Sprite(currentSpriteSheet);
@@ -135,7 +139,7 @@ public class Player extends Character{
 		Damage = 2;
 		Alive = true;
 		currentWeapon = "melee";
-		AttSpeed = 200;
+		AttSpeed = 100;
 		X = 300;
 		Y = 300;
 		W = 11;
@@ -208,48 +212,68 @@ public class Player extends Character{
 	}
 	
 	
-	public Animation getCurrentSprite(String Dirrection, boolean standingStill) {
+	public Animation getCurrentSprite(String Dirrection, boolean standingStill, boolean isAttacking) {
 		Animation temp = walkFront;
 		
-		if(standingStill) {
-			switch(Dirrection) {
-			case "Left":
-				temp = standLeft;
+		if (isAttacking == false) {
+			if(standingStill) {
+				switch(Dirrection) {
+				case "Left":
+					temp = standLeft;
 				
+					break;
+			
+				case "Backwards":
+					temp = standBack;
+					break;
+			
+				case "Forward":
+					temp = standFront;
+					break;
+			
+				case "Right":
+					temp = standRight;
+					break;
+				}
+			} else {
+				switch(Dirrection) {
+				case "Left":
+					temp = walkLeft;
+					break;
+			
+				case "Backwards":
+					temp = walkBack;
+					break;
+			
+				case "Forward":
+					temp = walkFront;
 				break;
 			
-			case "Backwards":
-				temp = standBack;
+				case "Right":
+					temp = walkRight;
 				break;
-			
-			case "Forward":
-				temp = standFront;
-				break;
-			
-			case "Right":
-				temp = standRight;
-				break;
+				}
 			}
 		} else {
 			switch(Dirrection) {
-			case "Left":
-				temp = walkLeft;
+				case "Left":
+					temp = attackLeft;
+				break;
+	
+				case "Backwards":
+					temp = attackBack;
+				break;
+	
+				case "Forward":
+					temp = attackFront;
+				break;
+	
+				case "Right":
+					temp = attackRight;
 				break;
 			
-			case "Backwards":
-				temp = walkBack;
-				break;
-			
-			case "Forward":
-				temp = walkFront;
-				break;
-			
-			case "Right":
-				temp = walkRight;
-				break;
 			}
 		}
-		
 		
 		return temp;
 	}

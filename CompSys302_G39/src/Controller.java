@@ -38,8 +38,7 @@ public class Controller implements ActionListener{
 		AddAction("Left", -5,0,KeyEvent.VK_A);
 		AddAction("Forward", 0,5,KeyEvent.VK_S);
 		AddAction("Right", 5,0,KeyEvent.VK_D);
-		AddAction("SwapWeapons", 0,0,KeyEvent.VK_C);	
-		AddAction("Attack", 0,0, KeyEvent.VK_C);
+		AddAction("swapWeapon", 0,0, KeyEvent.VK_C);
 		AddAction("Escape", 0,0,KeyEvent.VK_ESCAPE);
 		AddAction("Enter", 0,0,KeyEvent.VK_ENTER);
 	}
@@ -78,17 +77,16 @@ public class Controller implements ActionListener{
 				CurrentKey = null;
 		}
 		else if(Engine.GetState() == 2 ) {
-			if(CurrentKey == "Attack") {
-				System.out.println("go to line 82 int controller.java to change what happens when you press c");
+			if(CurrentKey == "swapWeapon") {
+				Engine.PlayerSwapWeapon();
 				CurrentKey = null;
 			}
 			else if(CurrentKey == "Enter") {
-				System.out.println("go to line 86 int controller.java to change what happens when you press enter");
+				Engine.setPlayerAttacking(true);
 				CurrentKey = null;
 			}
 			Engine.MovePlayer(DeltaX, DeltaY);
-			if (CurrentKey == "SwapWeapon") {Engine.PlayerSwapWeapon();}
-			System.out.print(CurrentKey + "\n");
+			
 			Engine.SetCurrentPlayerDirrection(CurrentKey);
 		}
 		

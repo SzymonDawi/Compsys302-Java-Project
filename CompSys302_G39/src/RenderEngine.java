@@ -5,6 +5,8 @@ import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.Timer;
@@ -16,6 +18,7 @@ public class RenderEngine extends JPanel implements ActionListener{
 	private String PlayerDirrection;
 	private Animation currentAnimation;
 	private Image playerSprite;
+	private attacks attacks = new attacks();
 	private Color HUD_Background = new Color(0f,0f,0f,.35f ); //new color of 25% opacity
 	
 	RenderEngine(JFrame Frame, GameEngine Engine){
@@ -23,23 +26,21 @@ public class RenderEngine extends JPanel implements ActionListener{
 		f = Frame;
 		this.Engine = Engine;
 		PlayerDirrection = "Forward";
-		currentAnimation = Engine.GetPlayer().getCurrentSprite(PlayerDirrection, Engine.playerIsStandingStill());
+		currentAnimation = Engine.GetPlayer().getCurrentSprite(PlayerDirrection, Engine.playerIsStandingStill(), Engine.PlayerAttack());
 	}
 	
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource() == Timer) {
 			PlayerDirrection = Engine.GetCurrentPlayerDirrection();
-			currentAnimation = Engine.GetPlayer().getCurrentSprite(PlayerDirrection, Engine.playerIsStandingStill());
-			//PlayerDirrection = Engine.GetCurrentPlayerDirrection();
-			//currentAnimation = Engine.GetPlayer().getCurrentSprite(PlayerDirrection);
+			currentAnimation = Engine.GetPlayer().getCurrentSprite(PlayerDirrection, Engine.playerIsStandingStill(), Engine.PlayerAttack());
 			repaint();
 		}
 	}
 	
-	public void drawPlayer (Graphics g){
-		if(currentAnimation != null) {
-			currentAnimation.update(System.currentTimeMillis());
-			g.drawImage(currentAnimation.Sprite, Engine.GetPlayer().GetX(),Engine.GetPlayer().GetY(), 32,32,null);
+	public void drawEntity (Graphics g, Animation EntityAnimation){
+		if(EntityAnimation != null) {
+			EntityAnimation.update(System.currentTimeMillis());
+			g.drawImage(EntityAnimation.Sprite, Engine.GetPlayer().GetX(),Engine.GetPlayer().GetY(), 32,32,null);
 			
 		}
 	}
@@ -92,10 +93,24 @@ public class RenderEngine extends JPanel implements ActionListener{
 			//Player
 			g2d.drawImage(currentAnimation.Sprite, Engine.GetPlayer().GetX(),Engine.GetPlayer().GetY(), 32,32,null);
 			playerSprite = createImage(getWidth(),getHeight());
-			drawPlayer(playerSprite.getGraphics());
+			drawEntity(playerSprite.getGraphics(), currentAnimation);
+			if (Engine.getPlayerAttacking()) {
+			System.out.print(Engine.GetCurrentPlayerDirrection() + "\n");
+				g2d.drawImage(attacks.getAttackSprite("playerMeleeAttack", Engine.GetCurrentPlayerDirrection()), Engine.GetPlayerAttackLocation("x"),Engine.GetPlayerAttackLocation("y"), 32,32,null);
+			}
 			
 			//Enemies
 			for(i=0;i <Engine.GetNumberOfEnemies(); i++) {
+				//use this for drawing an sprite
+				//g.drawImage(img, x, y, observer)
+			}
+			
+			//pickups
+			for(i=0;i <Engine.GetNumberOfPickups(); i++) {
+				System.out.print("test");
+				pickups P = Engine.GetPickup(i);
+				g2d.setColor(Color.blue);
+				g2d.fillRect(P.GetX(), P.GetY(), 32, 32);
 				//use this for drawing an sprite
 				//g.drawImage(img, x, y, observer)
 			}
@@ -108,9 +123,12 @@ public class RenderEngine extends JPanel implements ActionListener{
 			
 			//HUD
 			g2d.setColor(HUD_Background);
+			g2d.fillRect(870, 10, 150, 30);
 			g2d.fillRect(80, 650, 100, 60);
 			g2d.fillRect(800, 650, 140, 60);
 			g2d.setColor(Color.LIGHT_GRAY);
+			g2d.drawString("Score:", 880, 30);
+			g2d.drawString(Engine.GetScore(), 940, 30);
 			g2d.drawString("Health", 110, 670);
 			g2d.drawString(Engine.GetPlayer().GetHealth() + "/" +  Engine.GetPlayer().GetMaxHealth(), 110, 700);
 			g2d.drawString(Engine.GetPlayer().getWeaponType(), 820, 685);

@@ -10,11 +10,15 @@ import javax.swing.JPanel;
 public class GameEngine{
 	//stores the current scene
 	private String currentKeyPress = "Forward";
+	private boolean isPlayerAttacking = false;
 	private boolean standingStill = true;
+	private int currentGameScore;
 	private ArrayList<Enemy> ListOfEnemies = new ArrayList<Enemy>();
 	private ArrayList<Obstacle> ListOfObstacles = new ArrayList<Obstacle>();
+	private ArrayList<pickups> ListOfPickups = new ArrayList<pickups>();
 	private Player PlayerOne = new Player();
 	private Map MainMap = new Map();
+	
 	
 	private Menu MainMenu = new Menu();
 	private Menu SoundMenu = new Menu();
@@ -28,6 +32,7 @@ public class GameEngine{
 	private Sound MMMusic = new Sound();
 	private Sound meleeAttack = new Sound();
 	private Sound rangedAttack = new Sound();
+	private Sound pickupItem = new Sound();
 	private Sound noAmmo = new Sound();
 	private float prevousVolume;
 	
@@ -93,12 +98,15 @@ public class GameEngine{
 		swapWeapon.getSound("Player_Swap_Weapons");
 		rangedAttack.getSound("Player_Ranged_Attack");
 		meleeAttack.getSound("Player_Melee_Attack");
+		pickupItem.getSound("pickup");
 		noAmmo.getSound("noAmmo");
 		MMMusic.getSound("MMMusic_forgotten-toys");
 		MMMusic.loopSound(Clip.LOOP_CONTINUOUSLY);
 		MMMusic.setVol( 0.50);
 		State = GameState.MAINMENU;
+		currentGameScore = 0;
 		AddObstacle(100,100,100,100);
+		AddPickup("coin", 500, 500);
 	}
 			
 	private void MainMenuInit() {
@@ -214,6 +222,15 @@ public class GameEngine{
 				if(Rect.intersects(new Rectangle(9,9,480,445))){
 					if(!Physics.PlayerCollisions(DeltaX, DeltaY)) {
 						PlayerOne.Move(DeltaX, DeltaY);
+						for(int i = 0; i < ListOfPickups.size(); i++) {
+							int XDifference = Math.abs(ListOfPickups.get(i).GetX() - PlayerOne.GetX());
+							int YDifference = Math.abs(ListOfPickups.get(i).GetY() - PlayerOne.GetY());
+							if ((XDifference<32) && (YDifference<32)) {
+								currentGameScore += ListOfPickups.get(i).getPickupValue();
+								pickupItem.playSound();
+								ListOfPickups.remove(i);
+							}
+						}
 					}
 				}
 				else {
@@ -222,6 +239,7 @@ public class GameEngine{
 				
 				if(MoveMap && !Physics.PlayerCollisions(DeltaX, DeltaY)) {
 					MoveObstacles(DeltaX,DeltaY);
+					MovePickups(DeltaX,DeltaY);
 					MainMap.Update(DeltaX,DeltaY);
 				}
 	}
@@ -233,6 +251,13 @@ public class GameEngine{
 		}
 	}
 	
+	private void MovePickups(int DeltaX, int DeltaY) {
+		for(int i = 0; i < ListOfPickups.size(); i++) {
+			pickups P = ListOfPickups.get(i);
+			P.Move(-DeltaX, -DeltaY);
+		}
+	}
+	
 	//adds entities
 	private void AddEnemy() {
 		ListOfEnemies.add(new MeleeEnemy());
@@ -240,6 +265,10 @@ public class GameEngine{
 	
 	private void AddObstacle(int W, int H, int X, int Y) {
 		ListOfObstacles.add(new Obstacle(W,H,X,Y));
+	}
+	
+	private void AddPickup(String type, int X, int Y) {
+		ListOfPickups.add(new pickups(type,X,Y));
 	}
 	
 	public String getVolume() {
@@ -311,6 +340,10 @@ public class GameEngine{
 		return ListOfObstacles.get(i);
 	}
 	
+	public pickups GetPickup(int i) {
+		return ListOfPickups.get(i);
+	}
+	
 	public int GetNumberOfEnemies() {
 		return ListOfEnemies.size();
 	}
@@ -319,8 +352,17 @@ public class GameEngine{
 		return ListOfObstacles.size();
 	}
 	
+	public int GetNumberOfPickups() {
+		return ListOfPickups.size();
+	}
+	
 	public Player GetPlayer() {
 		return PlayerOne;
+	}
+	
+	public String GetScore() {
+		String Score = String.format("%06d", currentGameScore);
+		return Score;
 	}
 	
 	public void PlayerSwapWeapon() {
@@ -332,14 +374,23 @@ public class GameEngine{
 		 }
 	}
 	
+	public boolean getPlayerAttacking() {
+		return isPlayerAttacking;
+	}
+	
+	public void setPlayerAttacking(boolean playerAttack) {
+		isPlayerAttacking = playerAttack;
+	}
+	
 	public boolean PlayerAttack() {
-		
+		if (isPlayerAttacking) {
 		if(PlayerOne.getWeaponType() == "melee") {
 			meleeAttack.playSound();
 			//insert attack melee animation
 		} else {
 			if (PlayerOne.getAmmo() == 0) {
 				noAmmo.playSound();
+				isPlayerAttacking = false;
 				return false;
 			} else {
 				rangedAttack.playSound();
@@ -347,7 +398,36 @@ public class GameEngine{
 			}
 		}
 		PlayerOne.attack();
+		isPlayerAttacking = false;
 		return true;	
+		}
+		return false;
+	}
+	
+	public int GetPlayerAttackLocation(String XorY) {
+		int x = 0;
+		int y = 0;
+		switch (currentKeyPress) {
+		case "Right":
+			x = 32;
+		break;
+		
+		case "Backwards":
+			y = -32;
+		break;
+		
+		case "Left":
+			x = -32;
+		break;
+		
+		case "Forward":
+			y = 32;
+		break;	
+		}
+		if (XorY == "x") {
+			return x+PlayerOne.GetX();
+		}
+		return y+PlayerOne.GetY();
 	}
 	public Map Getlevel() {
 		return MainMap;
