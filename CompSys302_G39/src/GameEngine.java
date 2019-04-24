@@ -306,7 +306,7 @@ public class GameEngine{
 		 }
 	}
 	
-	public void PlayerAttack() {
+	public boolean PlayerAttack() {
 		
 		if(PlayerOne.getWeaponType() == "melee") {
 			meleeAttack.playSound();
@@ -314,12 +314,14 @@ public class GameEngine{
 		} else {
 			if (PlayerOne.getAmmo() == 0) {
 				noAmmo.playSound();
+				return false;
 			} else {
 				rangedAttack.playSound();
 				//insert attack ranged animation
 			}
-			
 		}
+		PlayerOne.attack();
+		return true;	
 	}
 	public Map Getlevel() {
 		return MainMap;
