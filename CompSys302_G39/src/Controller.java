@@ -56,13 +56,12 @@ public class Controller implements ActionListener{
 		
 		if((Engine.GetState() == 0) ||(Engine.GetState() == 1 )|| (Engine.GetState() == 3)) {
 				if(CurrentKey == "Left") {
-					if(Engine.GetSoundMenu().GetSelected() == 1) {
+					if(Engine.GetState() == 3 ||Engine.GetSoundMenu().GetSelected() == 1) {
 						Engine.SwitchButton(-1);
 					}
 				}
 				else if(CurrentKey == "Right") {
-					
-					if(Engine.GetSoundMenu().GetSelected() == 0) {
+					if(Engine.GetState() == 3 || Engine.GetSoundMenu().GetSelected() == 0) {
 						Engine.SwitchButton(1);
 					}
 				}

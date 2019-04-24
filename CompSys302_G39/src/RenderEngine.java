@@ -28,8 +28,8 @@ public class RenderEngine extends JPanel implements ActionListener{
 	
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource() == Timer) {
-			PlayerDirrection = Engine.GetCurrentPlayerDirrection();
-			currentAnimation = Engine.GetPlayer().getCurrentSprite(PlayerDirrection);
+			//PlayerDirrection = Engine.GetCurrentPlayerDirrection();
+			//currentAnimation = Engine.GetPlayer().getCurrentSprite(PlayerDirrection);
 			repaint();
 		}
 	}
@@ -138,9 +138,5 @@ public class RenderEngine extends JPanel implements ActionListener{
 				//g.drawImage(img, x, y, observer)
 			}
 		}
-		
-		
-		
-		
 	}
 }
