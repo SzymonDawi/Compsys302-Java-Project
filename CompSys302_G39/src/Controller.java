@@ -22,7 +22,6 @@ public class Controller implements ActionListener{
 	private int DeltaX;
 	private int DeltaY;
 	private String CurrentKey;
-	boolean OneKey =true;
 	
 	public Controller(JFrame f, GameEngine Engine, int Delay) {
 		this.Engine = Engine;
@@ -40,6 +39,7 @@ public class Controller implements ActionListener{
 		AddAction("Forward", 0,5,KeyEvent.VK_S);
 		AddAction("Right", 5,0,KeyEvent.VK_D);
 		
+		AddAction("Attack", 0,0, KeyEvent.VK_C);
 		AddAction("Escape", 0,0,KeyEvent.VK_ESCAPE);
 		AddAction("Enter", 0,0,KeyEvent.VK_ENTER);
 	}
@@ -55,7 +55,18 @@ public class Controller implements ActionListener{
 		}
 		
 		if((Engine.GetState() == 0) ||(Engine.GetState() == 1 )|| (Engine.GetState() == 3)) {
-				if(CurrentKey == "Backwards") {
+				if(CurrentKey == "Left") {
+					if(Engine.GetSoundMenu().GetSelected() == 1) {
+						Engine.SwitchButton(-1);
+					}
+				}
+				else if(CurrentKey == "Right") {
+					
+					if(Engine.GetSoundMenu().GetSelected() == 0) {
+						Engine.SwitchButton(1);
+					}
+				}
+				else if(CurrentKey == "Backwards") {
 					Engine.SwitchButton(-1);
 				}
 				else if(CurrentKey == "Forward") {
@@ -67,6 +78,14 @@ public class Controller implements ActionListener{
 				CurrentKey = null;
 		}
 		else if(Engine.GetState() == 2 ) {
+			if(CurrentKey == "Attack") {
+				System.out.println("go to line 82 int controller.java to change what happens when you press c");
+				CurrentKey = null;
+			}
+			else if(CurrentKey == "Enter") {
+				System.out.println("go to line 86 int controller.java to change what happens when you press enter");
+				CurrentKey = null;
+			}
 			Engine.MovePlayer(DeltaX, DeltaY);
 			Engine.SetCurrentPlayerDirrection(CurrentKey);
 		}
@@ -101,108 +120,5 @@ public class Controller implements ActionListener{
 	public void SetKey(String Key) {
 		CurrentKey = Key; 
 	}
-	
-	public void SetOneKey(boolean b) {
-		OneKey = b;
-	}
+
 }
-//	private void SceneListen(JFrame f) {
-//		JPanel Panel = (JPanel) f.getContentPane();
-//		AddKeyBind(Panel, "ESCAPE", Close);
-//		AddKeyBind(Panel, "W", MoveW);
-//		AddKeyBind(Panel, "A", MoveA);
-//		AddKeyBind(Panel, "S", MoveS);
-//		AddKeyBind(Panel, "D", MoveD);
-//		AddKeyBind(Panel, "ENTER", Enter);
-//	}
-//	
-//	private void AddKeyBind(JComponent Panel, String Key, Action A) {
-//		InputMap InputMap= Panel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
-//		ActionMap ActionMap = Panel.getActionMap();
-//		
-//		InputMap.put(KeyStroke.getKeyStroke(Key), Key);
-//		ActionMap.put(Key, A);
-//	}
-//	
-//	Action Close = new AbstractAction() {
-//		@Override
-//		public void actionPerformed(ActionEvent e) {
-//			Engine.SetState(4);
-//		}
-//	};
-//
-//	Action Enter = new AbstractAction() {
-//		@Override
-//		public void actionPerformed(ActionEvent e) {
-//			if(Engine.GetState() == 0 || Engine.GetState() == 1 || Engine.GetState() == 3) {
-//				Engine.SelectButton();
-//			}	
-//			else if(Engine.GetState() == 2 ) {
-//			
-//			}
-//		}
-//	};
-//	
-//	Action MoveW = new AbstractAction() {
-//		@Override
-//		public void actionPerformed(ActionEvent e) {
-//			if(Engine.GetState() == 0 || Engine.GetState() == 1 || Engine.GetState() == 3) {
-//				Engine.SwitchButton(-1);
-//			}
-//			else if(Engine.GetState() == 2 ) {
-//				Engine.MovePlayer(0, -3);
-//			}
-//		}
-//	};
-//	
-//	Action MoveA = new AbstractAction() {
-//		@Override
-//		public void actionPerformed(ActionEvent e) {
-//			if(Engine.GetState() == 0 || Engine.GetState() == 1 ) {
-//				
-//			}
-//			else if(Engine.GetState() == 2 ) {
-//				Engine.MovePlayer(-3, 0);
-//			}
-//			else if(Engine.GetState() == 3 && Engine.GetSoundMenu().GetSelected() == 1) {
-//				Engine.SwitchButton(-1);
-//			}
-//		}
-//	};
-//	
-//	Action MoveS = new AbstractAction() {
-//		@Override
-//		public void actionPerformed(ActionEvent e) {
-//			if(Engine.GetState() == 0 || Engine.GetState() == 1 ) {
-//				Engine.SwitchButton(1);
-//			}
-//			else if(Engine.GetState() == 3) {
-//				if(Engine.GetSoundMenu().GetSelected() == 0 ) {
-//					Engine.SwitchButton(2);	
-//				}
-//				else {
-//					Engine.SwitchButton(1);	
-//				}
-//				
-//			}
-//			else if(Engine.GetState() == 2 ) {
-//				Engine.MovePlayer(0, 3);
-//			}
-//		}
-//	};
-//	
-//	Action MoveD = new AbstractAction() {
-//		@Override
-//		public void actionPerformed(ActionEvent e) {
-//			if(Engine.GetState() == 0 || Engine.GetState() == 1 ) {
-//				
-//			}
-//			else if(Engine.GetState() == 2 ) {
-//				Engine.MovePlayer(3, 0);
-//			}
-//			else if(Engine.GetState() == 3 && Engine.GetSoundMenu().GetSelected() == 0) {
-//				Engine.SwitchButton(1);
-//			}
-//		}
-//	};
-//}
