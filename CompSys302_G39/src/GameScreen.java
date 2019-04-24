@@ -8,9 +8,10 @@ public class GameScreen {
 		f.setSize(500,500);
 		
 		GameEngine Game = new GameEngine();
-		Controller Control = new Controller();
+		Controller Control = new Controller(f, Game, 30);
 		
 		Game.init();
+		Control.init();
 		RenderEngine Render = new RenderEngine(f, Game);
 		f.add(Render);
 		//f.setContentPane(Render);
@@ -22,8 +23,6 @@ public class GameScreen {
 		
 		while(Game.IsRunning()){
 			long lastTime = System.nanoTime();
-
-			Control.update(f, Game);
 			
 			Game.Update((float)(delta/1000000000.0));
 			

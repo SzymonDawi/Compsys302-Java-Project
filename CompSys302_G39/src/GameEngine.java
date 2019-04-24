@@ -19,6 +19,7 @@ public class GameEngine{
 	private Menu SoundMenu = new Menu();
 	private Menu OptionsMenu = new Menu();
 	private Menu CurrentMenu = new Menu();
+	private boolean LoadingMenu;
 	
 	private Sound buttonClick = new Sound();
 	private Sound buttonSwitch = new Sound();
@@ -50,14 +51,26 @@ public class GameEngine{
 		switch (State){
 			case MAINMENU:
 				CurrentMenu = MainMenu;	
+				if(LoadingMenu) {
+					CurrentMenu.Select(0);
+					LoadingMenu = false;
+				}
 				break;
 			case OPTIONSMENU:
 				previousState =  GameState.MAINMENU;
 				CurrentMenu = OptionsMenu;
+				if(LoadingMenu) {
+					CurrentMenu.Select(0);
+					LoadingMenu = false;
+				}
 				break;
 			case SOUNDMENU:
 				previousState =  GameState.OPTIONSMENU;
 				CurrentMenu = SoundMenu;
+				if(LoadingMenu) {
+					CurrentMenu.Select(0);
+					LoadingMenu = false;
+				}
 				break;
 			case SCENE:
 				//AddObstacle(100,100,50,50);
@@ -142,10 +155,12 @@ public class GameEngine{
 			case "Continue":
 				break;
 			case "Options":
+				LoadingMenu = true;
 				State = GameState.OPTIONSMENU;
 				break;
 				
 			case "Sound settings":
+				LoadingMenu = true;
 				State = GameState.SOUNDMENU;
 				break;
 				
@@ -154,6 +169,7 @@ public class GameEngine{
 				break;
 				
 			case "Back":
+				LoadingMenu = true;
 				State = previousState;
 				break;
 		
