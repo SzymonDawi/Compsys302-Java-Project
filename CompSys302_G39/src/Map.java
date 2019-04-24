@@ -63,7 +63,7 @@ public class Map {
 	
 	//loads part of the map
 	public BufferedImage LoadMap() {
-		BufferedImage OnScreenMap = FullMap.getSubimage(X, Y, 500,500);
+		BufferedImage OnScreenMap = FullMap.getSubimage(X, Y, 1024,768);
 		return OnScreenMap;
 	}
 	
