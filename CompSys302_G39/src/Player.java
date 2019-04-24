@@ -17,6 +17,10 @@ public class Player extends Character{
 	Animation walkBack;
 	Animation walkLeft;
 	Animation walkRight;
+	Animation standFront;
+	Animation standBack;
+	Animation standLeft;
+	Animation standRight;
 	
 	private void initPlayerAnimations() {
 		
@@ -67,6 +71,10 @@ public class Player extends Character{
 		currentPlayerSprite = new Sprite(currentSpriteSheet);
 		ArrayList<BufferedImage> walkForwardSprites = new ArrayList<BufferedImage>(); 
 		walkForwardSprites.add(currentPlayerSprite.getSprite(0, 0, 32, 32));  //frame 1
+		standFront = new Animation(walkForwardSprites); //stand facing front animation
+		standFront.setSpeed(100000);
+		standFront.start();
+	
 		walkForwardSprites.add(currentPlayerSprite.getSprite(32, 0, 32, 32)); //frame 2
 		walkForwardSprites.add(currentPlayerSprite.getSprite(64, 0, 32, 32)); //frame 3
 		walkForwardSprites.add(currentPlayerSprite.getSprite(96, 0, 32, 32)); //frame 4
@@ -78,6 +86,9 @@ public class Player extends Character{
 		currentPlayerSprite = new Sprite(currentSpriteSheet);
 		ArrayList<BufferedImage> walkBackSprites = new ArrayList<BufferedImage>(); 
 		walkBackSprites.add(currentPlayerSprite.getSprite(0, 0, 32, 32));  //frame 1
+		standBack = new Animation(walkBackSprites); //stand facing back animation
+		standBack.setSpeed(100000);
+		standBack.start();
 		walkBackSprites.add(currentPlayerSprite.getSprite(32, 0, 32, 32)); //frame 2
 		walkBackSprites.add(currentPlayerSprite.getSprite(64, 0, 32, 32)); //frame 3
 		walkBackSprites.add(currentPlayerSprite.getSprite(96, 0, 32, 32)); //frame 4
@@ -89,6 +100,9 @@ public class Player extends Character{
 		currentPlayerSprite = new Sprite(currentSpriteSheet);
 		ArrayList<BufferedImage> walkRightSprites = new ArrayList<BufferedImage>(); 
 		walkRightSprites.add(currentPlayerSprite.getSprite(0, 0, 32, 32));  //frame 1
+		standRight = new Animation(walkRightSprites); //stand facing right animation
+		standRight.setSpeed(100000);
+		standRight.start();
 		walkRightSprites.add(currentPlayerSprite.getSprite(32, 0, 32, 32)); //frame 2
 		walkRightSprites.add(currentPlayerSprite.getSprite(64, 0, 32, 32)); //frame 3
 		walkRightSprites.add(currentPlayerSprite.getSprite(96, 0, 32, 32)); //frame 4
@@ -100,6 +114,9 @@ public class Player extends Character{
 		currentPlayerSprite = new Sprite(currentSpriteSheet);
 		ArrayList<BufferedImage> walkLeftSprites = new ArrayList<BufferedImage>(); 
 		walkLeftSprites.add(currentPlayerSprite.getSprite(0, 0, 32, 32));  //frame 1
+		standLeft = new Animation(walkLeftSprites); //walk facing right animation
+		standLeft.setSpeed(100000);
+		standLeft.start();
 		walkLeftSprites.add(currentPlayerSprite.getSprite(32, 0, 32, 32)); //frame 2
 		walkLeftSprites.add(currentPlayerSprite.getSprite(64, 0, 32, 32)); //frame 3
 		walkLeftSprites.add(currentPlayerSprite.getSprite(96, 0, 32, 32)); //frame 4
@@ -191,26 +208,49 @@ public class Player extends Character{
 	}
 	
 	
-	public Animation getCurrentSprite(String Dirrection) {
+	public Animation getCurrentSprite(String Dirrection, boolean standingStill) {
 		Animation temp = walkFront;
-		switch(Dirrection) {
-	
-		case "Left":
-			temp = walkLeft;
-		break;
+		
+		if(standingStill) {
+			switch(Dirrection) {
+			case "Left":
+				temp = standLeft;
+				
+				break;
 			
-		case "Backwards":
+			case "Backwards":
+				temp = standBack;
+				break;
+			
+			case "Forward":
+				temp = standFront;
+				break;
+			
+			case "Right":
+				temp = standRight;
+				break;
+			}
+		} else {
+			switch(Dirrection) {
+			case "Left":
+				temp = walkLeft;
+				break;
+			
+			case "Backwards":
 				temp = walkBack;
-		break;
+				break;
 			
-		case "Forward":
+			case "Forward":
 				temp = walkFront;
-		break;
+				break;
 			
-		case "Right":
+			case "Right":
 				temp = walkRight;
-		break;
+				break;
+			}
 		}
+		
+		
 		return temp;
 	}
 	

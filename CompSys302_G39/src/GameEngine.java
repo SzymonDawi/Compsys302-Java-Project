@@ -9,7 +9,8 @@ import javax.swing.JPanel;
 
 public class GameEngine{
 	//stores the current scene
-	private String previousKeyPress = "S";
+	private String currentKeyPress = "Forward";
+	private boolean standingStill = true;
 	private ArrayList<Enemy> ListOfEnemies = new ArrayList<Enemy>();
 	private ArrayList<Obstacle> ListOfObstacles = new ArrayList<Obstacle>();
 	private Player PlayerOne = new Player();
@@ -269,7 +270,16 @@ public class GameEngine{
 	}
 	
 	public void SetCurrentPlayerDirrection(String keyLog) {
-		 previousKeyPress = keyLog;
+		if (keyLog != null) {
+		 currentKeyPress = keyLog;
+		 standingStill = false;
+		} else {
+			standingStill = true;
+		}
+	}
+	
+	public boolean playerIsStandingStill() {
+		return standingStill;
 	}
 	
 	public void Close() {
@@ -344,7 +354,7 @@ public class GameEngine{
 	}
 	
 	public String GetCurrentPlayerDirrection() {
-		return previousKeyPress;
+		return currentKeyPress;
 	}
 	
 	public int GetState() {

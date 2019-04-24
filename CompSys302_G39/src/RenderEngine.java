@@ -23,13 +23,13 @@ public class RenderEngine extends JPanel implements ActionListener{
 		f = Frame;
 		this.Engine = Engine;
 		PlayerDirrection = "Forward";
-		currentAnimation = Engine.GetPlayer().getCurrentSprite(PlayerDirrection);
+		currentAnimation = Engine.GetPlayer().getCurrentSprite(PlayerDirrection, Engine.playerIsStandingStill());
 	}
 	
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource() == Timer) {
 			PlayerDirrection = Engine.GetCurrentPlayerDirrection();
-			currentAnimation = Engine.GetPlayer().getCurrentSprite(PlayerDirrection);
+			currentAnimation = Engine.GetPlayer().getCurrentSprite(PlayerDirrection, Engine.playerIsStandingStill());
 			repaint();
 		}
 	}
@@ -106,13 +106,14 @@ public class RenderEngine extends JPanel implements ActionListener{
 			
 			//HUD
 			g2d.setColor(HUD_Background);
-			g2d.fillRect(100, 400, 300, 45);
+			g2d.fillRect(80, 650, 100, 60);
+			g2d.fillRect(800, 650, 140, 60);
 			g2d.setColor(Color.LIGHT_GRAY);
-			g2d.drawString("Health", 120, 415);
-			g2d.drawString(Engine.GetPlayer().GetHealth() + "/" +  Engine.GetPlayer().GetMaxHealth(), 120, 437);
-			g2d.drawString(Engine.GetPlayer().getWeaponType(), 220, 417);
-			g2d.drawString("AMMO", 320, 415);
-			g2d.drawString(Engine.GetPlayer().getAmmo() + "/" +  Engine.GetPlayer().getMaxAmmo(), 320, 437);
+			g2d.drawString("Health", 110, 670);
+			g2d.drawString(Engine.GetPlayer().GetHealth() + "/" +  Engine.GetPlayer().GetMaxHealth(), 110, 700);
+			g2d.drawString(Engine.GetPlayer().getWeaponType(), 820, 685);
+			g2d.drawString("AMMO", 880, 670);
+			g2d.drawString(Engine.GetPlayer().getAmmo() + "/" +  Engine.GetPlayer().getMaxAmmo(), 880, 700);
 			
 		}	
 		

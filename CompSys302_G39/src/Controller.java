@@ -39,7 +39,7 @@ public class Controller implements ActionListener{
 		AddAction("Left", -5,0,KeyEvent.VK_A);
 		AddAction("Forward", 0,5,KeyEvent.VK_S);
 		AddAction("Right", 5,0,KeyEvent.VK_D);
-		
+		AddAction("SwapWeapons", 0,0,KeyEvent.VK_C);
 		AddAction("Escape", 0,0,KeyEvent.VK_ESCAPE);
 		AddAction("Enter", 0,0,KeyEvent.VK_ENTER);
 	}
@@ -49,6 +49,7 @@ public class Controller implements ActionListener{
 	}
 	
 	public void Move(int DeltaX, int DeltaY, ActionEvent e) {
+		
 		if(CurrentKey == "Escape") {
 			Engine.SetState(4);
 			System.exit(0);
@@ -68,8 +69,11 @@ public class Controller implements ActionListener{
 		}
 		else if(Engine.GetState() == 2 ) {
 			Engine.MovePlayer(DeltaX, DeltaY);
+			if (CurrentKey == "SwapWeapon") {Engine.PlayerSwapWeapon();}
+			System.out.print(CurrentKey + "\n");
 			Engine.SetCurrentPlayerDirrection(CurrentKey);
 		}
+		
 	}
 	
 	public void HandleKeyEvent(int DeltaX, int DeltaY , boolean Pressed ) {
@@ -82,6 +86,7 @@ public class Controller implements ActionListener{
 		}
 		else if(KeysPressed == 0) {
 			Timer.stop();
+			
 		}
 	}
 
