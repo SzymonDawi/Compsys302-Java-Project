@@ -218,21 +218,37 @@ public class GameEngine{
 	
 	public void MovePlayer(int DeltaX,int DeltaY) {
 		boolean MoveMap = false;
-		Rectangle Rect = new Rectangle(PlayerOne.GetX() + DeltaX, PlayerOne.GetY() + DeltaY, 10,10);
-				if(Rect.intersects(new Rectangle(9,9,480,445))){
-					if(!Physics.PlayerCollisions(DeltaX, DeltaY)) {
+		
+		if(DeltaX !=0 && DeltaY!=0){
+			if(currentKeyPress == "Forward" ||currentKeyPress == "Backwards") {
+				DeltaY = 0;
+			}
+			else {
+				DeltaX =0;
+			}
+		}
+		
+		Rectangle Rect = new Rectangle(PlayerOne.GetX() + MainMap.GetDeltaX(), PlayerOne.GetY() + MainMap.GetDeltaY(), 32,32);
+		if(Rect.intersects(new Rectangle(50,50, 3800, 2800)))	{	
+			Rect = new Rectangle(PlayerOne.GetX() + DeltaX, PlayerOne.GetY() + DeltaY, 32,32);
+			if(Rect.intersects(new Rectangle(50,50,928,624))){	
+				if(!Physics.PlayerCollisions(DeltaX, DeltaY)) {
 						PlayerOne.Move(DeltaX, DeltaY);
 					}
 				}
 				else {
-					MoveMap = true;
+					if(MainMap.GetDeltaX() >=0 || MainMap.GetDeltaY() >=0 ) {
+						MoveMap = true;
+					}
+					
 				}
 				
 				if(MoveMap && !Physics.PlayerCollisions(DeltaX, DeltaY)) {
 					MoveObstacles(DeltaX,DeltaY);
 					MovePickups(DeltaX,DeltaY);
-					MainMap.Update(DeltaX,DeltaY);
-				}
+					MainMap.Update(DeltaX,DeltaY);	
+			}
+		}
 	}
 	
 	public void PickupItem(int i) {

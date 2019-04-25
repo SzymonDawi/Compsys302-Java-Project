@@ -12,11 +12,11 @@ public class Map {
 	
 	//private Image FullMap;
 	private int X=0,Y=0;
-	private BufferedImage FullMap = new BufferedImage(3584,3072, BufferedImage.TYPE_INT_ARGB);
+	private BufferedImage FullMap = new BufferedImage(3840,3072, BufferedImage.TYPE_INT_ARGB);
 	private BufferedImage Img1;
 	private Graphics g = FullMap.getGraphics();
 	private int Height=12;
-	private int Width=14;
+	private int Width=15;
 	private int dX,dY;
 	private int[][] Map = {{0,0,0,0,0,0,0,0,0,1,2,3,3,3,3},
 						   {0,0,0,0,0,0,0,0,0,1,2,3,3,3,3},
@@ -57,6 +57,7 @@ public class Map {
 		Y += dY;
 		this.dX += dX;
 		this.dY += dY;
+		
 	}
 	
 	//loads part of the map
