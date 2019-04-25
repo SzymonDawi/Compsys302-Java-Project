@@ -20,6 +20,8 @@ private void initPickupAnimations() {
 		coinAnimationSprites.add(coins.getSprite(96, 0, 32, 32)); //frame 3
 		coinAnimationSprites.add(coins.getSprite(128, 0, 32, 32)); //frame 3
 		coinAnimation = new Animation(coinAnimationSprites); //coin animation
+		coinAnimation.setSpeed(200);
+		coinAnimation.start();
 		
 	}
 		
@@ -30,9 +32,9 @@ private void initPickupAnimations() {
 		this.type = type;
 	}
 	
-	public Animation getPickupSprite(String pickUp) {
+	public Animation getPickupAnimation() {
 		Animation temp = null;
-		switch(pickUp) {
+		switch(type) {
 		case "coin":
 			temp = coinAnimation;
 		break;
@@ -40,6 +42,7 @@ private void initPickupAnimations() {
 	
 		return temp;
 	}
+	
 	
 	public int getPickupValue() {
 		int temp = 0;

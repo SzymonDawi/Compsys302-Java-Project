@@ -12,16 +12,19 @@ public class GameEngine{
 	private String currentKeyPress = "Forward";
 	private boolean isPlayerAttacking = false;
 	private boolean standingStill = true;
-	private int currentGameScore;
+	 int currentGameScore;  //do not make this private (yet)
 	private ArrayList<Enemy> ListOfEnemies = new ArrayList<Enemy>();
 	private ArrayList<Obstacle> ListOfObstacles = new ArrayList<Obstacle>();
 	private ArrayList<pickups> ListOfPickups = new ArrayList<pickups>();
 	private Player PlayerOne = new Player();
 	private Map MainMap = new Map();
+	private ScoreSaver ScoreEngine = new ScoreSaver();
+	
 	
 	
 	private Menu MainMenu = new Menu();
 	private Menu SoundMenu = new Menu();
+	private Menu ScoreMenu = new Menu();
 	private Menu OptionsMenu = new Menu();
 	private Menu CurrentMenu = new Menu();
 	private boolean LoadingMenu;
@@ -44,6 +47,7 @@ public class GameEngine{
 		MAINMENU,
 		OPTIONSMENU,
 		SOUNDMENU,
+		SCOREMENU,
 		SCENE,
 		CLOSE
 	}
@@ -78,6 +82,14 @@ public class GameEngine{
 					LoadingMenu = false;
 				}
 				break;
+			case SCOREMENU:
+				previousState =  GameState.MAINMENU;
+				CurrentMenu = ScoreMenu;
+				if(LoadingMenu) {
+					CurrentMenu.Select(0);
+					LoadingMenu = false;
+				}
+				break;
 			case SCENE:
 				//AddObstacle(100,100,50,50);
 				//AddObstacle(100,100,1024,0);
@@ -92,6 +104,7 @@ public class GameEngine{
 		MainMap.init();
 		MainMenuInit();
 		OptionsMenuInit();
+		ScoreMenuInit();
 		SoundMenuInit();
 		buttonClick.getSound("beep");
 		buttonSwitch.getSound("switchButton");
@@ -107,11 +120,13 @@ public class GameEngine{
 		currentGameScore = 0;
 		AddObstacle(100,100,100,100);
 		AddPickup("coin", 500, 500);
+		AddPickup("coin", 460, 500);
+		AddPickup("coin", 460, 460);
 	}
 			
 	private void MainMenuInit() {
 		MainMenu.AddButton("Play", (1024/2-100), 100);
-		MainMenu.AddButton("Continue", (1024/2-100), 200);
+		MainMenu.AddButton("High Scores", (1024/2-100), 200);
 		MainMenu.AddButton("Options", (1024/2-100), 300);
 		MainMenu.AddButton("Exit", (1024/2-100), 400);
 		
@@ -119,7 +134,7 @@ public class GameEngine{
 	}
 	
 	private void OptionsMenuInit() {
-		OptionsMenu.AddButton("Sound settings", (1024/2-100), 100);
+		OptionsMenu.AddButton("Music", (1024/2-100), 100);
 		OptionsMenu.AddButton("Option 2", (1024/2-100), 200);
 		OptionsMenu.AddButton("Option 3", (1024/2-100), 300);
 		OptionsMenu.AddButton("Back", (1024/2-100), 400);
@@ -134,6 +149,12 @@ public class GameEngine{
 		SoundMenu.AddButton("Back", (1024/2-50), 300);
 		
 		SoundMenu.Select(0);
+	}
+	
+	private void ScoreMenuInit() {
+		ScoreMenu.AddButton("Back", (1024/3+50), 600);
+		
+		ScoreMenu.Select(0);
 	}
 	
 	private void Clear() {
@@ -161,14 +182,16 @@ public class GameEngine{
 				State = GameState.SCENE;
 				MMMusic.stopSound();
 				break;
-			case "Continue":
+			case "High Scores":
+				LoadingMenu = true;
+				State = GameState.SCOREMENU;
 				break;
 			case "Options":
 				LoadingMenu = true;
 				State = GameState.OPTIONSMENU;
 				break;
 				
-			case "Sound settings":
+			case "Music":
 				LoadingMenu = true;
 				State = GameState.SOUNDMENU;
 				break;
@@ -299,6 +322,10 @@ public class GameEngine{
 		else if(i == 3) {
 			State =GameState.SOUNDMENU;
 		}
+		else if(i == 4) {
+			State =GameState.SCOREMENU;
+		}
+		
 		else {
 			State =GameState.CLOSE;
 		}
@@ -353,6 +380,15 @@ public class GameEngine{
 	
 	public Menu GetSoundMenu() {
 		return SoundMenu;
+	}
+	
+	public Menu GetScoreMenu() {
+		return ScoreMenu;
+	}
+	
+
+	public ScoreSaver GetScoreEngine() {
+		return ScoreEngine;
 	}
 	
 	public boolean IsRunning() {
@@ -460,6 +496,7 @@ public class GameEngine{
 		return MainMap;
 	}
 	
+	
 	public String GetCurrentPlayerDirrection() {
 		return currentKeyPress;
 	}
@@ -474,9 +511,11 @@ public class GameEngine{
 			return 2;
 		case SOUNDMENU:
 			return 3;
-		case CLOSE:
+		case SCOREMENU:
 			return 4;
-		}
+		case CLOSE:
+		return 6;
+	}
 		return -1;
 	}
 }

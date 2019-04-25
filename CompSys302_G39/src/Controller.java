@@ -50,11 +50,12 @@ public class Controller implements ActionListener{
 	public void Move(int DeltaX, int DeltaY, ActionEvent e) {
 		
 		if(CurrentKey == "Escape") {
-			Engine.SetState(4);
+			Engine.SetState(6);
+			Engine.GetScoreEngine().compareCurrentToHigh(Engine.currentGameScore);
 			System.exit(0);
 		}
 		
-		if((Engine.GetState() == 0) ||(Engine.GetState() == 1 )|| (Engine.GetState() == 3)) {
+		if((Engine.GetState() == 0) ||(Engine.GetState() == 1 )|| (Engine.GetState() == 3)|| (Engine.GetState() == 4)) {
 				if(CurrentKey == "Left") {
 					if(Engine.GetState() == 3 ||Engine.GetSoundMenu().GetSelected() == 1) {
 						Engine.SwitchButton(-1);
