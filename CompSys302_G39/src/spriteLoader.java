@@ -5,9 +5,12 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 public class spriteLoader {
-	
 	public BufferedImage loadSprite(String file) {
 		BufferedImage spriteSheet = null;
+		
+		if(file == "0") {
+			return spriteSheet;
+		}
 		
 		try {
 			spriteSheet = ImageIO.read(new File("sprites/" + file + ".png"));

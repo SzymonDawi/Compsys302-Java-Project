@@ -3,27 +3,13 @@ import java.util.ArrayList;
 
 public class Player extends Character{
 	
-	spriteLoader loadPlayer = new spriteLoader();
-	
 	protected int ammo;
 	protected int maxAmmo;
 	protected String currentWeapon;
-	Sprite currentSprite;
-	Animation attackFront;
-	Animation attackBack;
-	Animation attackLeft;
-	Animation attackRight;
-	Animation walkFront;
-	Animation walkBack;
-	Animation walkLeft;
-	Animation walkRight;
-	Animation standFront;
-	Animation standBack;
-	Animation standLeft;
-	Animation standRight;
+	private int MainMapX;
+	private int MainMapY;
 	
-	private void initPlayerAnimations() {
-		
+	private void initPlayerAnimations() {		
 		
 		BufferedImage currentSpriteSheet = loadPlayer.loadSprite("player/Player_Attack_Forward"); 
 		Sprite currentPlayerSprite = new Sprite(currentSpriteSheet);
@@ -142,8 +128,8 @@ public class Player extends Character{
 		AttSpeed = 100;
 		X = 300;
 		Y = 300;
-		W = 11;
-		H = 11;
+		W = 40;
+		H = 50;
 	}
 	
 	public void TakeDamage(int i) {
@@ -156,6 +142,33 @@ public class Player extends Character{
 	
 	public boolean IsAlive() {
 		return Alive;
+	}
+
+	public int attack() {
+		if (currentWeapon == "ranged") {
+			if(ammo>0) {
+			ammo -= 1;
+			} else {
+				return 0;
+			}
+		} else {
+			//melee attack animation
+		}
+		return Damage;
+	}
+	
+	//Setters
+	@Override
+	public void SetAttSpeed(int NewAttSpeed) {
+		AttSpeed = NewAttSpeed;
+		attackRight.setSpeed(AttSpeed);
+		attackLeft.setSpeed(AttSpeed);
+		attackFront.setSpeed(AttSpeed);
+		attackBack.setSpeed(AttSpeed);
+	}
+	
+	public void setWeaponType (String weaponType) {
+		currentWeapon = weaponType;
 	}
 	
 	public void SetAmmo(int AmmoDelta) {
@@ -171,6 +184,24 @@ public class Player extends Character{
 		maxAmmo += MaxAmmoDelta;
 	}
 	
+	public void SetMainMapX() {
+		MainMapX = X;
+	}
+	
+	public void SetMainMapY() {
+		MainMapY = Y;
+	}
+	
+	//Getters
+	
+	public int GetMainMapX() {
+		return MainMapX;
+	}
+	
+	public int GetMainMapY() {
+		return MainMapY;
+	}
+	
 	public int getMaxAmmo () {
 		return maxAmmo;
 	}
@@ -179,38 +210,9 @@ public class Player extends Character{
 		return ammo;
 	}
 	
-	public void setWeaponType (String weaponType) {
-		
-			currentWeapon = weaponType;
-		
-	}
-	
 	public String getWeaponType () {
 		return currentWeapon;
 	}
-	
-	public int attack() {
-		if (currentWeapon == "ranged") {
-			if(ammo>0) {
-			ammo -= 1;
-			} else {
-				return 0;
-			}
-		} else {
-			//melee attack animation
-		}
-		return Damage;
-	}
-	
-	@Override
-	public void SetAttSpeed(int NewAttSpeed) {
-		AttSpeed = NewAttSpeed;
-		attackRight.setSpeed(AttSpeed);
-		attackLeft.setSpeed(AttSpeed);
-		attackFront.setSpeed(AttSpeed);
-		attackBack.setSpeed(AttSpeed);
-	}
-	
 	
 	public Animation getCurrentSprite(String Dirrection, boolean standingStill, boolean isAttacking) {
 		Animation temp = walkFront;

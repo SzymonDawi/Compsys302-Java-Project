@@ -6,6 +6,20 @@ public class Character extends Entity{
 	protected int AttSpeed;
 	protected int MaxHealth;
 	protected boolean Alive;
+	
+	Sprite currentSprite;
+	Animation attackFront;
+	Animation attackBack;
+	Animation attackLeft;
+	Animation attackRight;
+	Animation walkFront;
+	Animation walkBack;
+	Animation walkLeft;
+	Animation walkRight;
+	Animation standFront;
+	Animation standBack;
+	Animation standLeft;
+	Animation standRight;
 
 	public int GetHealth() {
 		return Health;

@@ -11,7 +11,7 @@ public class Physics {
 	private Boolean Collision = false;
 	private GameEngine Engine;
 	
-	public Physics(GameEngine Engine){
+	public void Update(GameEngine Engine){
 		this.Engine = Engine;
 		this.ListOfEnemies = Engine.GetListOfEnemies();
 		this.ListOfObstacles = Engine.GetListOfObstacles();
@@ -22,12 +22,18 @@ public class Physics {
 
 	public Boolean PlayerCollisions(int X, int Y) {
 		Collision = false;
-		Rectangle PlayerBounds = new Rectangle(PlayerOne.GetX() + X, PlayerOne.GetY() + Y, 32,32);
+		Rectangle PlayerBounds = new Rectangle(PlayerOne.GetX() + X, PlayerOne.GetY() + Y, PlayerOne.GetWidth(),PlayerOne.GetHeight());
 		for(int i=0; i < ListOfObstacles.size(); i++) {
 			Obstacle O = ListOfObstacles.get(i);
-			Rectangle Rect2 = O.GetBounds();
-			if(PlayerBounds.intersects(Rect2)) {
-				Collision = true;
+			if(O.GetSpecialBounds() != null) {
+				Rectangle Rect2 = O.GetSpecialBounds();
+				if(PlayerBounds.intersects(Rect2)) {
+					Engine.ObstacleAction(O.GetAciton());
+				}
+			}
+			Rectangle Rect3 = O.GetBounds();
+			if(PlayerBounds.intersects(Rect3)) {
+			Collision = true;
 			}
 		}
 		
@@ -38,7 +44,6 @@ public class Physics {
 				Engine.PickupItem(i);
 			}
 		}
-		
 		
 		return Collision;
 	}

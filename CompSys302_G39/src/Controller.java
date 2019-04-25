@@ -34,10 +34,10 @@ public class Controller implements ActionListener{
 	}
 	
 	public void init() {
-		AddAction("Backwards", 0,-5,KeyEvent.VK_W);
-		AddAction("Left", -5,0,KeyEvent.VK_A);
-		AddAction("Forward", 0,5,KeyEvent.VK_S);
-		AddAction("Right", 5,0,KeyEvent.VK_D);
+		AddAction("Backwards", 0,-10,KeyEvent.VK_W);
+		AddAction("Left", -10,0,KeyEvent.VK_A);
+		AddAction("Forward", 0,10,KeyEvent.VK_S);
+		AddAction("Right", 10,0,KeyEvent.VK_D);
 		AddAction("swapWeapon", 0,0, KeyEvent.VK_C);
 		AddAction("Escape", 0,0,KeyEvent.VK_ESCAPE);
 		AddAction("Enter", 0,0,KeyEvent.VK_ENTER);

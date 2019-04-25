@@ -12,15 +12,18 @@ public class GameEngine{
 	private String currentKeyPress = "Forward";
 	private boolean isPlayerAttacking = false;
 	private boolean standingStill = true;
-	 int currentGameScore;  //do not make this private (yet)
+	int currentGameScore;  //do not make this private (yet)
 	private ArrayList<Enemy> ListOfEnemies = new ArrayList<Enemy>();
 	private ArrayList<Obstacle> ListOfObstacles = new ArrayList<Obstacle>();
 	private ArrayList<pickups> ListOfPickups = new ArrayList<pickups>();
 	private Player PlayerOne = new Player();
-	private Map MainMap = new Map();
 	private ScoreSaver ScoreEngine = new ScoreSaver();
 	
-	
+	private boolean CentreMap = false;
+	private Map MainMap = new Map();
+	private Map House1Map = new Map();
+	private Map CurrentMap;
+	private String PreviousMap;
 	
 	private Menu MainMenu = new Menu();
 	private Menu SoundMenu = new Menu();
@@ -41,7 +44,7 @@ public class GameEngine{
 	
 	private GameState State;
 	private GameState previousState;
-	private Physics Physics = new Physics(this);
+	private Physics Physics = new Physics();
 	
 	enum GameState{
 		MAINMENU,
@@ -91,6 +94,7 @@ public class GameEngine{
 				}
 				break;
 			case SCENE:
+				Physics.Update(this);
 				//AddObstacle(100,100,50,50);
 				//AddObstacle(100,100,1024,0);
 				break;
@@ -101,11 +105,14 @@ public class GameEngine{
 	}
 	
 	public void init() {
-		MainMap.init();
 		MainMenuInit();
 		OptionsMenuInit();
 		ScoreMenuInit();
 		SoundMenuInit();
+		
+		MainMapInit();
+		CurrentMap = MainMap;
+		
 		buttonClick.getSound("beep");
 		buttonSwitch.getSound("switchButton");
 		swapWeapon.getSound("Player_Swap_Weapons");
@@ -118,10 +125,42 @@ public class GameEngine{
 		MMMusic.setVol( 0.50);
 		State = GameState.MAINMENU;
 		currentGameScore = 0;
-		AddObstacle(100,100,100,100);
+		
+	}
+	
+	private void MainMapInit() {
 		AddPickup("coin", 500, 500);
 		AddPickup("coin", 460, 500);
 		AddPickup("coin", 460, 460);
+		AddObstacle("House_1",174,132,100,100,1);
+		AddObstacle("0", 50, 50, 504, 590, 0);
+
+		int[][] Map = {
+					{0,0,0,0,0,0,0,0,1,4,2,3,3,3,3},
+					{0,0,0,0,0,0,0,0,1,4,2,3,3,3,3},
+					{0,0,0,18,14,16,14,12,10,8,6,3,3,3,3},
+					{0,0,0,19,17,15,13,11,9,7,5,3,3,3,3},
+					{0,0,0,0,0,0,0,0,1,4,2,3,3,3,3},
+					{0,0,0,0,0,0,0,0,1,4,2,3,3,3,3},
+					{0,0,0,0,0,0,0,0,1,4,2,3,3,3,3},
+					{0,0,0,0,0,0,0,0,1,4,2,3,3,3,3},
+					{0,0,0,0,0,0,0,0,1,4,2,3,3,3,3},
+					{0,0,0,0,0,0,0,0,1,4,2,3,3,3,3},
+					{0,0,0,0,0,0,0,0,1,4,2,3,3,3,3},
+					{0,0,0,0,0,0,0,0,1,4,2,3,3,3,3}};
+		
+		MainMap.init(Map,15,12);
+		MainMap.LoadTile("Path_Up", 118, 232, 64);
+		MainMap.LoadTile("Path_Up", 118, 296, 64);
+		MainMap.LoadTile("Path_Up", 118, 360, 64);
+	}
+	
+	private void House1MapInit() {
+		PreviousMap = "MainMap";
+		AddObstacle("0", 50, 50, 504, 590, 0);
+		int[][] Map = {{3,3},
+					{3,3}};
+		House1Map.init(Map,2,2);
 	}
 			
 	private void MainMenuInit() {
@@ -161,6 +200,7 @@ public class GameEngine{
 		//clears the scene
 		ListOfEnemies.clear();
 		ListOfObstacles.clear();
+		ListOfPickups.clear();
 	}
 	
 	public void SwitchButton(int Delta) {
@@ -241,9 +281,11 @@ public class GameEngine{
 	
 	public void MovePlayer(int DeltaX,int DeltaY) {
 		boolean MoveMap = false;
+		int MapX=50;
+		int MapY=50;
 		
 		if(DeltaX !=0 && DeltaY!=0){
-			if(currentKeyPress == "Forward" ||currentKeyPress == "Backwards") {
+			if(currentKeyPress == "Left" ||currentKeyPress == "Right") {
 				DeltaY = 0;
 			}
 			else {
@@ -251,26 +293,30 @@ public class GameEngine{
 			}
 		}
 		
-		Rectangle Rect = new Rectangle(PlayerOne.GetX() + MainMap.GetDeltaX(), PlayerOne.GetY() + MainMap.GetDeltaY(), 32,32);
-		if(Rect.intersects(new Rectangle(50,50, 3800, 2800)))	{	
-			Rect = new Rectangle(PlayerOne.GetX() + DeltaX, PlayerOne.GetY() + DeltaY, 32,32);
-			if(Rect.intersects(new Rectangle(50,50,928,624))){	
-				if(!Physics.PlayerCollisions(DeltaX, DeltaY)) {
-						PlayerOne.Move(DeltaX, DeltaY);
-					}
+		if(CentreMap) {
+			MapX = (1024 - CurrentMap.GetMaxX())/2 +10;
+			MapY = (718- CurrentMap.GetMaxY())/2 + 25;
+		}
+		
+		Rectangle Rect = new Rectangle(PlayerOne.GetX() + CurrentMap.GetDeltaX() +DeltaX, PlayerOne.GetY() + CurrentMap.GetDeltaY()+ DeltaY, 25,25);
+		if(Rect.intersects(new Rectangle(MapX, MapY, CurrentMap.GetMaxX()-64, CurrentMap.GetMaxY()-62)))	{	
+			Rect = new Rectangle(PlayerOne.GetX() + DeltaX, PlayerOne.GetY() + DeltaY, PlayerOne.GetWidth(),PlayerOne.GetHeight());
+				if(Rect.intersects(new Rectangle(50,50,928,624))){	
+					if(!Physics.PlayerCollisions(DeltaX, DeltaY)) {
+							PlayerOne.Move(DeltaX, DeltaY);
+						}
 				}
 				else {
-					if(MainMap.GetDeltaX() >=0 || MainMap.GetDeltaY() >=0 ) {
+					if(CurrentMap.GetDeltaX() >= 0 || CurrentMap.GetDeltaY() >= 0 ) {
 						MoveMap = true;
 					}
-					
 				}
 				
 				if(MoveMap && !Physics.PlayerCollisions(DeltaX, DeltaY)) {
 					MoveObstacles(DeltaX,DeltaY);
 					MovePickups(DeltaX,DeltaY);
-					MainMap.Update(DeltaX,DeltaY);	
-			}
+					CurrentMap.Update(DeltaX,DeltaY);	
+				}
 		}
 	}
 	
@@ -278,6 +324,27 @@ public class GameEngine{
 		currentGameScore += ListOfPickups.get(i).getPickupValue();
 		pickupItem.playSound();
 		ListOfPickups.remove(i);
+	}
+	
+	public void ObstacleAction(String s) {
+		if(s == "LoadHouse1") {
+			Clear();
+			House1MapInit();
+			CurrentMap = House1Map;
+			CentreMap = true;
+			PlayerOne.SetMainMapX();
+			PlayerOne.SetMainMapY();
+			PlayerOne.setX(500);
+			PlayerOne.setY(500);
+		}
+		else if(s.compareTo("ExitToMainMap") ==0){
+			Clear();
+			CentreMap = false;
+			MainMapInit();
+			CurrentMap = MainMap;
+			PlayerOne.setX(PlayerOne.GetMainMapX());
+			PlayerOne.setY(PlayerOne.GetMainMapY());
+		}
 	}
 	
 	//Moving entities when the map moves 
@@ -300,9 +367,20 @@ public class GameEngine{
 		ListOfEnemies.add(new MeleeEnemy());
 	}
 	
-	private void AddObstacle(int W, int H, int X, int Y) {
-		ListOfObstacles.add(new Obstacle(W,H,X,Y));
+	private void AddObstacle(String s, int W, int H, int X, int Y,int Frames) {
+		Obstacle O = new Obstacle(s,W,H,X,Y,Frames);
+		if(s == "House_1"){
+			O.SetBounds(X, Y+H/2, W, H/2 -8);
+			O.SetSpecialBounds(X+36, Y+H+1, 8, 1);
+			O.SetAction("LoadHouse1");
+		}
+		else if(s == "0") {
+			O.SetSpecialBounds(X, Y, W, H);
+			O.SetAction("ExitTo"+PreviousMap);
+		}
+		ListOfObstacles.add(O);
 	}
+	
 	
 	private void AddPickup(String type, int X, int Y) {
 		ListOfPickups.add(new pickups(type,X,Y));
@@ -493,9 +571,12 @@ public class GameEngine{
 	}
 	
 	public Map Getlevel() {
-		return MainMap;
+		return CurrentMap;
 	}
 	
+	public boolean GetCentreMap() {
+		return CentreMap;
+	}
 	
 	public String GetCurrentPlayerDirrection() {
 		return currentKeyPress;

@@ -18,46 +18,28 @@ public class Map {
 	private int Height=12;
 	private int Width=15;
 	private int dX,dY;
-	private int[][] Map = {{0,0,0,0,0,0,0,0,0,1,2,3,3,3,3},
-						   {0,0,0,0,0,0,0,0,0,1,2,3,3,3,3},
-						   {0,0,0,0,0,0,0,0,0,1,0,3,3,3,3},
-						   {0,0,0,0,0,0,0,0,0,1,0,3,3,3,3},
-						   {0,0,0,0,0,0,0,0,0,1,2,3,3,3,3},
-						   {0,0,0,0,0,0,0,0,0,1,2,3,3,3,3},
-						   {0,0,0,0,0,0,0,0,0,1,2,3,3,3,3},
-						   {0,0,0,0,0,0,0,0,0,1,2,3,3,3,3},
-						   {0,0,0,0,0,0,0,0,0,1,2,3,3,3,3},
-						   {0,0,0,0,0,0,0,0,0,1,2,3,3,3,3},
-						   {0,0,0,0,0,0,0,0,0,1,2,3,3,3,3},
-						   {0,0,0,0,0,0,0,0,0,1,2,3,3,3,3}};
-	
-	//Loads the whole map
-	public void init(){
-		for(int i =0; i < Height; i++) {
-			for(int j = 0;j< Width; j++) {
-				if(Map[i][j] == 0) {
-					LoadImage("sprites/Grass1.png",i,j);
-				}
-				else if(Map[i][j] == 1) {
-					LoadImage("sprites/Grass_Beach.png",i,j);
-				}
-				else if(Map[i][j] == 2) {
-					LoadImage("sprites/Error.png",i,j);
-				}
-				else if(Map[i][j] == 3) {
-					LoadImage("sprites/Water.png",i,j);
-				}
-			}
+
+	public void LoadTile(String s, int X, int Y, int Scale) {
+		try {
+			Img1 = ImageIO.read(new File("sprites/" + s +".png"));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		if(Scale != 0) {
+			Image NewImg = Img1.getScaledInstance(Scale, Scale, Image.SCALE_DEFAULT);
+			g.drawImage(NewImg,X,Y,null);
+		}
+		else {
+			g.drawImage(Img1,X,Y,null);
 		}
 	}
 	
-	//this needs to be changed
 	public void Update(int dX, int dY) {
 		X += dX;
 		Y += dY;
 		this.dX += dX;
 		this.dY += dY;
-		
 	}
 	
 	//loads part of the map
@@ -110,4 +92,74 @@ public class Map {
 	public int GetMaxY() {
 		return Height*256;
 	}
+	
+	//Loads the whole map
+		public void init(int Map[][],int W,int H){
+			Width = W;
+			Height = H;
+			for(int i =0; i < Height; i++) {
+				for(int j = 0;j< Width; j++) {
+					if(Map[i][j] == 0) {
+						LoadImage("sprites/Grass1.png",i,j);
+					}
+					else if(Map[i][j] == 1) {
+						LoadImage("sprites/Grass_Beach.png",i,j);
+					}
+					else if(Map[i][j] == 2) {
+						LoadImage("sprites/Error.png",i,j);
+					}
+					else if(Map[i][j] == 3) {
+						LoadImage("sprites/Water.png",i,j);
+					}
+					else if(Map[i][j] == 4) {
+						LoadImage("sprites/Sand.png",i,j);
+					}
+					else if(Map[i][j] == 5) {
+						LoadImage("sprites/River_Ocean_2.png",i,j);
+					}
+					else if(Map[i][j] == 6) {
+						LoadImage("sprites/River_Ocean_1.png",i,j);
+					}
+					else if(Map[i][j] == 7) {
+						LoadImage("sprites/River_Mouth_6.png",i,j);
+					}
+					else if(Map[i][j] == 8) {
+						LoadImage("sprites/River_Mouth_7.png",i,j);
+					}
+					else if(Map[i][j] == 9) {
+						LoadImage("sprites/River_Mouth_4.png",i,j);
+					}
+					else if(Map[i][j] == 10) {
+						LoadImage("sprites/River_Mouth_5.png",i,j);
+					}
+					else if(Map[i][j] == 11) {
+						LoadImage("sprites/River_Mouth_2.png",i,j);
+					}
+					else if(Map[i][j] == 12) {
+						LoadImage("sprites/River_Mouth_1.png",i,j);
+					}
+					else if(Map[i][j] == 13) {
+						LoadImage("sprites/River_Edge_Front4.png",i,j);
+					}
+					else if(Map[i][j] == 14) {
+						LoadImage("sprites/River_Edge_Back2.png",i,j);
+					}
+					else if(Map[i][j] == 15) {
+						LoadImage("sprites/River_Edge_Front2.png",i,j);
+					}
+					else if(Map[i][j] == 16) {
+						LoadImage("sprites/River_Edge_Back3.png",i,j);
+					}
+					else if(Map[i][j] == 17) {
+						LoadImage("sprites/River_Edge_Front3.png",i,j);
+					}
+					else if(Map[i][j] == 18) {
+						LoadImage("sprites/River_Edge_Back1.png",i,j);
+					}
+					else if(Map[i][j] == 19) {
+						LoadImage("sprites/River_Edge_Front1.png",i,j);
+					}
+				}
+			}
+		}
 }

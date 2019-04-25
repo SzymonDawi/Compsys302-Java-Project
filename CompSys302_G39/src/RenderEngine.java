@@ -100,10 +100,15 @@ public class RenderEngine extends JPanel implements ActionListener{
 		else if(Engine.GetState() == 2) {
 			
 			//Map
-			g2d.drawImage(Engine.Getlevel().LoadMap(),0,0,f);
+			if(Engine.GetCentreMap()) {
+				g2d.drawImage(Engine.Getlevel().LoadMap(), (1024 - Engine.Getlevel().GetMaxX())/2,(768-Engine.Getlevel().GetMaxY())/2,f);
+			}
+			else {
+				g2d.drawImage(Engine.Getlevel().LoadMap(),0,0,f);
+			}
 			
 			//Player
-			g2d.drawImage(currentAnimation.Sprite, Engine.GetPlayer().GetX(),Engine.GetPlayer().GetY(), 32,32,null);
+			g2d.drawImage(currentAnimation.Sprite, Engine.GetPlayer().GetX(),Engine.GetPlayer().GetY(), 64,64,null);
 			playerSprite = createImage(getWidth(),getHeight());
 			drawEntity(playerSprite.getGraphics(), currentAnimation);
 			if (Engine.getPlayerAttacking()) {
@@ -127,8 +132,13 @@ public class RenderEngine extends JPanel implements ActionListener{
 			
 			for(i=0;i <Engine.GetNumberOfObstacles(); i++) {
 				Obstacle O = Engine.GetObstacle(i);
-				g2d.setColor(Color.yellow);
-				g2d.fillRect(O.GetX(), O.GetY(), O.GetWidth(), O.GetHeight());
+				if(O.GetCurrentSprite() != null) {
+				g2d.drawImage(O.GetCurrentSprite(), O.GetX(),O.GetY(), O.GetWidth(), O.GetHeight(),f);
+				}
+				else {
+					//g2d.setColor(Color.yellow);
+					//g2d.fillRect(O.GetSpecialBounds().x,O.GetSpecialBounds().y, O.GetWidth(), O.GetHeight());
+				}
 			}
 			
 			//HUD

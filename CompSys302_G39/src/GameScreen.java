@@ -8,7 +8,7 @@ public class GameScreen {
 		f.setSize(1024,768);
 		
 		GameEngine Game = new GameEngine();
-		Controller Control = new Controller(f, Game, 30);
+		Controller Control = new Controller(f, Game, 24);
 		
 		Game.init();
 		Control.init();
