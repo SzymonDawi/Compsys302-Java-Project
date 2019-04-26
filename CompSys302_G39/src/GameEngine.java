@@ -12,7 +12,8 @@ public class GameEngine{
 	private String currentKeyPress = "Forward";
 	private boolean isPlayerAttacking = false;
 	private boolean standingStill = true;
-	int currentGameScore;  //do not make this private (yet)
+	private String randomiseFile;
+	private int currentGameScore;  //do not make this private (yet)
 	private ArrayList<Enemy> ListOfEnemies = new ArrayList<Enemy>();
 	private ArrayList<Obstacle> ListOfObstacles = new ArrayList<Obstacle>();
 	private ArrayList<pickups> ListOfPickups = new ArrayList<pickups>();
@@ -28,8 +29,10 @@ public class GameEngine{
 	private Menu MainMenu = new Menu();
 	private Menu SoundMenu = new Menu();
 	private Menu ScoreMenu = new Menu();
+	private Menu PauseMenu = new Menu();
 	private Menu OptionsMenu = new Menu();
 	private Menu CurrentMenu = new Menu();
+	private Menu CloseMenu = new Menu();
 	private boolean LoadingMenu;
 	
 	private Sound buttonClick = new Sound();
@@ -38,8 +41,10 @@ public class GameEngine{
 	private Sound MMMusic = new Sound();
 	private Sound meleeAttack = new Sound();
 	private Sound rangedAttack = new Sound();
+	private Sound enterHouse = new Sound();
 	private Sound pickupItem = new Sound();
 	private Sound noAmmo = new Sound();
+	private Sound playerDetected = new Sound();
 	private float prevousVolume;
 	
 	private GameState State;
@@ -52,6 +57,7 @@ public class GameEngine{
 		SOUNDMENU,
 		SCOREMENU,
 		SCENE,
+		PAUSED,
 		CLOSE
 	}
 	
@@ -98,8 +104,23 @@ public class GameEngine{
 				//AddObstacle(100,100,50,50);
 				//AddObstacle(100,100,1024,0);
 				break;
+				
+			case PAUSED:
+				previousState =  GameState.SCENE;
+				CurrentMenu = PauseMenu;
+				if(LoadingMenu) {
+					CurrentMenu.Select(0);
+					LoadingMenu = false;
+				}
+				break;
+				
 			case CLOSE:
-				IsRunning = false;
+				previousState =  GameState.SCENE;
+				CurrentMenu = CloseMenu;
+				if(LoadingMenu) {
+					CurrentMenu.Select(0);
+					LoadingMenu = false;
+				}
 				break;
 		}
 	}
@@ -109,7 +130,13 @@ public class GameEngine{
 		OptionsMenuInit();
 		ScoreMenuInit();
 		SoundMenuInit();
-		
+		PauseMenuInit();
+		CloseMenuInit();
+		AddPickup("coin", 500, 500);
+		AddPickup("coin", 460, 500);
+		AddPickup("coin", 460, 460);
+		AddEnemy(470, 510);
+		AddEnemy(200, 700);
 		MainMapInit();
 		CurrentMap = MainMap;
 		
@@ -119,6 +146,7 @@ public class GameEngine{
 		rangedAttack.getSound("Player_Ranged_Attack");
 		meleeAttack.getSound("Player_Melee_Attack");
 		pickupItem.getSound("pickup");
+		enterHouse.getSound("EnterDoor");
 		noAmmo.getSound("noAmmo");
 		MMMusic.getSound("MMMusic_forgotten-toys");
 		MMMusic.loopSound(Clip.LOOP_CONTINUOUSLY);
@@ -129,9 +157,7 @@ public class GameEngine{
 	}
 	
 	private void MainMapInit() {
-		AddPickup("coin", 500, 500);
-		AddPickup("coin", 460, 500);
-		AddPickup("coin", 460, 460);
+		
 		AddObstacle("House_1",174,132,100,100,1);
 		AddObstacle("0", 50, 50, 504, 590, 0);
 
@@ -190,10 +216,23 @@ public class GameEngine{
 		SoundMenu.Select(0);
 	}
 	
+	private void PauseMenuInit() {
+	
+		PauseMenu.AddButton("Back", (1024/2-100), 300);
+		
+		PauseMenu.Select(0);
+	}
+	
 	private void ScoreMenuInit() {
 		ScoreMenu.AddButton("Back", (1024/3+50), 600);
 		
 		ScoreMenu.Select(0);
+	}
+	
+	private void CloseMenuInit() {
+		CloseMenu.AddButton("Exit", (1024/2-100), 250);
+		CloseMenu.AddButton("Back", (1024/2-100), 400);
+		CloseMenu.Select(0);
 	}
 	
 	private void Clear() {
@@ -237,7 +276,9 @@ public class GameEngine{
 				break;
 				
 			case "Exit":
-				State = GameState.CLOSE;
+				ScoreEngine.compareCurrentToHigh(currentGameScore);
+				System.exit(0);
+				//State = GameState.CLOSE;
 				break;
 				
 			case "Back":
@@ -315,8 +356,23 @@ public class GameEngine{
 				if(MoveMap && !Physics.PlayerCollisions(DeltaX, DeltaY)) {
 					MoveObstacles(DeltaX,DeltaY);
 					MovePickups(DeltaX,DeltaY);
+					MoveEnemies(DeltaX,DeltaY);
 					CurrentMap.Update(DeltaX,DeltaY);	
 				}
+				
+			
+				for(int i = 0; i < ListOfEnemies.size(); i++) {
+					Enemy E = ListOfEnemies.get(i);
+					if(E.detectPlayer(PlayerOne.GetX(),PlayerOne.GetY())) {
+						randomiseFile = String.valueOf((int)(Math.random() *5 +1));
+						
+						playerDetected.getSound("detected_"+randomiseFile);
+						playerDetected.setVol(0.3);
+						playerDetected.playSound();
+					}
+					E.triangulatePlayer (PlayerOne.GetX(),PlayerOne.GetY());
+				}	
+				
 		}
 	}
 	
@@ -330,6 +386,7 @@ public class GameEngine{
 		if(s == "LoadHouse1") {
 			Clear();
 			House1MapInit();
+			enterHouse.playSound();
 			CurrentMap = House1Map;
 			CentreMap = true;
 			PlayerOne.SetMainMapX();
@@ -339,6 +396,7 @@ public class GameEngine{
 		}
 		else if(s.compareTo("ExitToMainMap") ==0){
 			Clear();
+			enterHouse.playSound();
 			CentreMap = false;
 			MainMapInit();
 			CurrentMap = MainMap;
@@ -362,9 +420,17 @@ public class GameEngine{
 		}
 	}
 	
+	private void MoveEnemies(int DeltaX, int DeltaY) {
+		for(int i = 0; i < ListOfEnemies.size(); i++) {
+			Enemy E = ListOfEnemies.get(i);
+			E.Move(-DeltaX, -DeltaY);
+			
+		}
+	}
+	
 	//adds entities
-	private void AddEnemy() {
-		ListOfEnemies.add(new MeleeEnemy());
+	private void AddEnemy(int x, int y) {
+		ListOfEnemies.add(new MeleeEnemy(x,y, "Left"));
 	}
 	
 	private void AddObstacle(String s, int W, int H, int X, int Y,int Frames) {
@@ -402,6 +468,9 @@ public class GameEngine{
 		}
 		else if(i == 4) {
 			State =GameState.SCOREMENU;
+		}
+		else if(i == 5) {
+			State =GameState.PAUSED;
 		}
 		
 		else {
@@ -462,6 +531,14 @@ public class GameEngine{
 	
 	public Menu GetScoreMenu() {
 		return ScoreMenu;
+	}
+	
+	public Menu GetPauseMenu() {
+		return PauseMenu;
+	}
+	
+	public Menu GetCloseMenu() {
+		return CloseMenu;
 	}
 	
 
@@ -549,19 +626,19 @@ public class GameEngine{
 		int y = 0;
 		switch (currentKeyPress) {
 		case "Right":
-			x = 32;
+			x = 64;
 		break;
 		
 		case "Backwards":
-			y = -32;
+			y = -64;
 		break;
 		
 		case "Left":
-			x = -32;
+			x = -64;
 		break;
 		
 		case "Forward":
-			y = 32;
+			y = 64;
 		break;	
 		}
 		if (XorY == "x") {
@@ -594,6 +671,8 @@ public class GameEngine{
 			return 3;
 		case SCOREMENU:
 			return 4;
+		case PAUSED:
+			return 5;
 		case CLOSE:
 		return 6;
 	}

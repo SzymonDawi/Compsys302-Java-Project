@@ -21,12 +21,14 @@ public class RenderEngine extends JPanel implements ActionListener{
 	private Animation currentAnimation;
 	private Image playerSprite;
 	private Image pickupSprite;
+	private Image enemySprite;
 	private BufferedImage currentIcon;
 	private BufferedImage meleeWeapon;
 	private BufferedImage rangedWeapon;
 	private attacks attacks = new attacks();
 	private Color HUD_Background = new Color(0f,0f,0f,.35f ); //new color of 25% opacity
 	private Font buttonFont = new Font("Georgia", Font.BOLD,20);
+	private Font titleFont = new Font("Georgia", Font.BOLD,40);
 	private Font HUDFont = new Font("Georgia", Font.PLAIN,15);
 	
 	RenderEngine(JFrame Frame, GameEngine Engine){
@@ -112,13 +114,18 @@ public class RenderEngine extends JPanel implements ActionListener{
 			playerSprite = createImage(getWidth(),getHeight());
 			drawEntity(playerSprite.getGraphics(), currentAnimation);
 			if (Engine.getPlayerAttacking()) {
-				g2d.drawImage(attacks.getAttackSprite("playerMeleeAttack", Engine.GetCurrentPlayerDirrection()), Engine.GetPlayerAttackLocation("x"),Engine.GetPlayerAttackLocation("y"), 32,32,null);
+				g2d.drawImage(attacks.getAttackSprite("playerMeleeAttack", Engine.GetCurrentPlayerDirrection()), Engine.GetPlayerAttackLocation("x"),Engine.GetPlayerAttackLocation("y"), 64,64,null);
 			}
 			
 			//Enemies
 			for(i=0;i <Engine.GetNumberOfEnemies(); i++) {
-				//use this for drawing an sprite
-				//g.drawImage(img, x, y, observer)
+				Enemy E = Engine.GetEnemy(i);
+				//g2d.setColor(Color.RED);
+				//g2d.drawRect(E.GetX(),E.GetY(), 32,32);
+				g2d.drawImage(E.getEnemyAnimation().Sprite, E.GetX(),E.GetY(), 64,64,null);
+				enemySprite = createImage(getWidth(),getHeight());
+				drawEntity(enemySprite.getGraphics(), E.getEnemyAnimation());
+				
 			}
 			
 			//pickups
@@ -143,7 +150,7 @@ public class RenderEngine extends JPanel implements ActionListener{
 			
 			//HUD
 			meleeWeapon = iconLoader.loadSprite("MenusAndIcons/HUD_weaponMelee");
-			rangedWeapon = iconLoader.loadSprite("Error"); //replace with ranged weapon when done
+			rangedWeapon = iconLoader.loadSprite("MenusAndIcons/HUD_weaponRanged"); 
 			currentIcon = iconLoader.loadSprite("MenusAndIcons/HUD_score");
 			g2d.setFont(HUDFont);
 			g2d.setColor(HUD_Background);
@@ -227,5 +234,42 @@ public class RenderEngine extends JPanel implements ActionListener{
 				//g.drawImage(img, x, y, observer)
 			}
 		}
+		
+		else if(Engine.GetState() ==5) {
+			Menu Menu = Engine.GetPauseMenu();
+			g2d.setColor(Color.BLACK);
+			g2d.setFont(titleFont);
+			g2d.drawString("PAUSED",1024/2-100,100);
+			for(i=0;i< Menu.GetNumberOfButtons(); i++) {
+				g2d.setColor(Color.cyan);
+				if(Menu.GetButton(i).Selected()) {
+					g2d.setColor(Color.magenta);
+				}
+				g2d.fillRect(Menu.GetButton(i).GetX(), Menu.GetButton(i).GetY(), 200, 50);
+				g2d.setColor(Color.BLACK);
+				g2d.setFont(buttonFont);
+				g2d.drawString(Menu.GetButton(i).GetName(), Menu.GetButton(i).GetX()+70, Menu.GetButton(i).GetY()+28);
+				//g.drawImage(img, x, y, observer)
+			}
+		}
+		
+		else if(Engine.GetState() == 6) {
+			Menu Menu = Engine.GetCloseMenu();
+			g2d.setColor(Color.BLACK);
+			g2d.setFont(titleFont);
+			g2d.drawString("Are you sure?",1024/2-130,100);
+			for(i=0;i< Menu.GetNumberOfButtons(); i++) {
+				g2d.setColor(Color.cyan);
+				if(Menu.GetButton(i).Selected()) {
+					g2d.setColor(Color.magenta);
+				}
+				g2d.fillRect(Menu.GetButton(i).GetX(), Menu.GetButton(i).GetY(), 200, 50);
+				g2d.setColor(Color.BLACK);
+				g2d.setFont(buttonFont);
+				g2d.drawString(Menu.GetButton(i).GetName(), Menu.GetButton(i).GetX()+70, Menu.GetButton(i).GetY()+28);
+				//g.drawImage(img, x, y, observer)
+			}
+		}
+	
 	}
 }

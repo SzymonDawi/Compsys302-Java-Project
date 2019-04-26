@@ -41,6 +41,7 @@ public class Controller implements ActionListener{
 		AddAction("swapWeapon", 0,0, KeyEvent.VK_C);
 		AddAction("Escape", 0,0,KeyEvent.VK_ESCAPE);
 		AddAction("Enter", 0,0,KeyEvent.VK_ENTER);
+		AddAction("Pause", 0,0,KeyEvent.VK_P);
 	}
 	
 	public void AddAction(String Name, int DeltaX, int DeltaY, int KeyCode) {
@@ -49,13 +50,13 @@ public class Controller implements ActionListener{
 	
 	public void Move(int DeltaX, int DeltaY, ActionEvent e) {
 		
-		if(CurrentKey == "Escape") {
-			Engine.SetState(6);
-			Engine.GetScoreEngine().compareCurrentToHigh(Engine.currentGameScore);
+		if(Engine.GetState() != 2  && CurrentKey == "Escape") {
 			System.exit(0);
+			//Engine.SetState(6);
+			
 		}
 		
-		if((Engine.GetState() == 0) ||(Engine.GetState() == 1 )|| (Engine.GetState() == 3)|| (Engine.GetState() == 4)) {
+		if((Engine.GetState() == 0) ||(Engine.GetState() == 1 )|| (Engine.GetState() == 3)|| (Engine.GetState() == 4)|| (Engine.GetState() == 5)|| (Engine.GetState() == 6)) {
 				if(CurrentKey == "Left") {
 					if(Engine.GetState() == 3 ||Engine.GetSoundMenu().GetSelected() == 1) {
 						Engine.SwitchButton(-1);
@@ -85,6 +86,15 @@ public class Controller implements ActionListener{
 			else if(CurrentKey == "Enter") {
 				Engine.setPlayerAttacking(true);
 				CurrentKey = null;
+			}
+			else if(CurrentKey == "Pause") {
+				Engine.SetState(5);
+				CurrentKey = null;
+			}
+			else if(CurrentKey == "Escape") {
+				Engine.SetState(6);
+				CurrentKey = null;
+			
 			}
 			Engine.MovePlayer(DeltaX, DeltaY);
 			

@@ -6,6 +6,7 @@ public class Character extends Entity{
 	protected int AttSpeed;
 	protected int MaxHealth;
 	protected boolean Alive;
+	protected String Direction;
 	
 	Sprite currentSprite;
 	Animation attackFront;
@@ -60,5 +61,10 @@ public class Character extends Entity{
 	public void SetAttSpeed(int NewAttSpeed) {
 		AttSpeed = NewAttSpeed;
 	}
+	
+	public void TakeDamage(int i) {
+		Health = Health - i;
+	}
+	
 	
 }

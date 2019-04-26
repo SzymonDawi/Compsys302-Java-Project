@@ -132,9 +132,6 @@ public class Player extends Character{
 		H = 50;
 	}
 	
-	public void TakeDamage(int i) {
-		Health = Health - i;
-	}
 	
 	public void Kill() {
 		Alive = false;
