@@ -24,7 +24,7 @@ public class GameScreen {
 		while(Game.IsRunning()){
 			long lastTime = System.nanoTime();
 			
-			Game.Update((float)(delta/1000000000.0));
+			Game.Update((float)(delta)/1000);
 			
 			//Render.repaint();
 			

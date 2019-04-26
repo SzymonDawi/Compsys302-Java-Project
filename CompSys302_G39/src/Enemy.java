@@ -1,9 +1,7 @@
 
 public class Enemy extends Character {
 	protected boolean aggro;
-	
-	
-		 
+
 	public void setAggro(boolean NewAggro) {
 		aggro = NewAggro;
 	}
@@ -13,7 +11,7 @@ public class Enemy extends Character {
 	}
 		
 	public void triangulatePlayer (int xTarget, int yTarget) {
-		if (!aggro) {
+		if (!aggro ) {
 			return;
 		}
 		int Xdifference = X - xTarget;
@@ -26,13 +24,10 @@ public class Enemy extends Character {
 			movementPriority = "y";
 		}else if(Math.abs(Xdifference)>Speed) {	
 			movementPriority = "x";
-			} else {
+		} else {
 			return;
-	}
-		
-		
-		
-		
+		}
+
 		if (movementPriority == "x") {
 			if(Xdifference < 0) {
 				X +=Speed;
@@ -55,8 +50,6 @@ public class Enemy extends Character {
 	
 	public Animation getEnemyAnimation() {
 		Animation temp = walkFront;
-		
-		
 			if(!aggro) {
 				switch(Direction) {
 				case "Left":
@@ -131,6 +124,4 @@ public class Enemy extends Character {
 		}
 		return false;
 	}
-	
-	
 }

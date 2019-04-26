@@ -9,6 +9,7 @@ import javax.swing.JPanel;
 
 public class GameEngine{
 	//stores the current scene
+	private boolean tick= false;
 	private String currentKeyPress = "Forward";
 	private boolean isPlayerAttacking = false;
 	private boolean standingStill = true;
@@ -50,6 +51,7 @@ public class GameEngine{
 	private GameState State;
 	private GameState previousState;
 	private Physics Physics = new Physics();
+	private boolean OtherCollision = false;
 	
 	enum GameState{
 		MAINMENU,
@@ -101,6 +103,10 @@ public class GameEngine{
 				break;
 			case SCENE:
 				Physics.Update(this);
+				OtherCollision = Physics.OtherCollisions();
+				
+				if(tick) {
+				}
 				//AddObstacle(100,100,50,50);
 				//AddObstacle(100,100,1024,0);
 				break;
@@ -132,11 +138,13 @@ public class GameEngine{
 		SoundMenuInit();
 		PauseMenuInit();
 		CloseMenuInit();
+		
 		AddPickup("coin", 500, 500);
 		AddPickup("coin", 460, 500);
 		AddPickup("coin", 460, 460);
 		AddEnemy(470, 510);
 		AddEnemy(200, 700);
+		
 		MainMapInit();
 		CurrentMap = MainMap;
 		
@@ -317,11 +325,15 @@ public class GameEngine{
 		//just calls run
 		LastTime = CurrentTime;
 		CurrentTime = (int)deltaTime;
+		if(deltaTime > 4) {
+			tick = !tick;
+		}
 		run();
 	}
 	
 	public void MovePlayer(int DeltaX,int DeltaY) {
 		boolean MoveMap = false;
+		boolean PlayerMove = !Physics.PlayerCollisions(DeltaX, DeltaY);
 		int MapX=50;
 		int MapY=50;
 		
@@ -343,7 +355,7 @@ public class GameEngine{
 		if(Rect.intersects(new Rectangle(MapX, MapY, CurrentMap.GetMaxX()-64, CurrentMap.GetMaxY()-62)))	{	
 			Rect = new Rectangle(PlayerOne.GetX() + DeltaX, PlayerOne.GetY() + DeltaY, PlayerOne.GetWidth(),PlayerOne.GetHeight());
 				if(Rect.intersects(new Rectangle(50,50,928,624))){	
-					if(!Physics.PlayerCollisions(DeltaX, DeltaY)) {
+					if(PlayerMove) {
 							PlayerOne.Move(DeltaX, DeltaY);
 						}
 				}
@@ -358,21 +370,21 @@ public class GameEngine{
 					MovePickups(DeltaX,DeltaY);
 					MoveEnemies(DeltaX,DeltaY);
 					CurrentMap.Update(DeltaX,DeltaY);	
-				}
-				
-			
-				for(int i = 0; i < ListOfEnemies.size(); i++) {
-					Enemy E = ListOfEnemies.get(i);
-					if(E.detectPlayer(PlayerOne.GetX(),PlayerOne.GetY())) {
-						randomiseFile = String.valueOf((int)(Math.random() *5 +1));
-						
-						playerDetected.getSound("detected_"+randomiseFile);
-						playerDetected.setVol(0.3);
-						playerDetected.playSound();
-					}
-					E.triangulatePlayer (PlayerOne.GetX(),PlayerOne.GetY());
 				}	
 				
+				if(PlayerMove) {
+					for(int i = 0; i < ListOfEnemies.size(); i++) {
+						Enemy E = ListOfEnemies.get(i);
+						if(E.detectPlayer(PlayerOne.GetX(),PlayerOne.GetY())) {
+							randomiseFile = String.valueOf((int)(Math.random() *5 +1));
+							
+							playerDetected.getSound("detected_"+randomiseFile);
+							playerDetected.setVol(0.3);
+							playerDetected.playSound();
+						}
+						E.triangulatePlayer (PlayerOne.GetX(),PlayerOne.GetY());
+					}		
+				}
 		}
 	}
 	
@@ -429,15 +441,17 @@ public class GameEngine{
 	}
 	
 	//adds entities
-	private void AddEnemy(int x, int y) {
-		ListOfEnemies.add(new MeleeEnemy(x,y, "Left"));
+	private void AddEnemy(int X, int Y) {
+		Enemy E = new MeleeEnemy(X,Y, "Left");
+		E.SetBounds(0,0,64,64);
+		ListOfEnemies.add(E);
 	}
 	
 	private void AddObstacle(String s, int W, int H, int X, int Y,int Frames) {
 		Obstacle O = new Obstacle(s,W,H,X,Y,Frames);
 		if(s == "House_1"){
-			O.SetBounds(X, Y+H/2, W, H/2 -8);
-			O.SetSpecialBounds(X+36, Y+H+1, 8, 1);
+			O.SetBounds(0, H/2, W-15, H/2 -8);
+			O.SetSpecialBounds(36, H+1, 8, 1);
 			O.SetAction("LoadHouse1");
 		}
 		else if(s == "0") {

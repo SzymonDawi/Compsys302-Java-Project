@@ -125,7 +125,8 @@ public class RenderEngine extends JPanel implements ActionListener{
 				g2d.drawImage(E.getEnemyAnimation().Sprite, E.GetX(),E.GetY(), 64,64,null);
 				enemySprite = createImage(getWidth(),getHeight());
 				drawEntity(enemySprite.getGraphics(), E.getEnemyAnimation());
-				
+				//g2d.setColor(Color.yellow);
+				//g2d.fillRect(E.GetBounds().x,E.GetBounds().y, E.GetWidth(), E.GetHeight());
 			}
 			
 			//pickups

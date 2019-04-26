@@ -8,9 +8,18 @@ public class Entity {
 	protected int Y;
 	protected int W;
 	protected int H;
+	
+	protected int BoundsX;
+	protected int BoundsY;
+	protected int BoundsW;
+	protected int BoundsH;
+	
+	protected int SpecialX;
+	protected int SpecialY;
+	protected int SpecialW;
+	protected int SpecialH;
+	
 	protected boolean exists;
-	protected Rectangle Bounds;
-	protected Rectangle SpecialBounds = null;
 	private String Action;
 	
 	ArrayList<BufferedImage> SpriteList = new ArrayList<BufferedImage>();
@@ -20,7 +29,6 @@ public class Entity {
 	
 	public Entity() {
 		exists = true;
-		Bounds = new Rectangle(X,Y,W,H);
 	}
 	
 	public void Move(int DeltaX,int DeltaY) {
@@ -29,11 +37,11 @@ public class Entity {
 	}
 	
 	public Rectangle GetSpecialBounds() {
-		return SpecialBounds;
+		return new Rectangle(X+SpecialX,Y+SpecialY,SpecialW,SpecialH);
 	}
 	
 	public Rectangle GetBounds() {
-		return Bounds;
+		return new Rectangle(X+BoundsX,Y+BoundsY,BoundsW,BoundsH);
 	}
 	
 	public Image GetCurrentSprite() { 
@@ -82,10 +90,16 @@ public class Entity {
 	}
 	
 	public void SetSpecialBounds(int X,int Y,int W,int H) {
-		SpecialBounds = new Rectangle(X,Y,W,H);
+		SpecialX = X;
+		SpecialY = Y;
+		SpecialW = W;
+		SpecialH = H;
 	}
 	
 	public void SetBounds(int X,int Y,int W,int H) {
-		Bounds = new Rectangle(X,Y,W,H);
+		BoundsX = X;
+		BoundsY = Y;
+		BoundsW = W;
+		BoundsH = H;
 	}
 }

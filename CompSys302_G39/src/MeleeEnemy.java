@@ -2,10 +2,20 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 public class MeleeEnemy extends Enemy{
-
-	MeleeEnemy() {
-		Health = 100;
-		Damage = 20;
+	
+	public MeleeEnemy(int x, int y, String direction) {
+		initMeleeEnemyAnimations();
+		Direction = direction;
+		Health = 6;
+		MaxHealth = 6;
+		Damage = 1;
+		Alive = true;
+		Speed = 1;
+		X = x;
+		Y = y;
+		W = 64;
+		H = 64;
+		aggro = false;
 	}
 	
 	private void initMeleeEnemyAnimations() {		
@@ -107,23 +117,5 @@ public class MeleeEnemy extends Enemy{
 		walkLeft.setSpeed(200);
 		walkLeft.start();
 	}
-	
-	
-	
-	public MeleeEnemy(int x, int y, String direction) {
-		initMeleeEnemyAnimations();
-		Direction = direction;
-		Health = 6;
-		MaxHealth = 6;
-		Damage = 1;
-		Alive = true;
-		Speed = 5;
-		X = x;
-		Y = y;
-		W = 40;
-		H = 50;
-		aggro = false;
-	}
-	
 	
 }
