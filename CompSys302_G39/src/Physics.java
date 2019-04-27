@@ -6,6 +6,8 @@ public class Physics {
 	private ArrayList<Enemy> ListOfEnemies = new ArrayList<Enemy>();
 	private ArrayList<Obstacle> ListOfObstacles = new ArrayList<Obstacle>();
 	private ArrayList<pickups> ListOfPickups = new ArrayList<pickups>();
+	private ArrayList<Projectile> ListofProjectiles = new ArrayList<Projectile>();
+	
 	private Player PlayerOne = new Player();
 	private Map Map = new Map();
 	private boolean Collision = false;
@@ -17,12 +19,13 @@ public class Physics {
 		this.Engine = Engine;
 		this.ListOfEnemies = Engine.GetListOfEnemies();
 		this.ListOfObstacles = Engine.GetListOfObstacles();
+		this.ListofProjectiles = Engine.GetListOfProjectile();
 		this.ListOfPickups = Engine.GetListOfPickups();
 		this.PlayerOne = Engine.GetPlayer();
 		this.Map = Engine.Getlevel();
 	}
 	
-	public boolean OtherCollisions(Entity E) {
+	public boolean OtherCollisions(Enemy E) {
 		int i;
 		OtherCollision = false;
 		Rectangle Bounds = new Rectangle(E.GetX()+E.GetDX(), E.GetY()+E.GetDY(), E.GetWidth(),E.GetHeight());
@@ -42,12 +45,20 @@ public class Physics {
 			OtherCollision =true;
 		}
 		
+		for(i = 0; i <ListofProjectiles.size(); i++) {
+			Projectile P = ListofProjectiles.get(i);
+			Rectangle Rect = P.GetBounds();
+			if(Bounds.intersects(Rect)) {
+				E.TakeDamage(6);
+			}
+		}
+		
 		for(i=0; i < ListOfObstacles.size(); i++) {
 			Obstacle O = ListOfObstacles.get(i);
-				Rectangle Rect3 = O.GetBounds();
-				if(Bounds.intersects(Rect3)) {
-				OtherCollision = true;
-				}
+			Rectangle Rect = O.GetBounds();
+			if(Bounds.intersects(Rect)) {
+			OtherCollision = true;
+			}
 			
 		}
 		return OtherCollision;
@@ -75,12 +86,18 @@ public class Physics {
 				if(E.GetBounds().intersects(PlayerBounds)) {
 				Collision = true;
 				if(E.GetIsAttacking())
-					PlayerOne.TakeDamage(E.GetDamage(),E.GetDirection());
+					PlayerOne.TakeDamage(E.GetDamage());
 					E.Stop();
+					E.SetIsAttacking(false);
 				}
 				if(PlayerOne.GetIsAttacking()) {
-					if(PlayerOne.GetSpecialBounds().intersects(E.GetBounds())) {
-						E.TakeDamage(PlayerOne.GetDamage(), PlayerOne.GetDirection());
+					if(PlayerOne.getWeaponType().compareTo("ranged") == 0) {
+						Engine.AddProjectile(true, PlayerOne.GetX()+15,PlayerOne.GetY()+20,10,10,PlayerOne.GetDirection());
+					}
+					else {
+						if(PlayerOne.GetSpecialBounds().intersects(E.GetBounds())) {
+							E.TakeDamage(PlayerOne.GetDamage());
+						}
 					}
 				}
 		}

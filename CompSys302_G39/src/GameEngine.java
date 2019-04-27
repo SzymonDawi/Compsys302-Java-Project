@@ -14,14 +14,16 @@ import javax.swing.Timer;
 
 public class GameEngine implements ActionListener{
 	//stores the current scene
+	private ArrayList<Enemy> ListOfEnemies = new ArrayList<Enemy>();
+	private ArrayList<Obstacle> ListOfObstacles = new ArrayList<Obstacle>();
+	private ArrayList<Projectile> ListofProjectiles = new ArrayList<Projectile>();
+	private ArrayList<pickups> ListOfPickups = new ArrayList<pickups>();
+	
 	private String currentKeyPress = "Forward";
 	private boolean isPlayerAttacking = false;
 	private boolean standingStill = true;
 	private String randomiseFile;
 	private int currentGameScore;  //do not make this private (yet)
-	private ArrayList<Enemy> ListOfEnemies = new ArrayList<Enemy>();
-	private ArrayList<Obstacle> ListOfObstacles = new ArrayList<Obstacle>();
-	private ArrayList<pickups> ListOfPickups = new ArrayList<pickups>();
 	private ScoreSaver ScoreEngine = new ScoreSaver();
 	private Timer Timer;
 	private int remainingTime;
@@ -132,6 +134,11 @@ public class GameEngine implements ActionListener{
 				}
 				
 				if(tick&& !physicsrun) {
+					for(int i =0; i<ListofProjectiles.size(); i++) {
+						Projectile P = ListofProjectiles.get(i);
+						P.Move();
+					}
+					
 					CheckIfDead();
 					for(int i = 0; i < ListOfEnemies.size(); i++) {
 						Enemy E = ListOfEnemies.get(i);
@@ -294,6 +301,9 @@ public class GameEngine implements ActionListener{
 		AddObstacle("Wall", 224, 8, 2176-MainMapDeltaX, 680-MainMapDeltaY, 0);
 		AddObstacle("Wall", 104, 8, 2400-MainMapDeltaX, 688-MainMapDeltaY, 0);
 		AddObstacle("Wall",	56, 8, 2504-MainMapDeltaX, 680-MainMapDeltaY, 0);
+		
+		//Beach Tiles
+		AddObstacle("Wall",	8, 3072, 2700-MainMapDeltaX, 0-MainMapDeltaY, 0);
 		
 		AddEnemy(470-MainMapDeltaX, 510-MainMapDeltaY,"Right");
 		AddEnemy(200-MainMapDeltaX, 700-MainMapDeltaY, "Backward");
@@ -563,6 +573,28 @@ public class GameEngine implements ActionListener{
 		ListOfEnemies.add(E);
 	}
 	
+	public void AddProjectile(boolean Friendly, int X, int Y, int W, int H,String s) {
+		Projectile P = new Projectile(Friendly, X, Y, W, H);
+		P.SetBounds(0, 0, W, H);
+		int Dx=0;
+		int Dy=0;
+		if(currentKeyPress.compareTo("Forward")==0) {
+			Dy = 5;
+		}
+		else if(currentKeyPress.compareTo("Backwards")==0) {
+			Dy = -5;
+		}
+		else if(currentKeyPress.compareTo("Left")==0) {
+			Dx = -5;
+		}
+		else if(currentKeyPress.compareTo("Right")==0) {
+			Dx = 5;
+		}
+		P.SetDX(Dx);
+		P.SetDY(Dy);
+		ListofProjectiles.add(P);
+	}
+	
 	private void AddObstacle(String s, int W, int H, int X, int Y,int Frames) {
 		Obstacle O = new Obstacle(s,W,H,X,Y,Frames);
 		if(s.compareTo("House_1") == 0){
@@ -706,6 +738,10 @@ public class GameEngine implements ActionListener{
 		return ListOfObstacles.get(i);
 	}
 	
+	public Projectile GetProjectile(int i) {
+		return ListofProjectiles.get(i);
+	}
+	
 	public pickups GetPickup(int i) {
 		return ListOfPickups.get(i);
 	}
@@ -718,6 +754,10 @@ public class GameEngine implements ActionListener{
 		return ListOfObstacles;
 	}
 	
+	public ArrayList<Projectile> GetListOfProjectile(){
+		return ListofProjectiles;
+	}
+	
 	public ArrayList<pickups> GetListOfPickups(){
 		return ListOfPickups;
 	}
@@ -728,6 +768,10 @@ public class GameEngine implements ActionListener{
 		
 	public int GetNumberOfObstacles() {
 		return ListOfObstacles.size();
+	}
+	
+	public int GetNumberOfProjectiles() {
+		return ListofProjectiles.size();
 	}
 	
 	public int GetNumberOfPickups() {

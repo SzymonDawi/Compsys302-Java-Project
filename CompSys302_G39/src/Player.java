@@ -34,7 +34,6 @@ public class Player extends Character{
 		BoundsH= H;
 	}
 	
-	
 	public void Kill() {
 		Alive = false;
 	}
@@ -96,7 +95,6 @@ public class Player extends Character{
 	}
 	
 	//Getters
-	
 	public boolean getHasKey () {
 		return hasKey;
 	}

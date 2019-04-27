@@ -25,13 +25,11 @@ public class Character extends Entity{
 	Animation standRight;
 
 
-	public void TakeDamage(int i, String s) {
+	public void TakeDamage(int i) {
 		Health = Health - i;
 		if (Health < 0) {
-			Health = 0;
-			
+			Health = 0;	
 		}
-	
 	}
 	
 	//getters
@@ -94,5 +92,4 @@ public class Character extends Entity{
 	public void SetAttSpeed(int NewAttSpeed) {
 		AttSpeed = NewAttSpeed;
 	}
-	
 }

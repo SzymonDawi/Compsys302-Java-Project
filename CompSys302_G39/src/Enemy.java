@@ -29,7 +29,6 @@ public class Enemy extends Character{
 		
 		int Xdifference = X - xTarget;
 		int Ydifference =  Y - yTarget;
-		isAttacking = false;
 		
 		if(StartReload != AttSpeed) {
 			StartReload++;

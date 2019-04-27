@@ -150,6 +150,11 @@ public class RenderEngine extends JPanel implements ActionListener{
 				g2d.drawRect(O.GetBounds().x,O.GetBounds().y, O.GetBounds().width, O.GetBounds().height);		
 			}
 			
+			for(i =0 ; i <Engine.GetNumberOfProjectiles(); i++) {
+				Projectile P = Engine.GetProjectile(i);
+				g2d.setColor(Color.blue);
+				g2d.drawRect(P.GetX(),P.GetY(), P.GetWidth(), P.GetHeight());		
+			}
 			//HUD
 			meleeWeapon = iconLoader.loadSprite("MenusAndIcons/HUD_weaponMelee");
 			rangedWeapon = iconLoader.loadSprite("MenusAndIcons/HUD_weaponRanged"); 
