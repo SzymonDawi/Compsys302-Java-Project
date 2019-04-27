@@ -6,16 +6,18 @@ public class Player extends Character{
 	
 	protected int ammo;
 	protected int maxAmmo;
+	protected boolean hasKey;
 	protected String currentWeapon;
 	private int MainMapX;
 	private int MainMapY;
 	
 	public Player() {
 		initPlayerAnimations();
+		hasKey = false;
 		maxAmmo = 20;
 		ammo = 20;
-		Health = 10;
-		MaxHealth = 10;
+		Health = 20;
+		MaxHealth = 20;
 		Damage = 6;
 		Alive = true;
 		currentWeapon = "melee";
@@ -64,6 +66,10 @@ public class Player extends Character{
 		attackBack.setSpeed(AttSpeed);
 	}
 	
+	public void setHasKey (boolean Key) {
+		hasKey = Key;
+	}
+	
 	public void setWeaponType (String weaponType) {
 		currentWeapon = weaponType;
 	}
@@ -90,6 +96,10 @@ public class Player extends Character{
 	}
 	
 	//Getters
+	
+	public boolean getHasKey () {
+		return hasKey;
+	}
 	
 	public int GetMainMapX() {
 		return MainMapX;

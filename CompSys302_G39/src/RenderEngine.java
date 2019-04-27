@@ -159,6 +159,11 @@ public class RenderEngine extends JPanel implements ActionListener{
 			g2d.drawImage(currentIcon,15, 675, 190, 40,null); //health icon
 			currentIcon = iconLoader.loadSprite("MenusAndIcons/HUD_weaponBox");
 			g2d.drawImage(currentIcon,680, 650, 70, 70,null); //weapon box icon
+			g2d.drawImage(currentIcon,610, 650, 70, 70,null); //inventory box icon
+			if(Engine.GetPlayer().getHasKey() ) {
+				currentIcon = iconLoader.loadSprite("MenusAndIcons/Inventory_key");
+				g2d.drawImage(currentIcon,620, 660, 50, 50,null);
+			}
 			currentIcon = iconLoader.loadSprite("MenusAndIcons/HUD_ammo");
 			g2d.drawImage(currentIcon,800, 675, 190, 40,null); //ammo icon
 			currentIcon = iconLoader.loadSprite("MenusAndIcons/HUD_timer");

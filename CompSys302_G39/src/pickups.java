@@ -8,6 +8,7 @@ public class pickups extends Entity {
 	private Animation coinAnimation;
 	private Animation ammoAnimation;
 	private Animation healthAnimation;
+	private Animation keyAnimation;
 	private String type;
 	
 private void initPickupAnimations() {
@@ -42,6 +43,15 @@ private void initPickupAnimations() {
 		healthAnimation = new Animation(healthAnimationSprites); //coin animation
 		healthAnimation.setSpeed(600);
 		healthAnimation.start();
+		
+		BufferedImage key = loadPlayer.loadSprite("pickups/key"); 
+		Sprite keySprite= new Sprite(key);
+		ArrayList<BufferedImage> keyAnimationSprites = new ArrayList<BufferedImage>();
+		keyAnimationSprites.add(keySprite.getSprite(0, 0, 32, 32));  //frame 1
+		keyAnimationSprites.add(keySprite.getSprite(32, 0, 32, 32)); //frame 2
+		keyAnimation = new Animation(keyAnimationSprites); //coin animation
+		keyAnimation.setSpeed(600);
+		keyAnimation.start();
 	}
 		
 	pickups(String type, int x, int y){
@@ -62,6 +72,9 @@ private void initPickupAnimations() {
 		break;
 		case "health":
 			temp = healthAnimation;
+		break;
+		case "key":
+			temp = keyAnimation;
 		break;
 		}
 	
@@ -84,6 +97,9 @@ private void initPickupAnimations() {
 		break;
 		case "health":
 			temp = 10;
+		break;
+		case "key":
+			temp = 1000;
 		break;
 		}
 		

@@ -116,7 +116,8 @@ public class GameEngine implements ActionListener{
 				}
 				break;
 			case SCENE:
-Physics.Update(this);
+				Timer.start();
+				Physics.Update(this);
 				
 				if(tick != PreviousTick) {
 					PreviousTick = tick;
@@ -176,7 +177,9 @@ Physics.Update(this);
 	
 	private void CheckIfDead() {
 		if(PlayerOne.GetHealth() == 0) {
-			
+			Timer.stop();
+			//TODO death sound
+			//go to death screen
 		}
 		
 		for(int i = 0; i < ListOfEnemies.size(); i++) {
@@ -196,8 +199,7 @@ Physics.Update(this);
 		CloseMenuInit();
 		
 		AddPickup("coin", 500, 500);
-		AddPickup("coin", 460, 500);
-		AddPickup("coin", 460, 460);
+		AddPickup("key", 700,700);
 		AddPickup("ammo", 400, 450);
 		AddPickup("health", 430, 470);
 		
@@ -493,6 +495,9 @@ Physics.Update(this);
 			break;
 		case "health":
 			PlayerOne.SetHealth(PlayerOne.GetHealth() + 4);
+			break;
+		case "key":
+			PlayerOne.setHasKey(true);
 			break;
 		}
 		ListOfPickups.remove(i);

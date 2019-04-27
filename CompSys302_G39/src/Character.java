@@ -27,6 +27,10 @@ public class Character extends Entity{
 
 	public void TakeDamage(int i, String s) {
 		Health = Health - i;
+		if (Health < 0) {
+			Health = 0;
+			
+		}
 	
 	}
 	
@@ -65,6 +69,9 @@ public class Character extends Entity{
 	
 	public void SetHealth(int NewHealth) {
 		Health = NewHealth;
+		if (Health > MaxHealth){
+			Health = MaxHealth;
+		}
 	}
 	
 	public void SetMaxHealth(int NewMaxHealth) {
