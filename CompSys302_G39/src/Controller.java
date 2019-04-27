@@ -56,7 +56,7 @@ public class Controller implements ActionListener{
 			
 		}
 		
-		if((Engine.GetState() == 0) ||(Engine.GetState() == 1 )|| (Engine.GetState() == 3)|| (Engine.GetState() == 4)|| (Engine.GetState() == 5)|| (Engine.GetState() == 6)) {
+		if((Engine.GetState() == 0) ||(Engine.GetState() == 1 )|| (Engine.GetState() == 3)|| (Engine.GetState() == 4)|| (Engine.GetState() == 5)|| (Engine.GetState() == 6)|| (Engine.GetState() == 6)) {
 				if(CurrentKey == "Left") {
 					if(Engine.GetState() == 3 ||Engine.GetSoundMenu().GetSelected() == 1) {
 						Engine.SwitchButton(-1);
@@ -92,7 +92,7 @@ public class Controller implements ActionListener{
 				CurrentKey = null;
 			}
 			else if(CurrentKey == "Escape") {
-				Engine.SetState(6);
+				Engine.SetState(7);
 				CurrentKey = null;
 			
 			}

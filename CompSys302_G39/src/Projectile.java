@@ -2,6 +2,7 @@
 public class Projectile extends Entity{
 	private boolean Friendly;
 	
+
 	public Projectile(boolean Friendly, int X, int Y, int W, int H) {
 		this.Friendly = Friendly;
 		this.W = W;
@@ -9,6 +10,10 @@ public class Projectile extends Entity{
 		this.X = X;
 		this.Y = Y;
 	}	
+	
+	public boolean getFriendly() {
+		return Friendly;
+	}
 	
 	@Override
 	public void Move() {

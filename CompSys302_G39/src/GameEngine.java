@@ -46,12 +46,17 @@ public class GameEngine implements ActionListener{
 	private Menu PauseMenu = new Menu();
 	private Menu OptionsMenu = new Menu();
 	private Menu CurrentMenu = new Menu();
+	private Menu DeadMenu = new Menu();
 	private Menu CloseMenu = new Menu();
 	private boolean LoadingMenu;
 	
 	private Sound buttonClick = new Sound();
+	private Sound enemyDeath = new Sound();
 	private Sound buttonSwitch = new Sound();
 	private Sound swapWeapon = new Sound();
+	private Sound playerHurt = new Sound();
+	private Sound enemyHurt = new Sound();
+	private Sound gameOver = new Sound();
 	private Sound MMMusic = new Sound();
 	private Sound meleeAttack = new Sound();
 	private Sound rangedAttack = new Sound();
@@ -73,6 +78,7 @@ public class GameEngine implements ActionListener{
 		SCOREMENU,
 		SCENE,
 		PAUSED,
+		DEAD,
 		CLOSE
 	}
 	
@@ -181,19 +187,29 @@ public class GameEngine implements ActionListener{
 					LoadingMenu = false;
 				}
 				break;
+				
+			case DEAD:
+				Timer.stop();
+				previousState =  GameState.MAINMENU;
+				CurrentMenu = DeadMenu;
+				if(LoadingMenu) {
+					CurrentMenu.Select(0);
+					LoadingMenu = false;
+				}
+				break;
 		}
 	}
 	
 	private void CheckIfDead() {
 		if(PlayerOne.GetHealth() == 0) {
-			Timer.stop();
-			//TODO death sound
-			//go to death screen
+			gameOver.playSound();
+			SetState(6);
 		}
 		
 		for(int i = 0; i < ListOfEnemies.size(); i++) {
 			Enemy E = ListOfEnemies.get(i);
 			if(E.GetHealth() == 0) {
+				enemyDeath.playSound();
 				ListOfEnemies.remove(i);
 			}
 		}
@@ -206,6 +222,7 @@ public class GameEngine implements ActionListener{
 		SoundMenuInit();
 		PauseMenuInit();
 		CloseMenuInit();
+		DeadMenuInit();
 		
 		AddPickup("coin", 500, 500);
 		AddPickup("key", 700,700);
@@ -222,7 +239,11 @@ public class GameEngine implements ActionListener{
 		meleeAttack.getSound("Player_Melee_Attack");
 		pickupItem.getSound("pickup");
 		enterHouse.getSound("EnterDoor");
+		playerHurt.getSound("player_hurt");
+		enemyHurt.getSound("enemy_hit");
+		gameOver.getSound("gameOver");
 		noAmmo.getSound("noAmmo");
+		enemyDeath.getSound("enemy_die");
 		MMMusic.getSound("MMMusic_forgotten-toys");
 		MMMusic.loopSound(Clip.LOOP_CONTINUOUSLY);
 		MMMusic.setVol( 0.50);
@@ -354,6 +375,14 @@ public class GameEngine implements ActionListener{
 		PauseMenu.AddButton("Back", (1024/2-100), 300);
 		
 		PauseMenu.Select(0);
+	}
+	
+	
+	private void DeadMenuInit() {
+		
+		DeadMenu.AddButton("Back", (1024/2-100), 300);
+		
+		DeadMenu.Select(0);
 	}
 	
 	private void ScoreMenuInit() {
@@ -637,6 +666,9 @@ public class GameEngine implements ActionListener{
 		else if(i == 5) {
 			State =GameState.PAUSED;
 		}
+		else if(i == 6) {
+			State =GameState.DEAD;
+		}
 		
 		else {
 			State =GameState.CLOSE;
@@ -712,6 +744,10 @@ public class GameEngine implements ActionListener{
 	
 	public Menu GetScoreMenu() {
 		return ScoreMenu;
+	}
+	
+	public Menu GetDeadMenu() {
+		return DeadMenu;
 	}
 	
 	public Menu GetPauseMenu() {
@@ -870,8 +906,10 @@ public class GameEngine implements ActionListener{
 			return 4;
 		case PAUSED:
 			return 5;
+		case DEAD:
+			return 6;
 		case CLOSE:
-		return 6;
+		return 7;
 	}
 		return -1;
 	}

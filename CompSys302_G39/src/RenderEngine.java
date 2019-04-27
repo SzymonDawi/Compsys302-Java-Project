@@ -22,6 +22,8 @@ public class RenderEngine extends JPanel implements ActionListener{
 	private Image playerSprite;
 	private Image pickupSprite;
 	private Image enemySprite;
+	private BufferedImage friendlyProjectile;
+	private BufferedImage enemyProjectile;
 	private BufferedImage currentIcon;
 	private BufferedImage meleeWeapon;
 	private BufferedImage rangedWeapon;
@@ -150,10 +152,15 @@ public class RenderEngine extends JPanel implements ActionListener{
 				g2d.drawRect(O.GetBounds().x,O.GetBounds().y, O.GetBounds().width, O.GetBounds().height);		
 			}
 			
+			friendlyProjectile = iconLoader.loadSprite("player/player_projectile");
+			enemyProjectile = iconLoader.loadSprite("enemy/enemy_projectile"); 
 			for(i =0 ; i <Engine.GetNumberOfProjectiles(); i++) {
 				Projectile P = Engine.GetProjectile(i);
-				g2d.setColor(Color.blue);
-				g2d.drawRect(P.GetX(),P.GetY(), P.GetWidth(), P.GetHeight());		
+				if(Engine.GetProjectile(i).getFriendly()) {
+					g2d.drawImage(friendlyProjectile,P.GetX(),P.GetY(), P.GetWidth(), P.GetHeight(),null);
+				} else {
+					g2d.drawImage(enemyProjectile,P.GetX(),P.GetY(), P.GetWidth()+10, P.GetHeight()+10,null);
+				}
 			}
 			//HUD
 			meleeWeapon = iconLoader.loadSprite("MenusAndIcons/HUD_weaponMelee");
@@ -269,7 +276,22 @@ public class RenderEngine extends JPanel implements ActionListener{
 			}
 		}
 		
-		else if(Engine.GetState() == 6) {
+		else if(Engine.GetState() ==6) {
+			Menu Menu = Engine.GetDeadMenu();
+			for(i=0;i< Menu.GetNumberOfButtons(); i++) {
+				g2d.setColor(Color.cyan);
+				if(Menu.GetButton(i).Selected()) {
+					g2d.setColor(Color.magenta);
+				}
+				g2d.fillRect(Menu.GetButton(i).GetX(), Menu.GetButton(i).GetY(), 200, 50);
+				g2d.setColor(Color.BLACK);
+				g2d.setFont(buttonFont);
+				g2d.drawString(Menu.GetButton(i).GetName(), Menu.GetButton(i).GetX()+70, Menu.GetButton(i).GetY()+28);
+				//g.drawImage(img, x, y, observer)
+			}
+		}
+		
+		else if(Engine.GetState() == 7) {
 			Menu Menu = Engine.GetCloseMenu();
 			g2d.setColor(Color.BLACK);
 			g2d.setFont(titleFont);
