@@ -26,7 +26,11 @@ public class Map {
 			e.printStackTrace();
 		}
 		
-		if(Scale != 0) {
+		if(s.compareTo("Bridge")==0) {
+			Image NewImg = Img1.getScaledInstance(256, 512, Image.SCALE_DEFAULT);
+			g.drawImage(NewImg,X,Y,null);
+		}
+		else if(Scale != 0) {
 			Image NewImg = Img1.getScaledInstance(Scale, Scale, Image.SCALE_DEFAULT);
 			g.drawImage(NewImg,X,Y,null);
 		}
@@ -158,6 +162,15 @@ public class Map {
 					}
 					else if(Map[i][j] == 19) {
 						LoadImage("sprites/River_Edge_Front1.png",i,j);
+					}
+					else if(Map[i][j] == 31) {
+						LoadImage("sprites/Beach_1.png",i,j);
+					}
+					else if(Map[i][j] == 32) {
+						LoadImage("sprites/Beach2.png",i,j);
+					}
+					else if(Map[i][j] == 33) {
+						LoadImage("sprites/Beach3.png",i,j);
 					}
 				}
 			}

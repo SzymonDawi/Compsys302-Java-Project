@@ -15,7 +15,7 @@ public class spriteLoader {
 		try {
 			spriteSheet = ImageIO.read(new File("sprites/" + file + ".png"));
 		} catch (IOException e) {
-			e.printStackTrace();
+//			e.printStackTrace();
 		}
 		return spriteSheet;
 	}

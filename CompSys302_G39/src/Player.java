@@ -1,3 +1,4 @@
+import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
@@ -8,6 +9,190 @@ public class Player extends Character{
 	protected String currentWeapon;
 	private int MainMapX;
 	private int MainMapY;
+	
+	public Player() {
+		initPlayerAnimations();
+		maxAmmo = 20;
+		ammo = 20;
+		Health = 10;
+		MaxHealth = 10;
+		Damage = 6;
+		Alive = true;
+		currentWeapon = "melee";
+		AttSpeed = 100;
+
+		X = 300;
+		Y = 300;
+		W = 30;
+		H = 60;
+		
+		BoundsX= 0;
+		BoundsY= 0;
+		BoundsW= W;
+		BoundsH= H;
+	}
+	
+	
+	public void Kill() {
+		Alive = false;
+	}
+	
+	public boolean IsAlive() {
+		return Alive;
+	}
+
+	public int attack() {
+		if (currentWeapon == "ranged") {
+			if(ammo>0) {
+			ammo -= 1;
+			} else {
+				return 0;
+			}
+		} else {
+			//melee attack animation
+		}
+		return Damage;
+	}
+	
+	//Setters
+	@Override
+	public void SetAttSpeed(int NewAttSpeed) {
+		AttSpeed = NewAttSpeed;
+		attackRight.setSpeed(AttSpeed);
+		attackLeft.setSpeed(AttSpeed);
+		attackFront.setSpeed(AttSpeed);
+		attackBack.setSpeed(AttSpeed);
+	}
+	
+	public void setWeaponType (String weaponType) {
+		currentWeapon = weaponType;
+	}
+	
+	public void SetAmmo(int AmmoDelta) {
+		ammo += AmmoDelta;
+		if (ammo > maxAmmo) {
+			ammo = maxAmmo;
+		}else if (ammo< 0) {
+			ammo = 0;
+		}
+	}
+	
+	public void SetMaxAmmo (int MaxAmmoDelta) {
+		maxAmmo += MaxAmmoDelta;
+	}
+	
+	public void SetMainMapX() {
+		MainMapX = X;
+	}
+	
+	public void SetMainMapY() {
+		MainMapY = Y;
+	}
+	
+	//Getters
+	
+	public int GetMainMapX() {
+		return MainMapX;
+	}
+	
+	public int GetMainMapY() {
+		return MainMapY;
+	}
+	
+	public int getMaxAmmo () {
+		return maxAmmo;
+	}
+	
+	public int getAmmo () {
+		return ammo;
+	}
+	
+	public String getWeaponType () {
+		return currentWeapon;
+	}
+	
+	@Override
+	public Rectangle GetSpecialBounds() {
+//		if(Direction.compareTo("Forward")==0) {
+//			return new Rectangle(X,Y-5,W,H/2);
+//		}
+//		else if(Direction.compareTo("Backwards")==0) {
+//			return new Rectangle(X,Y+5,W,5);
+//		}
+//		else if(Direction.compareTo("Left")==0) {
+//			return new Rectangle(X-5,Y,5,H);
+//		}
+//		else if(Direction.compareTo("Right")==0) {
+//			System.out.println("nice");
+//			return new Rectangle(X+W,Y,10,H);
+//		}
+		return new Rectangle(X-5,Y-5,W+10,H+10);
+	}
+	public Animation getCurrentSprite(String Dirrection, boolean standingStill, boolean isAttacking) {
+		Animation temp = walkFront;
+		
+		if (isAttacking == false) {
+			if(standingStill) {
+				switch(Dirrection) {
+				case "Left":
+					temp = standLeft;
+				
+					break;
+			
+				case "Backwards":
+					temp = standBack;
+					break;
+			
+				case "Forward":
+					temp = standFront;
+					break;
+			
+				case "Right":
+					temp = standRight;
+					break;
+				}
+			} else {
+				switch(Dirrection) {
+				case "Left":
+					temp = walkLeft;
+					break;
+			
+				case "Backwards":
+					temp = walkBack;
+					break;
+			
+				case "Forward":
+					temp = walkFront;
+				break;
+			
+				case "Right":
+					temp = walkRight;
+				break;
+				}
+			}
+		} else {
+			switch(Dirrection) {
+				case "Left":
+					temp = attackLeft;
+				break;
+	
+				case "Backwards":
+					temp = attackBack;
+				break;
+	
+				case "Forward":
+					temp = attackFront;
+				break;
+	
+				case "Right":
+					temp = attackRight;
+				break;
+			
+			}
+		}
+		
+		return temp;
+	}
 	
 	private void initPlayerAnimations() {		
 		
@@ -114,168 +299,4 @@ public class Player extends Character{
 		walkLeft.setSpeed(200);
 		walkLeft.start();
 	}
-	
-	
-	public Player() {
-		initPlayerAnimations();
-		maxAmmo = 20;
-		ammo = 20;
-		Health = 10;
-		MaxHealth = 10;
-		Damage = 2;
-		Alive = true;
-		currentWeapon = "melee";
-		AttSpeed = 100;
-		X = 300;
-		Y = 300;
-		W = 40;
-		H = 50;
-	}
-	
-	
-	public void Kill() {
-		Alive = false;
-	}
-	
-	public boolean IsAlive() {
-		return Alive;
-	}
-
-	public int attack() {
-		if (currentWeapon == "ranged") {
-			if(ammo>0) {
-			ammo -= 1;
-			} else {
-				return 0;
-			}
-		} else {
-			//melee attack animation
-		}
-		return Damage;
-	}
-	
-	//Setters
-	@Override
-	public void SetAttSpeed(int NewAttSpeed) {
-		AttSpeed = NewAttSpeed;
-		attackRight.setSpeed(AttSpeed);
-		attackLeft.setSpeed(AttSpeed);
-		attackFront.setSpeed(AttSpeed);
-		attackBack.setSpeed(AttSpeed);
-	}
-	
-	public void setWeaponType (String weaponType) {
-		currentWeapon = weaponType;
-	}
-	
-	public void SetAmmo(int AmmoDelta) {
-		ammo += AmmoDelta;
-		if (ammo > maxAmmo) {
-			ammo = maxAmmo;
-		}else if (ammo< 0) {
-			ammo = 0;
-		}
-	}
-	
-	public void SetMaxAmmo (int MaxAmmoDelta) {
-		maxAmmo += MaxAmmoDelta;
-	}
-	
-	public void SetMainMapX() {
-		MainMapX = X;
-	}
-	
-	public void SetMainMapY() {
-		MainMapY = Y;
-	}
-	
-	//Getters
-	
-	public int GetMainMapX() {
-		return MainMapX;
-	}
-	
-	public int GetMainMapY() {
-		return MainMapY;
-	}
-	
-	public int getMaxAmmo () {
-		return maxAmmo;
-	}
-	
-	public int getAmmo () {
-		return ammo;
-	}
-	
-	public String getWeaponType () {
-		return currentWeapon;
-	}
-	
-	public Animation getCurrentSprite(String Dirrection, boolean standingStill, boolean isAttacking) {
-		Animation temp = walkFront;
-		
-		if (isAttacking == false) {
-			if(standingStill) {
-				switch(Dirrection) {
-				case "Left":
-					temp = standLeft;
-				
-					break;
-			
-				case "Backwards":
-					temp = standBack;
-					break;
-			
-				case "Forward":
-					temp = standFront;
-					break;
-			
-				case "Right":
-					temp = standRight;
-					break;
-				}
-			} else {
-				switch(Dirrection) {
-				case "Left":
-					temp = walkLeft;
-					break;
-			
-				case "Backwards":
-					temp = walkBack;
-					break;
-			
-				case "Forward":
-					temp = walkFront;
-				break;
-			
-				case "Right":
-					temp = walkRight;
-				break;
-				}
-			}
-		} else {
-			switch(Dirrection) {
-				case "Left":
-					temp = attackLeft;
-				break;
-	
-				case "Backwards":
-					temp = attackBack;
-				break;
-	
-				case "Forward":
-					temp = attackFront;
-				break;
-	
-				case "Right":
-					temp = attackRight;
-				break;
-			
-			}
-		}
-		
-		return temp;
-	}
-	
-	
 }

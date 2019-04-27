@@ -9,6 +9,9 @@ public class Entity {
 	protected int W;
 	protected int H;
 	
+	protected int DX;
+	protected int DY;
+	
 	protected int BoundsX;
 	protected int BoundsY;
 	protected int BoundsW;
@@ -34,6 +37,13 @@ public class Entity {
 	public void Move(int DeltaX,int DeltaY) {
 		X += DeltaX;
 		Y += DeltaY;
+	}
+	
+	public void Move() {
+		X += DX;
+		Y += DY;
+		DX = 0;
+		DY = 0;
 	}
 	
 	public Rectangle GetSpecialBounds() {
@@ -72,7 +82,23 @@ public class Entity {
 		return exists;
 	}
 	
+	public int GetDX() {
+		return DX;
+	}
+	
+	public int GetDY() {
+		return DY;
+	}
+	
 	//Setters
+	public void SetDX(int X) {
+		DX =X;
+	}
+	
+	public void SetDY(int Y) {
+		DY =Y;
+	}
+	
 	public void setX(int newX) {
 		X = newX;
 	}

@@ -1,21 +1,49 @@
 
-public class Enemy extends Character {
+public class Enemy extends Character{
 	protected boolean aggro;
+	private int StartReload = 0;
+	private int StopCounter = 0;
+	private boolean Stop= false;
 
 	public void setAggro(boolean NewAggro) {
 		aggro = NewAggro;
 	}
-		
+
+	public void SetStartReload(int Count) {
+		StartReload = Count;
+	}
+	
+	public void Stop() {
+		StopCounter = 0;
+		Stop = true;
+	}
+	
 	public boolean getAggro() {
 		return aggro;
 	}
 		
-	public void triangulatePlayer (int xTarget, int yTarget) {
+	public void triangulatePlayer (int xTarget, int yTarget, int TickCount) {
 		if (!aggro ) {
 			return;
 		}
+		
 		int Xdifference = X - xTarget;
 		int Ydifference =  Y - yTarget;
+		isAttacking = false;
+		
+		if(StartReload != AttSpeed) {
+			StartReload++;
+		}
+		else {	
+			StartReload = 0;
+			Reloading = false;
+		}
+
+		if(!Reloading) {
+			isAttacking = true;
+			Reloading = true;
+		}
+		
 		String movementPriority;
 		
 		if((Math.abs(Xdifference)< Math.abs(Ydifference)) && Math.abs(Xdifference)>Speed) {
@@ -27,25 +55,35 @@ public class Enemy extends Character {
 		} else {
 			return;
 		}
-
-		if (movementPriority == "x") {
-			if(Xdifference < 0) {
-				X +=Speed;
-				Direction = "Right";
+		
+		if(StopCounter != 5) {
+			StopCounter++;
+		}
+		else {	
+			StopCounter = 0;
+			Stop = false;
+		}
+		
+		if(TickCount < 7 && !Stop) {
+			if (movementPriority == "x") {
+				if(Xdifference < 0) {
+					SetDX(5);
+					Direction = "Right";
+				} else {
+					SetDX(-5);
+					Direction = "Left";
+				}
+				
 			} else {
-				X-=Speed;
-				Direction = "Left";
-			}
-			
-		} else {
-			if(Ydifference < 0) {
-				Y +=Speed;
-				Direction = "Forward";
-			} else {
-				Y-=Speed;
-				Direction = "Backwards";
-			}
-		}	
+				if(Ydifference < 0) {
+					SetDY(5);
+					Direction = "Forward";
+				} else {
+					SetDY(-5);
+					Direction = "Backwards";
+				}
+			}	
+		}
 	}
 	
 	public Animation getEnemyAnimation() {

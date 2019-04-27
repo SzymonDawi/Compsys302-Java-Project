@@ -16,20 +16,26 @@ public class GameScreen {
 		f.add(Render);
 		//f.setContentPane(Render);
 		
+		boolean tick = false;
 		long delta = 0;
-		long timer = System.currentTimeMillis();
-		int frames = 0;
+		long Start = System.nanoTime();
 		f.setVisible(true);
 		
 		while(Game.IsRunning()){
 			long lastTime = System.nanoTime();
 			
-			Game.Update((float)(delta)/1000);
+			Game.Update(tick);
 			
 			//Render.repaint();
 			
 			delta = System.nanoTime() - lastTime;
 			
+			delta = (lastTime - Start)/1000000;
+			
+			if(delta > 15) {
+				tick = !tick;
+				Start = lastTime;
+			}
 //			frames ++;
 //			if(System.currentTimeMillis() - timer > 1000) {
 //				timer +=1000;

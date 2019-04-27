@@ -14,7 +14,6 @@ import javax.swing.Timer;
 
 public class GameEngine implements ActionListener{
 	//stores the current scene
-	private boolean tick= false;
 	private String currentKeyPress = "Forward";
 	private boolean isPlayerAttacking = false;
 	private boolean standingStill = true;
@@ -23,10 +22,13 @@ public class GameEngine implements ActionListener{
 	private ArrayList<Enemy> ListOfEnemies = new ArrayList<Enemy>();
 	private ArrayList<Obstacle> ListOfObstacles = new ArrayList<Obstacle>();
 	private ArrayList<pickups> ListOfPickups = new ArrayList<pickups>();
-	private Player PlayerOne = new Player();
 	private ScoreSaver ScoreEngine = new ScoreSaver();
 	private Timer Timer;
 	private int remainingTime;
+	
+	private Player PlayerOne = new Player();
+	private int PlayerXDir;
+	private int PlayerYDir;
 	
 	private boolean CentreMap = false;
 	private Map MainMap = new Map();
@@ -73,6 +75,10 @@ public class GameEngine implements ActionListener{
 	private int CurrentTime = 0;
 	private int LastTime = 0;
 	private boolean IsRunning = true;
+	private boolean tick= false;
+	private boolean PreviousTick = false;
+	private int TickCount = 0;
+	private boolean physicsrun = false;
 	
 	public void run() {
 		//selects what functions to run depending on the state
@@ -110,11 +116,38 @@ public class GameEngine implements ActionListener{
 				}
 				break;
 			case SCENE:
-				Timer.start();
-				Physics.Update(this);
-				OtherCollision = Physics.OtherCollisions();
+Physics.Update(this);
 				
-				if(tick) {
+				if(tick != PreviousTick) {
+					PreviousTick = tick;
+					TickCount++;
+					physicsrun = false;
+				}
+				
+				if(TickCount == 10) {
+					TickCount = 0;
+				}
+				
+				if(tick&& !physicsrun) {
+					CheckIfDead();
+					for(int i = 0; i < ListOfEnemies.size(); i++) {
+						Enemy E = ListOfEnemies.get(i);
+//						System.out.println(E.GetX());
+//						System.out.println(E.GetY());
+						if(E.detectPlayer(PlayerOne.GetX(),PlayerOne.GetY())) {
+							randomiseFile = String.valueOf((int)(Math.random() *5 +1));
+							
+							playerDetected.getSound("detected_"+randomiseFile);
+							playerDetected.setVol(0.3);
+							playerDetected.playSound();
+						}
+						if(!Physics.OtherCollisions(E)) {
+							E.Move();
+							E.triangulatePlayer(PlayerOne.GetX(),PlayerOne.GetY(),TickCount);
+						}
+					}
+					physicsrun = true;
+					PlayerOne.SetIsAttacking(false);
 				}
 				//AddObstacle(100,100,50,50);
 				//AddObstacle(100,100,1024,0);
@@ -141,6 +174,19 @@ public class GameEngine implements ActionListener{
 		}
 	}
 	
+	private void CheckIfDead() {
+		if(PlayerOne.GetHealth() == 0) {
+			
+		}
+		
+		for(int i = 0; i < ListOfEnemies.size(); i++) {
+			Enemy E = ListOfEnemies.get(i);
+			if(E.GetHealth() == 0) {
+				ListOfEnemies.remove(i);
+			}
+		}
+	}
+	
 	public void init() {
 		MainMenuInit();
 		OptionsMenuInit();
@@ -154,8 +200,6 @@ public class GameEngine implements ActionListener{
 		AddPickup("coin", 460, 460);
 		AddPickup("ammo", 400, 450);
 		AddPickup("health", 430, 470);
-		AddEnemy(470, 510,"Right");
-		AddEnemy(200, 700, "Backward");
 		
 		MainMapInit();
 		CurrentMap = MainMap;
@@ -173,29 +217,82 @@ public class GameEngine implements ActionListener{
 		MMMusic.setVol( 0.50);
 		State = GameState.MAINMENU;
 		currentGameScore = 0;
-		
 	}
 	
 	private void MainMapInit() {
-		
 		AddObstacle("House_1",174,132,100,100,1);
-		AddObstacle("0", 50, 50, 504, 590, 0);
-
+		
+		//Tile 14
+		AddObstacle("Wall", 256, 88, 0, 584, 0);
+		
+		//Tile 16
+		AddObstacle("Wall", 32, 72, 256, 584, 0);
+		AddObstacle("Wall", 8, 84, 288, 576, 0);
+		AddObstacle("Wall", 16, 84, 296, 568, 0);
+		AddObstacle("Wall", 80, 84, 312, 560, 0);
+		AddObstacle("Wall", 32, 84, 392, 576, 0);
+		AddObstacle("Wall", 72, 84, 424, 584, 0);
+		AddObstacle("Wall", 16, 80, 496, 584, 0);
+		
+		//Tile 14
+		AddObstacle("Wall", 128, 88, 512, 584, 0);
+		
+		//Tile 18
+		AddObstacle("Wall", 40, 88, 768, 560, 0);
+		AddObstacle("Wall", 8, 88, 808, 568, 0);		
+		AddObstacle("Wall", 208, 80, 816, 576, 0);
+		
+		//Tile 14
+		AddObstacle("Wall", 256, 88, 1024, 584, 0);	
+		
+		//Tile 16
+		AddObstacle("Wall", 32, 72, 1280, 584, 0);
+		AddObstacle("Wall", 8, 84, 1312, 576, 0);
+		AddObstacle("Wall", 16, 84, 1320, 568, 0);
+		AddObstacle("Wall", 80, 84, 1336, 560, 0);
+		AddObstacle("Wall", 32, 84, 1416, 576, 0);
+		AddObstacle("Wall", 72, 84, 1448, 584, 0);
+		AddObstacle("Wall", 16, 80, 1520, 584, 0);
+		
+		//Tile 14
+		AddObstacle("Wall", 256, 88, 1536, 584, 0);	
+		
+		//Tile 12
+		AddObstacle("Wall", 64, 64, 1792, 584, 0);
+		AddObstacle("Wall", 16, 56, 1856, 600, 0);
+		AddObstacle("Wall", 24, 48, 1872, 608, 0);
+		AddObstacle("Wall", 24, 40, 1896, 616, 0);
+		AddObstacle("Wall", 24, 32, 1920, 624, 0);
+		AddObstacle("Wall", 32, 32, 1944, 640, 0);
+		AddObstacle("Wall", 32, 32, 1976, 648, 0);
+		AddObstacle("Wall", 40, 16, 2008, 664, 0);
+		
+		//Tile 10 and 8
+		AddObstacle("Wall", 128, 8, 2048, 672, 0);
+		AddObstacle("Wall", 224, 8, 2176, 680, 0);
+		AddObstacle("Wall", 104, 8, 2400, 688, 0);
+		AddObstacle("Wall",	56, 8, 2504, 680, 0);
+		
+		
+		AddEnemy(470, 510,"Right");
+		AddEnemy(200, 700, "Backward");
+		
 		int[][] Map = {
-					{0,0,0,0,0,0,0,0,1,4,2,3,3,3,3},
-					{0,0,0,0,0,0,0,0,1,4,2,3,3,3,3},
-					{0,0,0,18,14,16,14,12,10,8,6,3,3,3,3},
-					{0,0,0,19,17,15,13,11,9,7,5,3,3,3,3},
-					{0,0,0,0,0,0,0,0,1,4,2,3,3,3,3},
-					{0,0,0,0,0,0,0,0,1,4,2,3,3,3,3},
-					{0,0,0,0,0,0,0,0,1,4,2,3,3,3,3},
-					{0,0,0,0,0,0,0,0,1,4,2,3,3,3,3},
-					{0,0,0,0,0,0,0,0,1,4,2,3,3,3,3},
-					{0,0,0,0,0,0,0,0,1,4,2,3,3,3,3},
-					{0,0,0,0,0,0,0,0,1,4,2,3,3,3,3},
-					{0,0,0,0,0,0,0,0,1,4,2,3,3,3,3}};
+					{0,0,0,0,0,0,0,0,1,4,33,3,3,3,3},
+					{0,0,0,0,0,0,0,0,1,4,32,3,3,3,3},
+					{14,16,14,18,14,16,14,12,10,8,6,3,3,3,3},
+					{15,17,19,19,17,15,13,11,9,7,5,3,3,3,3},
+					{0,0,0,0,0,0,0,0,1,4,32,3,3,3,3},
+					{0,0,0,0,0,0,0,0,1,4,31,3,3,3,3},
+					{0,0,0,0,0,0,0,0,1,4,33,3,3,3,3},
+					{0,0,0,0,0,0,0,0,1,4,31,3,3,3,3},
+					{0,0,0,0,0,0,0,0,1,4,32,3,3,3,3},
+					{0,0,0,0,0,0,0,0,1,4,33,3,3,3,3},
+					{0,0,0,0,0,0,0,0,1,4,31,3,3,3,3},
+					{0,0,0,0,0,0,0,0,1,4,33,3,3,3,3}};
 		
 		MainMap.init(Map,15,12);
+		MainMap.LoadTile("Bridge", 580, 490, 0);
 		MainMap.LoadTile("Path_Up", 118, 232, 64);
 		MainMap.LoadTile("Path_Up", 118, 296, 64);
 		MainMap.LoadTile("Path_Up", 118, 360, 64);
@@ -335,31 +432,29 @@ public class GameEngine implements ActionListener{
 		}
 	}
 	
-	public void Update(float deltaTime) {
-		//does nothing really
-		//just calls run
-		LastTime = CurrentTime;
-		CurrentTime = (int)deltaTime;
-		if(deltaTime > 4) {
-			tick = !tick;
-		}
+	public void Update(boolean tick) {
+		this.tick = tick;
 		run();
 	}
 	
 	public void MovePlayer(int DeltaX,int DeltaY) {
 		boolean MoveMap = false;
-		boolean PlayerMove = !Physics.PlayerCollisions(DeltaX, DeltaY);
 		int MapX=50;
 		int MapY=50;
-		
+		boolean PlayerMove = !Physics.PlayerCollisions(DeltaX, DeltaY);
 		if(DeltaX !=0 && DeltaY!=0){
 			if(currentKeyPress == "Left" ||currentKeyPress == "Right") {
-				DeltaY = 0;
+				DeltaY =0;
 			}
 			else {
 				DeltaX =0;
 			}
 		}
+		
+		PlayerXDir = DeltaX;
+		PlayerYDir = DeltaY;
+		SetCurrentKey();
+		
 		
 		if(CentreMap) {
 			MapX = (1024 - CurrentMap.GetMaxX())/2 +10;
@@ -369,7 +464,7 @@ public class GameEngine implements ActionListener{
 		Rectangle Rect = new Rectangle(PlayerOne.GetX() + CurrentMap.GetDeltaX() +DeltaX, PlayerOne.GetY() + CurrentMap.GetDeltaY()+ DeltaY, 25,25);
 		if(Rect.intersects(new Rectangle(MapX, MapY, CurrentMap.GetMaxX()-64, CurrentMap.GetMaxY()-62)))	{	
 			Rect = new Rectangle(PlayerOne.GetX() + DeltaX, PlayerOne.GetY() + DeltaY, PlayerOne.GetWidth(),PlayerOne.GetHeight());
-				if(Rect.intersects(new Rectangle(50,50,928,624))){	
+				if(Rect.intersects(new Rectangle(50,50,828,524))){	
 					if(PlayerMove) {
 							PlayerOne.Move(DeltaX, DeltaY);
 						}
@@ -380,26 +475,12 @@ public class GameEngine implements ActionListener{
 					}
 				}
 				
-				if(MoveMap && !Physics.PlayerCollisions(DeltaX, DeltaY)) {
+				if(MoveMap && PlayerMove) {
 					MoveObstacles(DeltaX,DeltaY);
 					MovePickups(DeltaX,DeltaY);
 					MoveEnemies(DeltaX,DeltaY);
 					CurrentMap.Update(DeltaX,DeltaY);	
 				}	
-				
-				if(PlayerMove) {
-					for(int i = 0; i < ListOfEnemies.size(); i++) {
-						Enemy E = ListOfEnemies.get(i);
-						if(E.detectPlayer(PlayerOne.GetX(),PlayerOne.GetY())) {
-							randomiseFile = String.valueOf((int)(Math.random() *5 +1));
-							
-							playerDetected.getSound("detected_"+randomiseFile);
-							playerDetected.setVol(0.3);
-							playerDetected.playSound();
-						}
-						E.triangulatePlayer (PlayerOne.GetX(),PlayerOne.GetY());
-					}		
-				}
 		}
 	}
 	
@@ -466,20 +547,23 @@ public class GameEngine implements ActionListener{
 	//adds entities
 	private void AddEnemy(int X, int Y, String Direction) {
 		Enemy E = new MeleeEnemy(X,Y, Direction);
-		E.SetBounds(0,0,64,64);
+		E.SetBounds(0,0,32,32);
 		ListOfEnemies.add(E);
 	}
 	
 	private void AddObstacle(String s, int W, int H, int X, int Y,int Frames) {
 		Obstacle O = new Obstacle(s,W,H,X,Y,Frames);
-		if(s == "House_1"){
-			O.SetBounds(0, H/2, W-15, H/2 -8);
-			O.SetSpecialBounds(36, H+1, 8, 1);
+		if(s.compareTo("House_1") == 0){
+			O.SetBounds(0, H/2-20 , W-20, H/2);
+			O.SetSpecialBounds(36, H+1, 20, 2);
 			O.SetAction("LoadHouse1");
 		}
-		else if(s == "0") {
-			O.SetSpecialBounds(X, Y, W, H);
+		else if(s.compareTo("0") == 0) {
+			O.SetSpecialBounds(0, 0, W, H);
 			O.SetAction("ExitTo"+PreviousMap);
+		}
+		else if(s.compareTo("Wall") == 0) {
+			O.SetBounds(0, 0 , W, H);
 		}
 		ListOfObstacles.add(O);
 	}
@@ -524,8 +608,24 @@ public class GameEngine implements ActionListener{
 		}
 	}
 	
+	private void SetCurrentKey() {
+		if(PlayerXDir > 0) {
+			currentKeyPress = "Right";
+		}
+		else if(PlayerXDir < 0) {
+			currentKeyPress = "Left";
+		}
+		else if(PlayerYDir > 0) {
+			currentKeyPress = "Forward";
+		}
+		else if(PlayerYDir > 0) {
+			currentKeyPress = "Backwards";
+		}
+	}
+	
 	public void setPlayerAttacking(boolean playerAttack) {
 		isPlayerAttacking = playerAttack;
+		PlayerOne.SetIsAttacking(true);
 	}
 	
 	public boolean playerIsStandingStill() {
@@ -578,7 +678,6 @@ public class GameEngine implements ActionListener{
 		return CloseMenu;
 	}
 	
-
 	public ScoreSaver GetScoreEngine() {
 		return ScoreEngine;
 	}

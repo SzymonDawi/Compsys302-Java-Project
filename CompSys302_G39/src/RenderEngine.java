@@ -109,16 +109,6 @@ public class RenderEngine extends JPanel implements ActionListener{
 				g2d.drawImage(Engine.Getlevel().LoadMap(),0,0,f);
 			}
 			
-			//Player
-			g2d.drawImage(currentAnimation.Sprite, Engine.GetPlayer().GetX(),Engine.GetPlayer().GetY(), 64,64,null);
-			playerSprite = createImage(getWidth(),getHeight());
-			drawEntity(playerSprite.getGraphics(), currentAnimation);
-			if (Engine.getPlayerAttacking()) {
-				if(Engine.GetPlayer().getWeaponType() == "melee" || Engine.GetPlayer().getAmmo() >0) {
-				g2d.drawImage(attacks.getAttackSprite("playerMeleeAttack", Engine.GetCurrentPlayerDirrection()), Engine.GetPlayerAttackLocation("x"),Engine.GetPlayerAttackLocation("y"), 64,64,null);
-				}
-			}
-			
 			//Enemies
 			for(i=0;i <Engine.GetNumberOfEnemies(); i++) {
 				Enemy E = Engine.GetEnemy(i);
@@ -140,15 +130,22 @@ public class RenderEngine extends JPanel implements ActionListener{
 				
 			}
 			
+			//Player
+			g2d.drawImage(currentAnimation.Sprite, Engine.GetPlayer().GetX(),Engine.GetPlayer().GetY(), 64,64,null);
+			playerSprite = createImage(getWidth(),getHeight());
+			drawEntity(playerSprite.getGraphics(), currentAnimation);
+			if (Engine.getPlayerAttacking()) {
+				if(Engine.GetPlayer().getWeaponType() == "melee" || Engine.GetPlayer().getAmmo() >0) {
+				g2d.drawImage(attacks.getAttackSprite("playerMeleeAttack", Engine.GetCurrentPlayerDirrection()), Engine.GetPlayerAttackLocation("x"),Engine.GetPlayerAttackLocation("y"), 64,64,null);
+				}
+			}
+			
+			//Obstacles
 			for(i=0;i <Engine.GetNumberOfObstacles(); i++) {
 				Obstacle O = Engine.GetObstacle(i);
-				if(O.GetCurrentSprite() != null) {
 				g2d.drawImage(O.GetCurrentSprite(), O.GetX(),O.GetY(), O.GetWidth(), O.GetHeight(),f);
-				}
-				else {
-					//g2d.setColor(Color.yellow);
-					//g2d.fillRect(O.GetSpecialBounds().x,O.GetSpecialBounds().y, O.GetWidth(), O.GetHeight());
-				}
+				g2d.setColor(Color.yellow);
+				g2d.drawRect(O.GetBounds().x,O.GetBounds().y, O.GetBounds().width, O.GetBounds().height);		
 			}
 			
 			//HUD

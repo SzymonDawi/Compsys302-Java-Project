@@ -22,17 +22,28 @@ public class Physics {
 		this.Map = Engine.Getlevel();
 	}
 	
-	public boolean OtherCollisions() {
+	public boolean OtherCollisions(Entity E) {
 		int i;
 		OtherCollision = false;
-		Rectangle PlayerBounds = new Rectangle(PlayerOne.GetX(), PlayerOne.GetY(), PlayerOne.GetWidth(),PlayerOne.GetHeight());
+		Rectangle Bounds = new Rectangle(E.GetX()+E.GetDX(), E.GetY()+E.GetDY(), E.GetWidth(),E.GetHeight());
 		for(i=0; i < ListOfEnemies.size(); i++) {
-			Enemy E = ListOfEnemies.get(i);	
-			if(E.GetBounds().intersects(new Rectangle(Map.GetDeltaX()- 100, Map.GetDeltaY()-100,1124,868))) {	
-				if(E.GetBounds().intersects(PlayerBounds)) {
-				OtherCollision = true;
+			Enemy e = ListOfEnemies.get(i);	
+			if(e != E) {
+				if(e.GetBounds().intersects(new Rectangle(Map.GetDeltaX()- 100, Map.GetDeltaY()-100,1124,868))) {	
+					if(e.GetBounds().intersects(Bounds)) {
+					OtherCollision = true;
+					}
 				}
 			}
+		}
+		
+		for(i=0; i < ListOfObstacles.size(); i++) {
+			Obstacle O = ListOfObstacles.get(i);
+				Rectangle Rect3 = O.GetBounds();
+				if(Bounds.intersects(Rect3)) {
+				OtherCollision = true;
+				}
+			
 		}
 		return OtherCollision;
 	}
@@ -43,18 +54,15 @@ public class Physics {
 		Rectangle PlayerBounds = new Rectangle(PlayerOne.GetX() + X, PlayerOne.GetY() + Y, PlayerOne.GetWidth(),PlayerOne.GetHeight());
 		for(i=0; i < ListOfObstacles.size(); i++) {
 			Obstacle O = ListOfObstacles.get(i);
-			if(O.GetBounds().intersects(new Rectangle(Map.GetDeltaX()- 100, Map.GetDeltaY()-100,1124,868))) {
-				if(O.GetSpecialBounds() != null) {
 					Rectangle Rect2 = O.GetSpecialBounds();
 					if(PlayerBounds.intersects(Rect2)) {
 						Engine.ObstacleAction(O.GetAciton());
 					}
-				}
+				
 				Rectangle Rect3 = O.GetBounds();
 				if(PlayerBounds.intersects(Rect3)) {
 				Collision = true;
 				}
-			}
 		}
 		
 		for(i=0; i < ListOfEnemies.size(); i++) {
@@ -62,10 +70,17 @@ public class Physics {
 			if(E.GetBounds().intersects(new Rectangle(Map.GetDeltaX()- 100, Map.GetDeltaY()-100,1124,868))) {	
 				if(E.GetBounds().intersects(PlayerBounds)) {
 				Collision = true;
+				if(E.GetIsAttacking())
+					PlayerOne.TakeDamage(E.GetDamage(),E.GetDirection());
+					E.Stop();
+				}
+				if(PlayerOne.GetIsAttacking()) {
+					if(PlayerOne.GetSpecialBounds().intersects(E.GetBounds())) {
+						E.TakeDamage(PlayerOne.GetDamage(), PlayerOne.GetDirection());
+					}
 				}
 			}
 		}
-		
 		
 		for(i = 0; i < ListOfPickups.size(); i++) {
 			int XDifference = Math.abs(ListOfPickups.get(i).GetX() - PlayerOne.GetX());

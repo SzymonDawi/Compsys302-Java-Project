@@ -6,6 +6,8 @@ public class Character extends Entity{
 	protected int AttSpeed;
 	protected int MaxHealth;
 	protected boolean Alive;
+	protected boolean isAttacking;
+	protected boolean Reloading = false;
 	protected String Direction;
 	
 	Sprite currentSprite;
@@ -22,6 +24,13 @@ public class Character extends Entity{
 	Animation standLeft;
 	Animation standRight;
 
+
+	public void TakeDamage(int i, String s) {
+		Health = Health - i;
+	
+	}
+	
+	//getters
 	public int GetHealth() {
 		return Health;
 	}
@@ -42,11 +51,20 @@ public class Character extends Entity{
 		return AttSpeed;
 	}
 	
+	public boolean GetIsAttacking() {
+		return isAttacking;
+	}
+	
+	public String GetDirection() {
+		return Direction;
+	}
+	//Setters
+	public void SetIsAttacking(boolean b) {
+		isAttacking = b;
+	}
+	
 	public void SetHealth(int NewHealth) {
 		Health = NewHealth;
-		if(Health > MaxHealth) {
-			Health = MaxHealth;
-		}
 	}
 	
 	public void SetMaxHealth(int NewMaxHealth) {
@@ -64,10 +82,5 @@ public class Character extends Entity{
 	public void SetAttSpeed(int NewAttSpeed) {
 		AttSpeed = NewAttSpeed;
 	}
-	
-	public void TakeDamage(int i) {
-		Health = Health - i;
-	}
-	
 	
 }
