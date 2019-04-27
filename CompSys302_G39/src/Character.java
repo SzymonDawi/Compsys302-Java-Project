@@ -44,6 +44,9 @@ public class Character extends Entity{
 	
 	public void SetHealth(int NewHealth) {
 		Health = NewHealth;
+		if(Health > MaxHealth) {
+			Health = MaxHealth;
+		}
 	}
 	
 	public void SetMaxHealth(int NewMaxHealth) {

@@ -1,4 +1,6 @@
 import java.awt.Rectangle;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
@@ -6,8 +8,11 @@ import javax.sound.sampled.Clip;
 import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JPanel;
+import javax.swing.Timer;
 
-public class GameEngine{
+
+
+public class GameEngine implements ActionListener{
 	//stores the current scene
 	private boolean tick= false;
 	private String currentKeyPress = "Forward";
@@ -20,6 +25,8 @@ public class GameEngine{
 	private ArrayList<pickups> ListOfPickups = new ArrayList<pickups>();
 	private Player PlayerOne = new Player();
 	private ScoreSaver ScoreEngine = new ScoreSaver();
+	private Timer Timer;
+	private int remainingTime;
 	
 	private boolean CentreMap = false;
 	private Map MainMap = new Map();
@@ -94,6 +101,7 @@ public class GameEngine{
 				}
 				break;
 			case SCOREMENU:
+				
 				previousState =  GameState.MAINMENU;
 				CurrentMenu = ScoreMenu;
 				if(LoadingMenu) {
@@ -102,6 +110,7 @@ public class GameEngine{
 				}
 				break;
 			case SCENE:
+				Timer.start();
 				Physics.Update(this);
 				OtherCollision = Physics.OtherCollisions();
 				
@@ -112,6 +121,7 @@ public class GameEngine{
 				break;
 				
 			case PAUSED:
+				Timer.stop();
 				previousState =  GameState.SCENE;
 				CurrentMenu = PauseMenu;
 				if(LoadingMenu) {
@@ -142,8 +152,10 @@ public class GameEngine{
 		AddPickup("coin", 500, 500);
 		AddPickup("coin", 460, 500);
 		AddPickup("coin", 460, 460);
-		AddEnemy(470, 510);
-		AddEnemy(200, 700);
+		AddPickup("ammo", 400, 450);
+		AddPickup("health", 430, 470);
+		AddEnemy(470, 510,"Right");
+		AddEnemy(200, 700, "Backward");
 		
 		MainMapInit();
 		CurrentMap = MainMap;
@@ -266,8 +278,11 @@ public class GameEngine{
 		switch (CurrentMenu.CurrentButtonName()){
 		
 			case "Play":
+				remainingTime = 300;
+				Timer = new Timer(1000, this);
 				State = GameState.SCENE;
 				MMMusic.stopSound();
+				
 				break;
 			case "High Scores":
 				LoadingMenu = true;
@@ -391,6 +406,14 @@ public class GameEngine{
 	public void PickupItem(int i) {
 		currentGameScore += ListOfPickups.get(i).getPickupValue();
 		pickupItem.playSound();
+		switch(ListOfPickups.get(i).getType()) {
+		case "ammo":
+			PlayerOne.SetAmmo(PlayerOne.getAmmo() + 5);
+			break;
+		case "health":
+			PlayerOne.SetHealth(PlayerOne.GetHealth() + 4);
+			break;
+		}
 		ListOfPickups.remove(i);
 	}
 	
@@ -441,8 +464,8 @@ public class GameEngine{
 	}
 	
 	//adds entities
-	private void AddEnemy(int X, int Y) {
-		Enemy E = new MeleeEnemy(X,Y, "Left");
+	private void AddEnemy(int X, int Y, String Direction) {
+		Enemy E = new MeleeEnemy(X,Y, Direction);
 		E.SetBounds(0,0,64,64);
 		ListOfEnemies.add(E);
 	}
@@ -609,6 +632,11 @@ public class GameEngine{
 		return Score;
 	}
 	
+	public String GetRemainingTime() {
+		String TimeLeft = String.format("%03d", remainingTime);
+		return TimeLeft;
+	}
+	
 	public boolean getPlayerAttacking() {
 		return isPlayerAttacking;
 	}
@@ -691,5 +719,11 @@ public class GameEngine{
 		return 6;
 	}
 		return -1;
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		remainingTime -= 1;
+		
 	}
 }

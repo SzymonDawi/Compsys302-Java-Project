@@ -29,7 +29,7 @@ public class RenderEngine extends JPanel implements ActionListener{
 	private Color HUD_Background = new Color(0f,0f,0f,.35f ); //new color of 25% opacity
 	private Font buttonFont = new Font("Georgia", Font.BOLD,20);
 	private Font titleFont = new Font("Georgia", Font.BOLD,40);
-	private Font HUDFont = new Font("Georgia", Font.PLAIN,15);
+	private Font HUDFont = new Font("Georgia", Font.BOLD,15);
 	
 	RenderEngine(JFrame Frame, GameEngine Engine){
 		Timer.start();
@@ -114,7 +114,9 @@ public class RenderEngine extends JPanel implements ActionListener{
 			playerSprite = createImage(getWidth(),getHeight());
 			drawEntity(playerSprite.getGraphics(), currentAnimation);
 			if (Engine.getPlayerAttacking()) {
+				if(Engine.GetPlayer().getWeaponType() == "melee" || Engine.GetPlayer().getAmmo() >0) {
 				g2d.drawImage(attacks.getAttackSprite("playerMeleeAttack", Engine.GetCurrentPlayerDirrection()), Engine.GetPlayerAttackLocation("x"),Engine.GetPlayerAttackLocation("y"), 64,64,null);
+				}
 			}
 			
 			//Enemies
@@ -157,23 +159,27 @@ public class RenderEngine extends JPanel implements ActionListener{
 			g2d.setColor(HUD_Background);
 			g2d.drawImage(currentIcon,850, 10, 160, 34,null); //score icon
 			currentIcon = iconLoader.loadSprite("MenusAndIcons/HUD_health");
-			g2d.drawImage(currentIcon,80, 675, 190, 40,null); //health icon
+			g2d.drawImage(currentIcon,15, 675, 190, 40,null); //health icon
 			currentIcon = iconLoader.loadSprite("MenusAndIcons/HUD_weaponBox");
-			g2d.drawImage(currentIcon,680, 640, 70, 70,null); //weapon box icon
-			g2d.fillRect(800, 650, 140, 60); //ammo
+			g2d.drawImage(currentIcon,680, 650, 70, 70,null); //weapon box icon
+			currentIcon = iconLoader.loadSprite("MenusAndIcons/HUD_ammo");
+			g2d.drawImage(currentIcon,800, 675, 190, 40,null); //ammo icon
+			currentIcon = iconLoader.loadSprite("MenusAndIcons/HUD_timer");
+			g2d.drawImage(currentIcon,15, 12, 190, 40,null); //timer icon
 			if(Engine.GetPlayer().getWeaponType() == "melee") {   //to display weapons
-				g2d.drawImage(meleeWeapon,690, 650, 50, 50,null); //melee weapon icon
+				g2d.drawImage(meleeWeapon,690, 660, 50, 50,null); //melee weapon icon
 			} else {
-				g2d.drawImage(rangedWeapon,690, 650, 50, 50,null); //ranged weapon icon
+				g2d.drawImage(rangedWeapon,690, 660, 50, 50,null); //ranged weapon icon
 			}
 			g2d.setColor(Color.LIGHT_GRAY);
-			g2d.drawString("Score:", 880, 32);
+			g2d.drawString("SCORE:", 878, 32);
 			g2d.drawString(Engine.GetScore(), 940, 32);
-			g2d.drawString("Health", 120, 700);
-			g2d.drawString(Engine.GetPlayer().GetHealth() + "/" +  Engine.GetPlayer().GetMaxHealth(), 190, 700);
-			g2d.drawString(Engine.GetPlayer().getWeaponType(), 820, 685);
-			g2d.drawString("AMMO", 880, 670);
-			g2d.drawString(Engine.GetPlayer().getAmmo() + "/" +  Engine.GetPlayer().getMaxAmmo(), 880, 700);
+			g2d.drawString("HEALTH", 55, 700);
+			g2d.drawString(Engine.GetPlayer().GetHealth() + "/" +  Engine.GetPlayer().GetMaxHealth(), 125, 700);
+			g2d.drawString("AMMO", 850, 700);
+			g2d.drawString(Engine.GetPlayer().getAmmo() + "/" +  Engine.GetPlayer().getMaxAmmo(), 920, 700);
+			g2d.drawString("TIME LEFT:", 25, 35);
+			g2d.drawString(Engine.GetRemainingTime(), 120, 35);
 			
 		}	
 		
