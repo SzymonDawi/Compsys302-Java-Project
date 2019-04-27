@@ -37,6 +37,11 @@ public class Physics {
 			}
 		}
 		
+		Rectangle PlayerBounds = new Rectangle(PlayerOne.GetX(), PlayerOne.GetY(), PlayerOne.GetWidth(),PlayerOne.GetHeight());
+		if(E.GetBounds().intersects(PlayerBounds)) {
+			OtherCollision =true;
+		}
+		
 		for(i=0; i < ListOfObstacles.size(); i++) {
 			Obstacle O = ListOfObstacles.get(i);
 				Rectangle Rect3 = O.GetBounds();
@@ -66,8 +71,7 @@ public class Physics {
 		}
 		
 		for(i=0; i < ListOfEnemies.size(); i++) {
-			Enemy E = ListOfEnemies.get(i);	
-			if(E.GetBounds().intersects(new Rectangle(Map.GetDeltaX()- 100, Map.GetDeltaY()-100,1124,868))) {	
+			Enemy E = ListOfEnemies.get(i);		
 				if(E.GetBounds().intersects(PlayerBounds)) {
 				Collision = true;
 				if(E.GetIsAttacking())
@@ -79,7 +83,6 @@ public class Physics {
 						E.TakeDamage(PlayerOne.GetDamage(), PlayerOne.GetDirection());
 					}
 				}
-			}
 		}
 		
 		for(i = 0; i < ListOfPickups.size(); i++) {

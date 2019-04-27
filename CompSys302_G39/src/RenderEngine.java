@@ -117,8 +117,8 @@ public class RenderEngine extends JPanel implements ActionListener{
 				g2d.drawImage(E.getEnemyAnimation().Sprite, E.GetX(),E.GetY(), 64,64,null);
 				enemySprite = createImage(getWidth(),getHeight());
 				drawEntity(enemySprite.getGraphics(), E.getEnemyAnimation());
-				//g2d.setColor(Color.yellow);
-				//g2d.fillRect(E.GetBounds().x,E.GetBounds().y, E.GetWidth(), E.GetHeight());
+				g2d.setColor(Color.yellow);
+				g2d.drawRect(E.GetBounds().x,E.GetBounds().y, E.GetWidth(), E.GetHeight());
 			}
 			
 			//pickups
@@ -139,6 +139,8 @@ public class RenderEngine extends JPanel implements ActionListener{
 				g2d.drawImage(attacks.getAttackSprite("playerMeleeAttack", Engine.GetCurrentPlayerDirrection()), Engine.GetPlayerAttackLocation("x"),Engine.GetPlayerAttackLocation("y"), 64,64,null);
 				}
 			}
+			g2d.setColor(Color.yellow);
+			g2d.drawRect(Engine.GetPlayer().GetSpecialBounds().x,Engine.GetPlayer().GetSpecialBounds().y, Engine.GetPlayer().GetSpecialBounds().width, Engine.GetPlayer().GetSpecialBounds().height);
 			
 			//Obstacles
 			for(i=0;i <Engine.GetNumberOfObstacles(); i++) {

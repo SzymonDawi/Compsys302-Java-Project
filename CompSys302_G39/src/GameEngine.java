@@ -32,6 +32,8 @@ public class GameEngine implements ActionListener{
 	
 	private boolean CentreMap = false;
 	private Map MainMap = new Map();
+	private int MainMapDeltaX = 0;
+	private int MainMapDeltaY = 0;
 	private Map House1Map = new Map();
 	private Map CurrentMap;
 	private String PreviousMap;
@@ -222,78 +224,80 @@ public class GameEngine implements ActionListener{
 	}
 	
 	private void MainMapInit() {
-		AddObstacle("House_1",174,132,100,100,1);
+		int[][] Map = {
+				{0,0,0,0,0,0,0,0,1,4,33,3,3,3,3},
+				{0,0,0,0,0,0,0,0,1,4,32,3,3,3,3},
+				{14,16,14,18,14,16,14,12,10,8,6,3,3,3,3},
+				{15,17,19,19,17,15,13,11,9,7,5,3,3,3,3},
+				{0,0,0,0,0,0,0,0,1,4,32,3,3,3,3},
+				{0,0,0,0,0,0,0,0,1,4,31,3,3,3,3},
+				{0,0,0,0,0,0,0,0,1,4,33,3,3,3,3},
+				{0,0,0,0,0,0,0,0,1,4,31,3,3,3,3},
+				{0,0,0,0,0,0,0,0,1,4,32,3,3,3,3},
+				{0,0,0,0,0,0,0,0,1,4,33,3,3,3,3},
+				{0,0,0,0,0,0,0,0,1,4,31,3,3,3,3},
+				{0,0,0,0,0,0,0,0,1,4,33,3,3,3,3}};
+	
+		MainMap.init(Map,15,12);
+		MainMap.SetX(MainMapDeltaX);
+		MainMap.SetY(MainMapDeltaY);
+		
+		AddObstacle("House_1",174,132,100-MainMapDeltaX,100-MainMapDeltaY,1);
 		
 		//Tile 14
-		AddObstacle("Wall", 256, 88, 0, 584, 0);
+		AddObstacle("Wall", 256, 88, 0-MainMapDeltaX, 584-MainMapDeltaY, 0);
 		
 		//Tile 16
-		AddObstacle("Wall", 32, 72, 256, 584, 0);
-		AddObstacle("Wall", 8, 84, 288, 576, 0);
-		AddObstacle("Wall", 16, 84, 296, 568, 0);
-		AddObstacle("Wall", 80, 84, 312, 560, 0);
-		AddObstacle("Wall", 32, 84, 392, 576, 0);
-		AddObstacle("Wall", 72, 84, 424, 584, 0);
-		AddObstacle("Wall", 16, 80, 496, 584, 0);
+		AddObstacle("Wall", 32, 72, 256-MainMapDeltaX, 584-MainMapDeltaY, 0);
+		AddObstacle("Wall", 8, 84, 288-MainMapDeltaX, 576-MainMapDeltaY, 0);
+		AddObstacle("Wall", 16, 84, 296-MainMapDeltaX, 568-MainMapDeltaY, 0);
+		AddObstacle("Wall", 80, 84, 312-MainMapDeltaX, 560-MainMapDeltaY, 0);
+		AddObstacle("Wall", 32, 84, 392-MainMapDeltaX, 576-MainMapDeltaY, 0);
+		AddObstacle("Wall", 72, 84, 424-MainMapDeltaX, 584-MainMapDeltaY, 0);
+		AddObstacle("Wall", 16, 80, 496-MainMapDeltaX, 584-MainMapDeltaY, 0);
 		
 		//Tile 14
-		AddObstacle("Wall", 128, 88, 512, 584, 0);
+		AddObstacle("Wall", 128, 88, 512-MainMapDeltaX, 584-MainMapDeltaY, 0);
 		
 		//Tile 18
-		AddObstacle("Wall", 40, 88, 768, 560, 0);
-		AddObstacle("Wall", 8, 88, 808, 568, 0);		
-		AddObstacle("Wall", 208, 80, 816, 576, 0);
+		AddObstacle("Wall", 40, 88, 768-MainMapDeltaX, 560-MainMapDeltaY, 0);
+		AddObstacle("Wall", 8, 88, 808-MainMapDeltaX, 568-MainMapDeltaY, 0);		
+		AddObstacle("Wall", 208, 80, 816-MainMapDeltaX, 576-MainMapDeltaY, 0);
 		
 		//Tile 14
-		AddObstacle("Wall", 256, 88, 1024, 584, 0);	
+		AddObstacle("Wall", 256, 88, 1024-MainMapDeltaX, 584-MainMapDeltaY, 0);	
 		
 		//Tile 16
-		AddObstacle("Wall", 32, 72, 1280, 584, 0);
-		AddObstacle("Wall", 8, 84, 1312, 576, 0);
-		AddObstacle("Wall", 16, 84, 1320, 568, 0);
-		AddObstacle("Wall", 80, 84, 1336, 560, 0);
-		AddObstacle("Wall", 32, 84, 1416, 576, 0);
-		AddObstacle("Wall", 72, 84, 1448, 584, 0);
-		AddObstacle("Wall", 16, 80, 1520, 584, 0);
+		AddObstacle("Wall", 32, 72, 1280-MainMapDeltaX, 584-MainMapDeltaY, 0);
+		AddObstacle("Wall", 8, 84, 1312-MainMapDeltaX, 576-MainMapDeltaY, 0);
+		AddObstacle("Wall", 16, 84, 1320-MainMapDeltaX, 568-MainMapDeltaY, 0);
+		AddObstacle("Wall", 80, 84, 1336-MainMapDeltaX, 560-MainMapDeltaY, 0);
+		AddObstacle("Wall", 32, 84, 1416-MainMapDeltaX, 576-MainMapDeltaY, 0);
+		AddObstacle("Wall", 72, 84, 1448-MainMapDeltaX, 584-MainMapDeltaY, 0);
+		AddObstacle("Wall", 16, 80, 1520-MainMapDeltaX, 584-MainMapDeltaY, 0);
 		
 		//Tile 14
-		AddObstacle("Wall", 256, 88, 1536, 584, 0);	
+		AddObstacle("Wall", 256, 88, 1536-MainMapDeltaX, 584-MainMapDeltaY, 0);	
 		
 		//Tile 12
-		AddObstacle("Wall", 64, 64, 1792, 584, 0);
-		AddObstacle("Wall", 16, 56, 1856, 600, 0);
-		AddObstacle("Wall", 24, 48, 1872, 608, 0);
-		AddObstacle("Wall", 24, 40, 1896, 616, 0);
-		AddObstacle("Wall", 24, 32, 1920, 624, 0);
-		AddObstacle("Wall", 32, 32, 1944, 640, 0);
-		AddObstacle("Wall", 32, 32, 1976, 648, 0);
-		AddObstacle("Wall", 40, 16, 2008, 664, 0);
+		AddObstacle("Wall", 64, 64, 1792-MainMapDeltaX, 584-MainMapDeltaY, 0);
+		AddObstacle("Wall", 16, 56, 1856-MainMapDeltaX, 600-MainMapDeltaY, 0);
+		AddObstacle("Wall", 24, 48, 1872-MainMapDeltaX, 608-MainMapDeltaY, 0);
+		AddObstacle("Wall", 24, 40, 1896-MainMapDeltaX, 616-MainMapDeltaY, 0);
+		AddObstacle("Wall", 24, 32, 1920-MainMapDeltaX, 624-MainMapDeltaY, 0);
+		AddObstacle("Wall", 32, 32, 1944-MainMapDeltaX, 640-MainMapDeltaY, 0);
+		AddObstacle("Wall", 32, 32, 1976-MainMapDeltaX, 648-MainMapDeltaY, 0);
+		AddObstacle("Wall", 40, 16, 2008-MainMapDeltaX, 664-MainMapDeltaY, 0);
 		
 		//Tile 10 and 8
-		AddObstacle("Wall", 128, 8, 2048, 672, 0);
-		AddObstacle("Wall", 224, 8, 2176, 680, 0);
-		AddObstacle("Wall", 104, 8, 2400, 688, 0);
-		AddObstacle("Wall",	56, 8, 2504, 680, 0);
+		AddObstacle("Wall", 128, 8, 2048-MainMapDeltaX, 672-MainMapDeltaY, 0);
+		AddObstacle("Wall", 224, 8, 2176-MainMapDeltaX, 680-MainMapDeltaY, 0);
+		AddObstacle("Wall", 104, 8, 2400-MainMapDeltaX, 688-MainMapDeltaY, 0);
+		AddObstacle("Wall",	56, 8, 2504-MainMapDeltaX, 680-MainMapDeltaY, 0);
 		
+		AddEnemy(470-MainMapDeltaX, 510-MainMapDeltaY,"Right");
+		AddEnemy(200-MainMapDeltaX, 700-MainMapDeltaY, "Backward");
 		
-		AddEnemy(470, 510,"Right");
-		AddEnemy(200, 700, "Backward");
-		
-		int[][] Map = {
-					{0,0,0,0,0,0,0,0,1,4,33,3,3,3,3},
-					{0,0,0,0,0,0,0,0,1,4,32,3,3,3,3},
-					{14,16,14,18,14,16,14,12,10,8,6,3,3,3,3},
-					{15,17,19,19,17,15,13,11,9,7,5,3,3,3,3},
-					{0,0,0,0,0,0,0,0,1,4,32,3,3,3,3},
-					{0,0,0,0,0,0,0,0,1,4,31,3,3,3,3},
-					{0,0,0,0,0,0,0,0,1,4,33,3,3,3,3},
-					{0,0,0,0,0,0,0,0,1,4,31,3,3,3,3},
-					{0,0,0,0,0,0,0,0,1,4,32,3,3,3,3},
-					{0,0,0,0,0,0,0,0,1,4,33,3,3,3,3},
-					{0,0,0,0,0,0,0,0,1,4,31,3,3,3,3},
-					{0,0,0,0,0,0,0,0,1,4,33,3,3,3,3}};
-		
-		MainMap.init(Map,15,12);
 		MainMap.LoadTile("Bridge", 580, 490, 0);
 		MainMap.LoadTile("Path_Up", 118, 232, 64);
 		MainMap.LoadTile("Path_Up", 118, 296, 64);
@@ -506,6 +510,8 @@ public class GameEngine implements ActionListener{
 	public void ObstacleAction(String s) {
 		if(s == "LoadHouse1") {
 			Clear();
+			MainMapDeltaX = MainMap.GetDeltaX();
+			MainMapDeltaY = MainMap.GetDeltaY();
 			House1MapInit();
 			enterHouse.playSound();
 			CurrentMap = House1Map;
@@ -553,6 +559,7 @@ public class GameEngine implements ActionListener{
 	private void AddEnemy(int X, int Y, String Direction) {
 		Enemy E = new MeleeEnemy(X,Y, Direction);
 		E.SetBounds(0,0,32,32);
+		E.setAggro(false);
 		ListOfEnemies.add(E);
 	}
 	

@@ -62,7 +62,12 @@ public class Character extends Entity{
 	public String GetDirection() {
 		return Direction;
 	}
+	
 	//Setters
+	public void SetDirection(String s) {
+		Direction = s;
+	}
+	
 	public void SetIsAttacking(boolean b) {
 		isAttacking = b;
 	}

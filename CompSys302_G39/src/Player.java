@@ -136,7 +136,7 @@ public class Player extends Character{
 //			System.out.println("nice");
 //			return new Rectangle(X+W,Y,10,H);
 //		}
-		return new Rectangle(X-5,Y-5,W+10,H+10);
+		return new Rectangle(X-10,Y-10,W+50,H+40);
 	}
 	public Animation getCurrentSprite(String Dirrection, boolean standingStill, boolean isAttacking) {
 		Animation temp = walkFront;
