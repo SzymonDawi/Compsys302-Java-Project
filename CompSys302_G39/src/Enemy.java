@@ -8,19 +8,19 @@ public class Enemy extends Character{
 	//pushes the enemy back when they are hit
 	public void TakeDamage(double i,String type) {
 		if(Direction.compareTo("Forward")==0) {
-			Move(0,+20);
+			Move(0,+10);
 			Stop();
 		}
 		else if(Direction.compareTo("Backwards")==0) {
-			Move(0,-20);
+			Move(0,-10);
 			Stop();
 		}
 		else if(Direction.compareTo("Left")==0) {
-			Move(+20,0);
+			Move(+10,0);
 			Stop();
 		}
 		else if(Direction.compareTo("Right")==0) {
-			Move(-20,0);
+			Move(-10,0);
 			Stop();
 		}
 		
@@ -68,7 +68,7 @@ public class Enemy extends Character{
 			return;
 		}
 		
-		if(StopCounter != 20) {
+		if(StopCounter != 15) {
 			StopCounter++;
 		}
 		else {	

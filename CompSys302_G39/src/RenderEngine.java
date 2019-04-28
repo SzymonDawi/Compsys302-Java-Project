@@ -69,15 +69,12 @@ public class RenderEngine extends JPanel implements ActionListener{
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		Render(g);
-		
 	}
 	
 	private void Render(Graphics g) {
 		Graphics2D g2d= (Graphics2D) g;
-		currentIcon = iconLoader.loadSprite("MenusAndIcons/MenuBG");
 		if(Engine.GetState() == 0) {
 			//Rendering Main menu
-			g2d.drawImage(currentIcon, 0,0, 1024,768,null);
 			Menu Menu = Engine.GetMainMenu();
 			for(i=0;i< Menu.GetNumberOfButtons(); i++) {
 				g2d.setColor(Color.cyan);
@@ -93,7 +90,6 @@ public class RenderEngine extends JPanel implements ActionListener{
 		}
 		else if(Engine.GetState() ==1) {
 			//Rendering Options Menu
-			g2d.drawImage(currentIcon, 0,0, 1024,768,null);
 			Menu Menu = Engine.GetOptionsMenu();
 			for(i=0;i< Menu.GetNumberOfButtons(); i++) {
 				g2d.setColor(Color.cyan);
@@ -274,7 +270,6 @@ public class RenderEngine extends JPanel implements ActionListener{
 		
 		else if(Engine.GetState() ==3) {
 			//Rendering Sound Menu
-			g2d.drawImage(currentIcon, 0,0, 1024,768,null);
 			Menu Menu = Engine.GetSoundMenu();
 			g2d.setColor(Color.cyan);
 			g2d.fillRect(1024/2-25, 100, 150, 50);
@@ -304,7 +299,6 @@ public class RenderEngine extends JPanel implements ActionListener{
 	
 		else if(Engine.GetState() ==4) {
 			//Rendering Socre Menu
-			g2d.drawImage(currentIcon, 0,0, 1024,768,null);
 			Menu Menu = Engine.GetScoreMenu();
 			for(i=0;i< Menu.GetNumberOfButtons(); i++) {
 				g2d.setColor(Color.cyan);

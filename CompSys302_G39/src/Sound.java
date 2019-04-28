@@ -10,7 +10,6 @@ public class Sound {
 		Clip clip;
 		boolean Mute = true;
 
-
 		public void getSound(String soundFileName) { //this loads in the sound file (must use full file path)
 			try {
 				File file = new File("sounds/" + soundFileName + ".wav");
@@ -32,7 +31,6 @@ public class Sound {
 		public void stopSound() {  // this plays the whole sound clip once
 			clip.stop();
 		}
-		
 		
 		public void loopSound(int count) { //loops sound file 'count' number of times. Type LOOP_CONTINUOUSLY to repeat forever
 			clip.setFramePosition(0);
