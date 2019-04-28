@@ -102,6 +102,7 @@ public class GameEngine implements ActionListener{
 		//selects what functions to run depending on the state
 		switch (State){
 			case MAINMENU:
+				PlayerOne = new Player();
 				CurrentMenu = MainMenu;	
 				if(LoadingMenu) {
 					CurrentMenu.Select(0);
@@ -500,7 +501,7 @@ public class GameEngine implements ActionListener{
 			case "Ok":
 				ScoreEngine.compareCurrentToHigh(currentGameScore);
 				Clear();
-				init();
+				MainMapInit();
 				PlayerOne.SetHealth(PlayerOne.GetMaxHealth());
 				State = GameState.MAINMENU;
 				break;	
