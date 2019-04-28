@@ -1202,9 +1202,7 @@ public class GameEngine implements ActionListener{
 	
 	private void OptionsMenuInit() {
 		OptionsMenu.AddButton("Music", (1024/2-100), 100);
-		OptionsMenu.AddButton("Option 2", (1024/2-100), 200);
-		OptionsMenu.AddButton("Option 3", (1024/2-100), 300);
-		OptionsMenu.AddButton("Back", (1024/2-100), 400);
+		OptionsMenu.AddButton("Back", (1024/2-100), 200);
 		
 		OptionsMenu.Select(0);
 	}
