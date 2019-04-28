@@ -1,4 +1,4 @@
 # 2019-Java-Group39
-Open src in terminal \n
-run: javac GameScreen.java \n
-run: java GameScreen \n
+Open src in terminal 
+run: javac GameScreen.java 
+run: java GameScreen 
