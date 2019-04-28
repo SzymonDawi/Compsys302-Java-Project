@@ -129,6 +129,14 @@ public class RenderEngine extends JPanel implements ActionListener{
 					g2d.setColor(Color.yellow);
 					g2d.drawRect(B.GetBounds().x,B.GetBounds().y, B.GetWidth(), B.GetHeight());
 					if(Engine.GetBossFightStatus()) {
+						g2d.setColor(Color.red);
+						g2d.fillRect(310,12,(int) (4.8*(((float)B.GetHealth()/(float)B.GetMaxHealth())*100)), 30);		
+						currentIcon = iconLoader.loadSprite("MenusAndIcons/HUD_weaponBox");
+						g2d.drawImage(currentIcon,250, 6, 50, 50,null);
+						currentIcon = iconLoader.loadSprite("MenusAndIcons/bossIcon");
+						g2d.drawImage(currentIcon,254, 10, 40, 40,null);
+						currentIcon = iconLoader.loadSprite("MenusAndIcons/bossHealthBar");
+						g2d.drawImage(currentIcon,300, 12, 500, 30,null); //health icon
 						if(Engine.GetBossLockedOnStatus()) {
 							currentIcon = iconLoader.loadSprite("Enemy/bossCrosshairLocked");
 							g2d.drawImage(currentIcon,B.getCrosshairX(),B.getCrosshairY(), 64, 64,null); 

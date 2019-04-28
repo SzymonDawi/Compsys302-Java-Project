@@ -433,6 +433,7 @@ public class GameEngine implements ActionListener{
 		AddObstacle("Wall",	3840, 1, 0, 2048, 0);
 		
 		AddEnemy(-100-MainMapDeltaX, -100-MainMapDeltaY,"Right","Meele");
+		AddEnemy(450, 450,"Right","boss");
 		//AddEnemy(470-MainMapDeltaX, 510-MainMapDeltaY,"Right");
 		//AddEnemy(200-MainMapDeltaX, 700-MainMapDeltaY, "Backward");
 		
@@ -1068,7 +1069,7 @@ public class GameEngine implements ActionListener{
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		remainingTime -= 1;
-		if(bossLockedOn) {
+		if(bossLockedOn && bossFightStarted) {
 			deathTimer++;
 			if(deathTimer == 1) {
 				deathCount3.playSound();
