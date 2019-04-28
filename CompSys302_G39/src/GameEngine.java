@@ -640,7 +640,6 @@ public class GameEngine implements ActionListener{
 				LoadingMenu = true;
 				State = GameState.SOUNDMENU;
 				break;
-				
 			case "Exit":
 				ScoreEngine.compareCurrentToHigh(currentGameScore);
 				System.exit(0);
@@ -650,8 +649,9 @@ public class GameEngine implements ActionListener{
 				ScoreEngine.compareCurrentToHigh(currentGameScore);
 				Clear();
 				PlayerOne.setHasKey(false);
-				GameReset = true;
+				CentreMap = false;
 				MainMapInit();
+				CurrentMap = MainMap;
 				PlayerOne.SetHealth(PlayerOne.GetMaxHealth());
 				State = GameState.MAINMENU;
 				break;	
