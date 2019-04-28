@@ -36,6 +36,7 @@ public class Player extends Character{
 	
 	public void Kill() {
 		Alive = false;
+		Health =0;
 	}
 	
 	public boolean IsAlive() {

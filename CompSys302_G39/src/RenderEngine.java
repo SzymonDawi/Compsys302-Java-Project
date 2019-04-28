@@ -113,14 +113,32 @@ public class RenderEngine extends JPanel implements ActionListener{
 			
 			//Enemies
 			for(i=0;i <Engine.GetNumberOfEnemies(); i++) {
-				Enemy E = Engine.GetEnemy(i);
-				//g2d.setColor(Color.RED);
-				//g2d.drawRect(E.GetX(),E.GetY(), 32,32);
-				g2d.drawImage(E.getEnemyAnimation().Sprite, E.GetX(),E.GetY(), 64,64,null);
-				enemySprite = createImage(getWidth(),getHeight());
-				drawEntity(enemySprite.getGraphics(), E.getEnemyAnimation());
-				g2d.setColor(Color.yellow);
-				g2d.drawRect(E.GetBounds().x,E.GetBounds().y, E.GetWidth(), E.GetHeight());
+				
+				if(Engine.GetEnemy(i).getType() == "normal") {
+					Enemy E = Engine.GetEnemy(i);
+					g2d.drawImage(E.getEnemyAnimation().Sprite, E.GetX(),E.GetY(), 64,64,null);
+					enemySprite = createImage(getWidth(),getHeight());
+					drawEntity(enemySprite.getGraphics(), E.getEnemyAnimation());
+					g2d.setColor(Color.yellow);
+					g2d.drawRect(E.GetBounds().x,E.GetBounds().y, E.GetWidth(), E.GetHeight());
+				}else {
+					boss B = (boss) Engine.GetEnemy(i);
+					g2d.drawImage(B.getEnemyAnimation().Sprite, B.GetX(),B.GetY(), 64,64,null);
+					enemySprite = createImage(getWidth(),getHeight());
+					drawEntity(enemySprite.getGraphics(), B.getEnemyAnimation());
+					g2d.setColor(Color.yellow);
+					g2d.drawRect(B.GetBounds().x,B.GetBounds().y, B.GetWidth(), B.GetHeight());
+					if(Engine.GetBossFightStatus()) {
+						if(Engine.GetBossLockedOnStatus()) {
+							currentIcon = iconLoader.loadSprite("Enemy/bossCrosshairLocked");
+							g2d.drawImage(currentIcon,B.getCrosshairX(),B.getCrosshairY(), 64, 64,null); 
+						} else {
+							currentIcon = iconLoader.loadSprite("Enemy/bossCrosshairNormal");
+							g2d.drawImage(currentIcon,B.getCrosshairX(),B.getCrosshairY(), 64, 64,null); 
+						}
+					}
+				}
+				
 			}
 			
 			//pickups
@@ -287,6 +305,10 @@ public class RenderEngine extends JPanel implements ActionListener{
 				g2d.setColor(Color.BLACK);
 				g2d.setFont(buttonFont);
 				g2d.drawString(Menu.GetButton(i).GetName(), Menu.GetButton(i).GetX()+70, Menu.GetButton(i).GetY()+28);
+				g2d.setColor(Color.BLACK);
+				g2d.setFont(titleFont);
+				g2d.drawString("GAME OVER ",1024/2-130,100);
+				g2d.drawString("Final Score: "+ Engine.GetScore(),1024/2-200,300);
 				//g.drawImage(img, x, y, observer)
 			}
 		}

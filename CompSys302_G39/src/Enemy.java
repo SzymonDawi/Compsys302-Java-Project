@@ -4,6 +4,7 @@ public class Enemy extends Character{
 	private int StartReload = 0;
 	private int StopCounter = 0;
 	private boolean Stop= false;
+	protected String type;
 
 	public void setAggro(boolean NewAggro) {
 		aggro = NewAggro;
@@ -20,6 +21,10 @@ public class Enemy extends Character{
 	
 	public boolean getAggro() {
 		return aggro;
+	}
+	
+	public String getType() {
+		return type;
 	}
 		
 	public void triangulatePlayer (int xTarget, int yTarget, int TickCount) {

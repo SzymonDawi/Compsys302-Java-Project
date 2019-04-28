@@ -3,8 +3,11 @@ import java.util.ArrayList;
 
 public class MeleeEnemy extends Enemy{
 	
+	
+	
 	public MeleeEnemy(int x, int y, String direction) {
 		initMeleeEnemyAnimations();
+		type = "normal";
 		Direction = direction;
 		Health = 6;
 		MaxHealth = 6;
@@ -16,60 +19,18 @@ public class MeleeEnemy extends Enemy{
 		W = 64;
 		H = 64;
 		aggro = false;
+		
 	}
+	
+	
 	
 	private void initMeleeEnemyAnimations() {		
 		
-		BufferedImage currentSpriteSheet = loadPlayer.loadSprite("player/Player_Attack_Forward"); 
+		
+		
+		BufferedImage currentSpriteSheet = loadPlayer.loadSprite("Enemy/melee_enemy"); 
+		
 		Sprite currentEnemySprite = new Sprite(currentSpriteSheet);
-		ArrayList<BufferedImage> attackFrontSprites = new ArrayList<BufferedImage>();
-		attackFrontSprites.add(currentEnemySprite.getSprite(0, 0, 32, 32));  //frame 1
-		attackFrontSprites.add(currentEnemySprite.getSprite(32, 0, 32, 32)); //frame 2
-		attackFrontSprites.add(currentEnemySprite.getSprite(64, 0, 32, 32)); //frame 3
-		attackFront = new Animation(attackFrontSprites); //attack facing forwards animation
-		attackFront.setSpeed(AttSpeed);
-		attackFront.start();
-		
-		
-		currentSpriteSheet = loadPlayer.loadSprite("player/Player_Attack_Backwards"); 
-		currentEnemySprite = new Sprite(currentSpriteSheet);
-		ArrayList<BufferedImage> attackBackSprites = new ArrayList<BufferedImage>(); 
-		attackBackSprites.add(currentEnemySprite.getSprite(0, 0, 32, 32));  //frame 1
-		attackBackSprites.add(currentEnemySprite.getSprite(32, 0, 32, 32)); //frame 2
-		attackBackSprites.add(currentEnemySprite.getSprite(64, 0, 32, 32)); //frame 3
-		attackBackSprites.add(currentEnemySprite.getSprite(96, 0, 32, 32)); //frame 4
-		attackBack = new Animation(attackBackSprites); //attack facing backwards animation
-		attackBack.setSpeed(AttSpeed);
-		attackBack.start();
-		
-		currentSpriteSheet = loadPlayer.loadSprite("player/Player_Attack_Left");  
-		currentEnemySprite = new Sprite(currentSpriteSheet);
-		ArrayList<BufferedImage> attackLeftSprites = new ArrayList<BufferedImage>();
-		attackLeftSprites.add(currentEnemySprite.getSprite(0, 0, 32, 32));  //frame 1
-		attackLeftSprites.add(currentEnemySprite.getSprite(32, 0, 32, 32)); //frame 2
-		attackLeftSprites.add(currentEnemySprite.getSprite(64, 0, 32, 32)); //frame 3
-		attackLeftSprites.add(currentEnemySprite.getSprite(96, 0, 32, 32)); //frame 4
-		attackLeftSprites.add(currentEnemySprite.getSprite(128, 0, 32, 32)); //frame 5
-		attackLeft = new Animation(attackLeftSprites); //attack facing left animation
-		attackLeft.setSpeed(AttSpeed);
-		attackLeft.start();
-		
-		currentSpriteSheet = loadPlayer.loadSprite("player/Player_Attack_Right");  
-		currentEnemySprite = new Sprite(currentSpriteSheet);
-		ArrayList<BufferedImage> attackRightSprites = new ArrayList<BufferedImage>();
-		attackRightSprites.add(currentEnemySprite.getSprite(0, 0, 32, 32));  //frame 1
-		attackRightSprites.add(currentEnemySprite.getSprite(32, 0, 32, 32)); //frame 2
-		attackRightSprites.add(currentEnemySprite.getSprite(64, 0, 32, 32)); //frame 3
-		attackRightSprites.add(currentEnemySprite.getSprite(96, 0, 32, 32)); //frame 4
-		attackRightSprites.add(currentEnemySprite.getSprite(128, 0, 32, 32)); //frame 5
-		attackRight = new Animation(attackRightSprites); //attack facing right animation
-		attackRight.setSpeed(AttSpeed);
-		attackRight.start();
-		
-		
-		currentSpriteSheet = loadPlayer.loadSprite("Enemy/melee_enemy"); 
-		
-		currentEnemySprite = new Sprite(currentSpriteSheet);
 		ArrayList<BufferedImage> walkForwardSprites = new ArrayList<BufferedImage>(); 
 		walkForwardSprites.add(currentEnemySprite.getSprite(0, 64, 32, 32));  //frame 1
 		standFront = new Animation(walkForwardSprites); //stand facing front animation

@@ -27,8 +27,11 @@ public class GameEngine implements ActionListener{
 	private ScoreSaver ScoreEngine = new ScoreSaver();
 	private Timer Timer;
 	private int remainingTime;
+	private boolean bossFightStarted;
+	private boolean bossLockedOn;
+	private int deathTimer;
 	
-	private Player PlayerOne = new Player();
+	private Player PlayerOne;
 	private int PlayerXDir;
 	private int PlayerYDir;
 	
@@ -52,8 +55,13 @@ public class GameEngine implements ActionListener{
 	
 	private Sound buttonClick = new Sound();
 	private Sound enemyDeath = new Sound();
+	private Sound bossDeath = new Sound();
 	private Sound buttonSwitch = new Sound();
 	private Sound swapWeapon = new Sound();
+	private Sound deathCount3 = new Sound();
+	private Sound deathCount2 = new Sound();
+	private Sound deathCount1 = new Sound();
+	private Sound laserDeath = new Sound();
 	private Sound playerHurt = new Sound();
 	private Sound enemyHurt = new Sound();
 	private Sound gameOver = new Sound();
@@ -147,21 +155,49 @@ public class GameEngine implements ActionListener{
 					
 					CheckIfDead();
 					for(int i = 0; i < ListOfEnemies.size(); i++) {
-						Enemy E = ListOfEnemies.get(i);
-//						System.out.println(E.GetX());
-//						System.out.println(E.GetY());
-						if(E.detectPlayer(PlayerOne.GetX(),PlayerOne.GetY())) {
-							randomiseFile = String.valueOf((int)(Math.random() *5 +1));
+						if (ListOfEnemies.get(i).getType() == "boss") {
+							boss B = (boss) ListOfEnemies.get(i);
 							
-							playerDetected.getSound("detected_"+randomiseFile);
-							playerDetected.setVol(0.3);
-							playerDetected.playSound();
-						}
-						if(!Physics.OtherCollisions(E)) {
-							E.Move();
-							E.triangulatePlayer(PlayerOne.GetX(),PlayerOne.GetY(),TickCount);
+							if(B.detectPlayer(PlayerOne.GetX(),PlayerOne.GetY())) {
+							
+								playerDetected.getSound("bossWakeup");
+								playerDetected.setVol(0.4);
+								playerDetected.playSound();
+								bossFightStarted = true;
+							}
+							
+							if(!Physics.OtherCollisions(B)) {
+								B.Move();
+								B.triangulatePlayer(PlayerOne.GetX(),PlayerOne.GetY(),TickCount);
+			
+							}
+							B.lockOnPlayer (PlayerOne.GetX(), PlayerOne.GetY());
+							int crosshairDifferenceX = Math.abs(B.getCrosshairX()-PlayerOne.GetX());
+							int crosshairDifferenceY = Math.abs(B.getCrosshairY()-PlayerOne.GetY());
+							if (crosshairDifferenceX <10 && crosshairDifferenceY <10) {
+								bossLockedOn = true;
+							} else {
+								bossLockedOn = false;
+							}
+						} else {
+							Enemy E = ListOfEnemies.get(i);
+//							System.out.println(E.GetX());
+//							System.out.println(E.GetY());
+							if(E.detectPlayer(PlayerOne.GetX(),PlayerOne.GetY())) {
+								randomiseFile = String.valueOf((int)(Math.random() *5 +1));
+							
+								playerDetected.getSound("detected_"+randomiseFile);
+								playerDetected.setVol(0.3);
+								playerDetected.playSound();
+							}
+							if(!Physics.OtherCollisions(E)) {
+								E.Move();
+								E.triangulatePlayer(PlayerOne.GetX(),PlayerOne.GetY(),TickCount);
+			
+							}
 						}
 					}
+					
 					physicsrun = true;
 					PlayerOne.SetIsAttacking(false);
 				}
@@ -190,7 +226,6 @@ public class GameEngine implements ActionListener{
 				
 			case DEAD:
 				Timer.stop();
-				previousState =  GameState.MAINMENU;
 				CurrentMenu = DeadMenu;
 				if(LoadingMenu) {
 					CurrentMenu.Select(0);
@@ -209,13 +244,22 @@ public class GameEngine implements ActionListener{
 		for(int i = 0; i < ListOfEnemies.size(); i++) {
 			Enemy E = ListOfEnemies.get(i);
 			if(E.GetHealth() == 0) {
-				enemyDeath.playSound();
+				if(ListOfEnemies.get(i).getType() == "normal") {
+					enemyDeath.playSound();
+					currentGameScore+= 200;
+			
+				} else {
+					bossDeath.playSound();
+					bossFightStarted = false;
+					currentGameScore+= 2000;
+				}
 				ListOfEnemies.remove(i);
 			}
 		}
 	}
 	
 	public void init() {
+		PlayerOne = new Player();
 		MainMenuInit();
 		OptionsMenuInit();
 		ScoreMenuInit();
@@ -244,11 +288,19 @@ public class GameEngine implements ActionListener{
 		gameOver.getSound("gameOver");
 		noAmmo.getSound("noAmmo");
 		enemyDeath.getSound("enemy_die");
+		bossDeath.getSound("bossDeath");
+		deathCount3.getSound("bossCountdown3");
+		deathCount2.getSound("bossCountdown2");
+		deathCount1.getSound("bossCountdown1");
+		laserDeath.getSound("laserDeath");
 		MMMusic.getSound("MMMusic_forgotten-toys");
 		MMMusic.loopSound(Clip.LOOP_CONTINUOUSLY);
 		MMMusic.setVol( 0.50);
 		State = GameState.MAINMENU;
 		currentGameScore = 0;
+		bossFightStarted = false;
+		bossLockedOn = false;
+		deathTimer = 0;
 	}
 	
 	private void MainMapInit() {
@@ -326,8 +378,8 @@ public class GameEngine implements ActionListener{
 		//Beach Tiles
 		AddObstacle("Wall",	8, 3072, 2700-MainMapDeltaX, 0-MainMapDeltaY, 0);
 		
-		AddEnemy(470-MainMapDeltaX, 510-MainMapDeltaY,"Right");
-		AddEnemy(200-MainMapDeltaX, 700-MainMapDeltaY, "Backward");
+		AddEnemy(470-MainMapDeltaX, 510-MainMapDeltaY,"Left","normal");
+		AddEnemy(200-MainMapDeltaX, 700-MainMapDeltaY, "Backward", "boss");
 		
 		MainMap.LoadTile("Bridge", 580, 490, 0);
 		MainMap.LoadTile("Path_Up", 118, 232, 64);
@@ -380,7 +432,7 @@ public class GameEngine implements ActionListener{
 	
 	private void DeadMenuInit() {
 		
-		DeadMenu.AddButton("Back", (1024/2-100), 300);
+		DeadMenu.AddButton("Ok", (1024/2-100), 600);
 		
 		DeadMenu.Select(0);
 	}
@@ -445,7 +497,13 @@ public class GameEngine implements ActionListener{
 				System.exit(0);
 				//State = GameState.CLOSE;
 				break;
-				
+			case "Ok":
+				ScoreEngine.compareCurrentToHigh(currentGameScore);
+				Clear();
+				init();
+				PlayerOne.SetHealth(PlayerOne.GetMaxHealth());
+				State = GameState.MAINMENU;
+				break;	
 			case "Back":
 				LoadingMenu = true;
 				State = previousState;
@@ -595,8 +653,13 @@ public class GameEngine implements ActionListener{
 	}
 	
 	//adds entities
-	private void AddEnemy(int X, int Y, String Direction) {
-		Enemy E = new MeleeEnemy(X,Y, Direction);
+	private void AddEnemy(int X, int Y, String Direction, String type) {
+		Enemy E;
+		if (type == "boss") {
+			 E = new boss(X,Y, Direction); 
+		} else {
+			 E = new MeleeEnemy(X,Y, Direction); 
+		}
 		E.SetBounds(0,0,32,32);
 		E.setAggro(false);
 		ListOfEnemies.add(E);
@@ -782,6 +845,14 @@ public class GameEngine implements ActionListener{
 		return ListOfPickups.get(i);
 	}
 	
+	public boolean GetBossFightStatus() {
+		return bossFightStarted;
+	}
+	
+	public boolean GetBossLockedOnStatus() {
+		return bossLockedOn;
+	}
+	
 	public ArrayList<Enemy> GetListOfEnemies() {
 		return ListOfEnemies;
 	}
@@ -917,6 +988,23 @@ public class GameEngine implements ActionListener{
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		remainingTime -= 1;
-		
+		if(bossLockedOn) {
+			deathTimer++;
+			if(deathTimer == 1) {
+				deathCount3.playSound();
+				
+			} else if(deathTimer == 2) {
+				deathCount2.playSound();
+			
+			} else if(deathTimer == 3) {
+				deathCount1.playSound();
+				
+			} else {
+				laserDeath.playSound();
+				PlayerOne.Kill();
+			}
+		} else {
+			deathTimer = 0;
+		}
 	}
 }
