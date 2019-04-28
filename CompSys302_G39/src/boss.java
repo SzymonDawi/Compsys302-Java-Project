@@ -7,21 +7,21 @@ public class boss extends Enemy{
 	private int crosshairY;
 	
 	public boss(int x, int y, String direction) {
-		 initAnimations();
-		 type = "boss";
-		 Direction = direction;
-			Health = 50;
-			MaxHealth = 50;
-			Damage = 1;
-			Alive = true;
-			Speed = 1;
-			X = x;
-			Y = y;
-			crosshairX = x;
-			crosshairY = y;
-			W = 96;
-			H = 96;
-			aggro = false;
+		initAnimations();
+		type = "boss";
+		Direction = direction;
+		Health = 50;
+		MaxHealth = 50;
+		Damage = 1;
+		Alive = true;
+		Speed = 1;
+		X = x;
+		Y = y;
+		crosshairX = x;
+		crosshairY = y;
+		W = 96;
+		H = 96;
+		aggro = false;
 	}
 	
 	public void lockOnPlayer (int xTarget, int yTarget, int TickCount) {
