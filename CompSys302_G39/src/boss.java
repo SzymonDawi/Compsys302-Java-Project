@@ -24,6 +24,10 @@ public class boss extends Enemy{
 		aggro = false;
 	}
 	
+	//Mechanics of the boss attacks
+	//This method computes the movement of the boss Crosshair mechanic
+	//it takes the target x and y and the tickcount and uses these to
+	//Calculate the movement
 	public void lockOnPlayer (int xTarget, int yTarget, int TickCount) {
 		if (!aggro ) {
 			return;
@@ -68,6 +72,8 @@ public class boss extends Enemy{
 		return crosshairY;
 	}
 	
+	
+	//init for the boss animations
 	private void initAnimations() {
 		
 		BufferedImage currentSpriteSheet = loadPlayer.loadSprite("Enemy/boss"); 

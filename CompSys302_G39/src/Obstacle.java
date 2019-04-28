@@ -1,4 +1,4 @@
-
+//Describes the obstacles 
 public class Obstacle extends Entity{
 	public Obstacle( String s, int W,int H,int X, int Y,int Frames){
 		Sprite= new Sprite(loadPlayer.loadSprite(s));

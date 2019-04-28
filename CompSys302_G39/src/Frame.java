@@ -1,5 +1,6 @@
 import java.awt.image.BufferedImage;
 
+//One frame of the animation stores the time the frame stays on screen
 public class Frame {
 	private BufferedImage Frame;
 	private int Length;

@@ -1,7 +1,5 @@
 import java.awt.image.BufferedImage;
-
-
-
+//Sprite sheet
 public class Sprite {
 	public BufferedImage Sprite;
 	

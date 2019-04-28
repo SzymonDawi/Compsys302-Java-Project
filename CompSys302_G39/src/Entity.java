@@ -12,11 +12,13 @@ public class Entity {
 	protected int DX;
 	protected int DY;
 	
+	//this is the collision bounds
 	protected int BoundsX;
 	protected int BoundsY;
 	protected int BoundsW;
 	protected int BoundsH;
 	
+	//this is the bounds for a special action i.e. attack
 	protected int SpecialX;
 	protected int SpecialY;
 	protected int SpecialW;

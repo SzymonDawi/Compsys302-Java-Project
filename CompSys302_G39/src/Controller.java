@@ -1,20 +1,14 @@
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
-
-import javax.swing.AbstractAction;
-import javax.swing.Action;
-import javax.swing.ActionMap;
 import javax.swing.InputMap;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.KeyStroke;
 import javax.swing.Timer;
 
 public class Controller implements ActionListener{
 	private GameEngine Engine = new GameEngine();
-	//private JFrame f;
 	private JPanel Panel;
 	private Timer Timer;
 	private InputMap InputMap;
@@ -45,19 +39,22 @@ public class Controller implements ActionListener{
 		AddAction("Cheat", 0,0,KeyEvent.VK_PAGE_UP);
 	}
 	
+	//Used for creating a custom action
 	public void AddAction(String Name, int DeltaX, int DeltaY, int KeyCode) {
 		new ControllerAction(Name, DeltaX, DeltaY, KeyCode, this);
 	}
 	
+	//This method manipulates the game engine depending on the current button pressed
 	public void Move(int DeltaX, int DeltaY, ActionEvent e) {
 		
+		//Behavior of escape key
 		if(Engine.GetState() != 2  && CurrentKey == "Escape") {
 			System.exit(0);
-			//Engine.SetState(6);
-			
 		}
 		
+		//selects different behaviors depending on the game state
 		if((Engine.GetState() == 0) ||(Engine.GetState() == 1 )|| (Engine.GetState() == 3)|| (Engine.GetState() == 4)|| (Engine.GetState() == 5)|| (Engine.GetState() == 6)|| (Engine.GetState() == 7)) {
+				//Menu behavior
 				if(CurrentKey == "Left") {
 					if(Engine.GetState() == 3 ||Engine.GetSoundMenu().GetSelected() == 1) {
 						Engine.SwitchButton(-1);
@@ -80,6 +77,7 @@ public class Controller implements ActionListener{
 				CurrentKey = null;
 		}
 		else if(Engine.GetState() == 2 ) {
+			//Game scene behavior
 			if(CurrentKey == "swapWeapon") {
 				Engine.PlayerSwapWeapon();
 				CurrentKey = null;
@@ -109,6 +107,7 @@ public class Controller implements ActionListener{
 		
 	}
 	
+	//this method allow for a faster polling rate when a key its pressed
 	public void HandleKeyEvent(int DeltaX, int DeltaY , boolean Pressed ) {
 		KeysPressed += Pressed ? 1: -1;
 		this.DeltaX += DeltaX;

@@ -2,9 +2,6 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 public class MeleeEnemy extends Enemy{
-	
-	
-	
 	public MeleeEnemy(int x, int y, String direction) {
 		initMeleeEnemyAnimations();
 		type = "normal";
@@ -19,15 +16,11 @@ public class MeleeEnemy extends Enemy{
 		W = 64;
 		H = 64;
 		aggro = false;
-		
 	}
 	
-	
-	
+	//loads Animations 
 	private void initMeleeEnemyAnimations() {		
-		
-		
-		
+			
 		BufferedImage currentSpriteSheet = loadPlayer.loadSprite("Enemy/melee_enemy"); 
 		
 		Sprite currentEnemySprite = new Sprite(currentSpriteSheet);

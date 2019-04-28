@@ -1,4 +1,3 @@
-import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
@@ -6,11 +5,9 @@ import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
 
 public class Map {
 	
-	//private Image FullMap;
 	private int X=0,Y=0;
 	private BufferedImage FullMap = new BufferedImage(3840,3072, BufferedImage.TYPE_INT_ARGB);
 	private BufferedImage Img1;
@@ -19,6 +16,7 @@ public class Map {
 	private int Width=15;
 	private int dX,dY;
 
+	//loads the sprite for the map
 	public void LoadTile(String s, int X, int Y, int Scale) {
 		try {
 			Img1 = ImageIO.read(new File("sprites/" + s +".png"));
@@ -39,8 +37,8 @@ public class Map {
 		}
 	}
 	
+	//moves the game camera
 	public void Update(int dX, int dY) {
-		
 		X += dX;
 		Y += dY;
 		this.dX += dX;
@@ -53,6 +51,7 @@ public class Map {
 		return OnScreenMap;
 	}
 	
+	//Loads a ground tile
 	public void LoadImage(String ImageName,int i, int j){
 		try {
 			Img1 = ImageIO.read(new File(ImageName));
@@ -98,7 +97,8 @@ public class Map {
 		return Height*256;
 	}
 	
-	//Loads the whole map
+	//takes the map array and depending on the element value it loads the tile
+	//this make load the basic map easier as it don't need to call as many methods 
 		public void init(int Map[][],int W,int H){
 			Width = W;
 			Height = H;

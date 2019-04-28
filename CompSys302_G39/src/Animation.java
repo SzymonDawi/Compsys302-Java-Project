@@ -1,9 +1,9 @@
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
-import java.util.List;
 
 public class Animation {
 	
+	//this holds the animation frames
 	private ArrayList<BufferedImage> frame;
 	
 	private long speed, previousTime;
@@ -11,7 +11,7 @@ public class Animation {
 	private volatile boolean running = false;
 	
 	public BufferedImage Sprite;
-	
+
 	public Animation(ArrayList<BufferedImage> newFrame) {
 		frame = newFrame;
 	}
@@ -44,6 +44,7 @@ public class Animation {
 	running = true;
 	}
 	
+	//updates the frame if enough time has passed
 	public void update(long time) {
 		if (running) {
 			if (time - previousTime >=speed) {

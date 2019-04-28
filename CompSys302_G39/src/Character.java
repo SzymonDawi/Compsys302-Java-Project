@@ -10,6 +10,7 @@ public class Character extends Entity{
 	protected boolean Reloading = false;
 	protected String Direction;
 	
+	//Declares animations for child classes
 	Sprite currentSprite;
 	Animation attackFront;
 	Animation attackBack;

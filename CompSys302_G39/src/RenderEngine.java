@@ -19,20 +19,27 @@ public class RenderEngine extends JPanel implements ActionListener{
 	private spriteLoader iconLoader = new spriteLoader();
 	private String PlayerDirrection;
 	private Animation currentAnimation;
+	
 	private Image playerSprite;
 	private Image pickupSprite;
 	private Image enemySprite;
+	
 	private BufferedImage friendlyProjectile;
 	private BufferedImage enemyProjectile;
 	private BufferedImage currentIcon;
 	private BufferedImage meleeWeapon;
 	private BufferedImage rangedWeapon;
+	
 	private attacks attacks = new attacks();
+	
 	private Color HUD_Background = new Color(0f,0f,0f,.35f ); //new color of 35% opacity
 	private Color hurt = new Color(1f,0f,0f,.50f ); //new color of 25% opacity
 	private Font buttonFont = new Font("Georgia", Font.BOLD,20);
 	private Font titleFont = new Font("Georgia", Font.BOLD,40);
 	private Font HUDFont = new Font("Georgia", Font.BOLD,15);
+	
+	
+	private int i;
 	
 	RenderEngine(JFrame Frame, GameEngine Engine){
 		Timer.start();
@@ -58,10 +65,6 @@ public class RenderEngine extends JPanel implements ActionListener{
 		}
 	}
 	
-	
-	//private Map Map = new Map();
-	private int i;
-	//private JPanel Panel = new JPanel();
 	@Override
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
@@ -73,6 +76,7 @@ public class RenderEngine extends JPanel implements ActionListener{
 		Graphics2D g2d= (Graphics2D) g;
 		currentIcon = iconLoader.loadSprite("MenusAndIcons/MenuBG");
 		if(Engine.GetState() == 0) {
+			//Rendering Main menu
 			g2d.drawImage(currentIcon, 0,0, 1024,768,null);
 			Menu Menu = Engine.GetMainMenu();
 			for(i=0;i< Menu.GetNumberOfButtons(); i++) {
@@ -88,6 +92,7 @@ public class RenderEngine extends JPanel implements ActionListener{
 			}
 		}
 		else if(Engine.GetState() ==1) {
+			//Rendering Options Menu
 			g2d.drawImage(currentIcon, 0,0, 1024,768,null);
 			Menu Menu = Engine.GetOptionsMenu();
 			for(i=0;i< Menu.GetNumberOfButtons(); i++) {
@@ -103,6 +108,7 @@ public class RenderEngine extends JPanel implements ActionListener{
 			}
 		}
 		else if(Engine.GetState() == 2) {
+			//Rendering game scene
 			
 			//Map
 			if(Engine.GetCentreMap()) {
@@ -182,6 +188,7 @@ public class RenderEngine extends JPanel implements ActionListener{
 				g2d.drawImage(O.GetCurrentSprite(), O.GetX(),O.GetY(), O.GetWidth(), O.GetHeight(),f);	
 			}
 			
+			//projectiles
 			friendlyProjectile = iconLoader.loadSprite("player/player_projectile");
 			enemyProjectile = iconLoader.loadSprite("enemy/enemy_projectile"); 
 			for(i =0 ; i <Engine.GetNumberOfProjectiles(); i++) {
@@ -239,6 +246,7 @@ public class RenderEngine extends JPanel implements ActionListener{
 			g2d.drawString(Engine.GetRemainingTime(), 120, 35);
 			
 			if(Engine.GetTutorialRoom()) {
+				//drawing the controls
 				currentIcon = iconLoader.loadSprite("MenusAndIcons/MovementKeys");
 				g2d.drawImage(currentIcon,30, 200, 75, 45,null); 
 				currentIcon = iconLoader.loadSprite("MenusAndIcons/attackKey");
@@ -265,6 +273,7 @@ public class RenderEngine extends JPanel implements ActionListener{
 		}	
 		
 		else if(Engine.GetState() ==3) {
+			//Rendering Sound Menu
 			g2d.drawImage(currentIcon, 0,0, 1024,768,null);
 			Menu Menu = Engine.GetSoundMenu();
 			g2d.setColor(Color.cyan);
@@ -294,6 +303,7 @@ public class RenderEngine extends JPanel implements ActionListener{
 		}
 	
 		else if(Engine.GetState() ==4) {
+			//Rendering Socre Menu
 			g2d.drawImage(currentIcon, 0,0, 1024,768,null);
 			Menu Menu = Engine.GetScoreMenu();
 			for(i=0;i< Menu.GetNumberOfButtons(); i++) {
@@ -318,12 +328,11 @@ public class RenderEngine extends JPanel implements ActionListener{
 						g2d.drawString(place +"------------------------------" +Engine.GetScoreEngine().getHighScore(i), 310, 135+(i*42));
 					}
 				}
-				
-				//g.drawImage(img, x, y, observer)
 			}
 		}
 		
 		else if(Engine.GetState() ==5) {
+			//Rendering Pause Menu
 			Menu Menu = Engine.GetPauseMenu();
 			g2d.setColor(Color.BLACK);
 			g2d.setFont(titleFont);
@@ -337,11 +346,11 @@ public class RenderEngine extends JPanel implements ActionListener{
 				g2d.setColor(Color.BLACK);
 				g2d.setFont(buttonFont);
 				g2d.drawString(Menu.GetButton(i).GetName(), Menu.GetButton(i).GetX()+70, Menu.GetButton(i).GetY()+28);
-				//g.drawImage(img, x, y, observer)
 			}
 		}
 		
 		else if(Engine.GetState() ==6) {
+			//Rendering end Screen
 			Menu Menu = Engine.GetDeadMenu();
 			for(i=0;i< Menu.GetNumberOfButtons(); i++) {
 				g2d.setColor(Color.cyan);
@@ -357,11 +366,11 @@ public class RenderEngine extends JPanel implements ActionListener{
 				g2d.drawString("GAME OVER ",1024/2-130,100);
 				g2d.drawString(Engine.GetPlayer().getDeathMessage(),1024/2-110,500);
 				g2d.drawString("Final Score: "+ Engine.GetScore(),1024/2-200,300);
-				//g.drawImage(img, x, y, observer)
 			}
 		}
 		
 		else if(Engine.GetState() == 7) {
+			//Rendering exit Menu
 			Menu Menu = Engine.GetCloseMenu();
 			g2d.setColor(Color.BLACK);
 			g2d.setFont(titleFont);

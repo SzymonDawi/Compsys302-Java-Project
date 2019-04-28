@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+//Loads Sprite sheet
 public class spriteLoader {
 	public BufferedImage loadSprite(String file) {
 		BufferedImage spriteSheet = null;
@@ -15,7 +16,7 @@ public class spriteLoader {
 		try {
 			spriteSheet = ImageIO.read(new File("sprites/" + file + ".png"));
 		} catch (IOException e) {
-//			e.printStackTrace();
+
 		}
 		return spriteSheet;
 	}

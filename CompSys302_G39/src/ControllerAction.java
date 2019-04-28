@@ -2,8 +2,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
-import javax.swing.InputMap;
-import javax.swing.JPanel;
 import javax.swing.KeyStroke;
 
 public class ControllerAction extends AbstractAction implements ActionListener {
@@ -28,6 +26,7 @@ public class ControllerAction extends AbstractAction implements ActionListener {
 		ListeningKey = true;
 	}
 	
+	//Performs actions depending on the state of the key
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if(ListeningKey) {

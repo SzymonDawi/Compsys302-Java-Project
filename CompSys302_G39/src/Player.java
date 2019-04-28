@@ -58,7 +58,6 @@ public class Player extends Character{
 				return 0;
 			}
 		} else {
-			//melee attack animation
 		}
 		return Damage;
 	}

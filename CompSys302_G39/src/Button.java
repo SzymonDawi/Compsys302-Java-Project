@@ -1,4 +1,4 @@
-
+//This is a basic button class
 public class Button {
 	private int X;
 	private int Y;

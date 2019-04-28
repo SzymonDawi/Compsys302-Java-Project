@@ -3,7 +3,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Scanner;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 
@@ -13,7 +12,6 @@ public class ScoreSaver {
 	private File HighScoreFile;
 	private String[] HighScores = new String[10];
 	 
-	
 	private void createNewHighScoreFile() {
 		try {
 			fileWriter = new FileWriter("saves/HighScoreList.txt");
@@ -27,8 +25,7 @@ public class ScoreSaver {
 		printWriter.close();
 	}
 	
-	
-	
+	//Opens score file
 	private void fileOpener() {
 		HighScoreFile = null;
 		int i = 0;
@@ -56,10 +53,10 @@ public class ScoreSaver {
 				e1.printStackTrace();
 			}
 		}
-
-		
 	}
 	
+	//checks if it is in the top 10 if it isnt then 
+	//the score is not saved
 	public void compareCurrentToHigh(int currentScore) {
 		String Score = String.format("%06d", currentScore);
 		String scoreShift = null;
@@ -88,14 +85,10 @@ public class ScoreSaver {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
-	
-	
 	}
 	
 	public ScoreSaver(){
 		fileOpener();
-	
 	}
 	
 	public String getHighScore(int i) {

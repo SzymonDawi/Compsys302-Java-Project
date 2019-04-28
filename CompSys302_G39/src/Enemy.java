@@ -5,6 +5,7 @@ public class Enemy extends Character{
 	private boolean Stop= false;
 	protected String type;
 
+	//pushes the enemy back when they are hit
 	@Override
 	public void TakeDamage(double i) {
 		if(Direction.compareTo("Forward")==0) {
@@ -47,6 +48,7 @@ public class Enemy extends Character{
 		return type;
 	}
 		
+	//This computes the "Ai" of the enemies
 	public void triangulatePlayer (int xTarget, int yTarget, int TickCount) {
 		if (!aggro ) {
 			return;
@@ -97,6 +99,7 @@ public class Enemy extends Character{
 		}
 	}
 	
+	//returns the correct animation to play
 	public Animation getEnemyAnimation() {
 		Animation temp = walkFront;
 			if(!aggro) {
@@ -142,11 +145,12 @@ public class Enemy extends Character{
 		return temp;
 	}
 	
+	//Used for detecting when the player is in front of the enemy
 	public boolean detectPlayer(int playerX, int playerY) {
 		if (aggro) {
 			return false;
 		}
-		int aggroBlockDistance = 9; //change this to set how far away the enemy can detect
+		int aggroBlockDistance = 9;
 		int pixelDistance = 32* aggroBlockDistance;
 		int Xdifference = X - playerX;
 		int Ydifference =  Y - playerY;

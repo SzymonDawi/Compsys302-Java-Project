@@ -1,20 +1,17 @@
 import java.util.ArrayList;
-
+//this describes the menu behavior
+//it allows for selecting different buttons
 public class Menu{
 	private ArrayList<Button> ListOfButtons = new ArrayList<Button>();
-	
-	
+
 	private int Selected;
-	private int Location;
 	
 	public void AddButton(String Text, int X, int Y) {
 		Button B = new Button(Text,X,Y);
 		ListOfButtons.add(B);
 	}
-	
 
-	public void Select(int Location) { 
-		
+	public void Select(int Location) { 	
 		//ButtonSelected();
 		if(Selected >= 0) {
 			ListOfButtons.get(Selected).Deselect();	
@@ -36,6 +33,5 @@ public class Menu{
 	
 	public Button GetButton(int i) {
 		return ListOfButtons.get(i);
-	}
-	
+	}	
 }

@@ -1,15 +1,11 @@
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
 import java.util.ArrayList;
-
 import javax.sound.sampled.Clip;
-import javax.swing.Box;
-import javax.swing.JButton;
-import javax.swing.JPanel;
 import javax.swing.Timer;
 
+//All the init code is at the bottom
 public class GameEngine implements ActionListener{
 	//stores the current scene
 	private ArrayList<Enemy> ListOfEnemies = new ArrayList<Enemy>();
@@ -20,12 +16,12 @@ public class GameEngine implements ActionListener{
 	private String currentKeyPress = "Forward";
 	private boolean isPlayerAttacking = false;
 	private boolean standingStill = true;
-	private boolean tutorialRoom;
 	private String randomiseFile;
-	private int currentGameScore;  //do not make this private (yet)
+	private int currentGameScore;
 	private ScoreSaver ScoreEngine = new ScoreSaver();
 	private Timer Timer;
 	private int remainingTime;
+	
 	private boolean bossFightStarted;
 	private boolean bossLockedOn;
 	private boolean bossDefeated;
@@ -45,6 +41,7 @@ public class GameEngine implements ActionListener{
 	private Map House3Map = new Map();
 	private Map CurrentMap;
 	private String PreviousMap;
+	private boolean tutorialRoom;
 	
 	private Menu MainMenu = new Menu();
 	private Menu SoundMenu = new Menu();
@@ -57,9 +54,11 @@ public class GameEngine implements ActionListener{
 	private boolean LoadingMenu;
 	
 	private Sound buttonClick = new Sound();
+	private Sound buttonSwitch = new Sound();
+	private Sound MMMusic = new Sound();
+	
 	private Sound enemyDeath = new Sound();
 	private Sound bossDeath = new Sound();
-	private Sound buttonSwitch = new Sound();
 	private Sound swapWeapon = new Sound();
 	private Sound deathCount3 = new Sound();
 	private Sound deathCount2 = new Sound();
@@ -68,13 +67,13 @@ public class GameEngine implements ActionListener{
 	private Sound playerHurt = new Sound();
 	private Sound enemyHurt = new Sound();
 	private Sound gameOver = new Sound();
-	private Sound MMMusic = new Sound();
 	private Sound meleeAttack = new Sound();
 	private Sound rangedAttack = new Sound();
 	private Sound enterHouse = new Sound();
 	private Sound pickupItem = new Sound();
 	private Sound noAmmo = new Sound();
 	private Sound playerDetected = new Sound();
+	
 	private Sound win = new Sound();
 	private Sound timeOut = new Sound();
 	private float prevousVolume;
@@ -105,6 +104,7 @@ public class GameEngine implements ActionListener{
 		//selects what functions to run depending on the state
 		switch (State){
 			case MAINMENU:
+				
 				PlayerOne = new Player();
 				PlayerOne.SetMainMapX(140);
 				PlayerOne.SetMainMapY(250);
@@ -160,10 +160,13 @@ public class GameEngine implements ActionListener{
 						Projectile P = ListofProjectiles.get(i);
 						P.Move();
 					}
+					
 					CheckIfDead();
 					if (isPlayerHit()) {
 						playerHurt.playSound();
 					}
+					
+					//Runs the physics for every enemy 
 					for(int i = 0; i < ListOfEnemies.size(); i++) {
 						if (ListOfEnemies.get(i).getType() == "boss") {
 							boss B = (boss) ListOfEnemies.get(i);
@@ -208,8 +211,6 @@ public class GameEngine implements ActionListener{
 					physicsrun = true;
 					PlayerOne.SetIsAttacking(false);
 				}
-				//AddObstacle(100,100,50,50);
-				//AddObstacle(100,100,1024,0);
 				break;
 				
 			case PAUSED:
@@ -245,6 +246,9 @@ public class GameEngine implements ActionListener{
 		}
 	}
 	
+	//Checks all if Characters have health above 0
+	//if they are not them removes them from the ArrayList
+	//if they player is not alive then set the state to death state;
 	private void CheckIfDead() {
 		if(PlayerOne.GetHealth() == 0) {
 			gameOver.playSound();
@@ -269,61 +273,16 @@ public class GameEngine implements ActionListener{
 			}
 		}
 	}
-	
-	public void init() {
-		PlayerOne = new Player();
-		MainMenuInit();
-		OptionsMenuInit();
-		ScoreMenuInit();
-		SoundMenuInit();
-		PauseMenuInit();
-		CloseMenuInit();
-		DeadMenuInit();
-	
-		tutorialRoom = true;
-		CentreMap = true;
-		House1MapInit();
-		CurrentMap = House1Map;	
 		
-		buttonClick.getSound("beep");
-		buttonSwitch.getSound("switchButton");
-		swapWeapon.getSound("Player_Swap_Weapons");
-		rangedAttack.getSound("Player_Ranged_Attack");
-		meleeAttack.getSound("Player_Melee_Attack");
-		pickupItem.getSound("pickup");
-		enterHouse.getSound("EnterDoor");
-		playerHurt.getSound("player_hurt");
-		enemyHurt.getSound("enemy_hit");
-		gameOver.getSound("gameOver");
-		noAmmo.getSound("noAmmo");
-		enemyDeath.getSound("enemy_die");
-		bossDeath.getSound("bossDeath");
-		deathCount3.getSound("bossCountdown3");
-		deathCount2.getSound("bossCountdown2");
-		deathCount1.getSound("bossCountdown1");
-		laserDeath.getSound("laserDeath");
-		win.getSound("win");
-		timeOut.getSound("timeOut");
-		MMMusic.getSound("MMMusic_forgotten-toys");
-		MMMusic.loopSound(Clip.LOOP_CONTINUOUSLY);
-		MMMusic.setVol( 0.50);
-		State = GameState.MAINMENU;
-		currentGameScore = 0;
-		bossFightStarted = false;
-		bossLockedOn = false;
-		deathTimer = 0;
-		bossDefeated = false;
-		winTimer = 0;
-	}
-		
+	//clears the scene
 	private void Clear() {
-		//clears the scene
 		ListOfEnemies.clear();
 		ListOfObstacles.clear();
 		ListOfPickups.clear();
 		ListofProjectiles.clear();
 	}
 	
+	//Changes the button selected depending on the user input
 	public void SwitchButton(int Delta) {
 		buttonSwitch.playSound();
 		if(CurrentMenu.GetSelected() == 0 && Delta <0) {
@@ -335,6 +294,8 @@ public class GameEngine implements ActionListener{
 		CurrentMenu.Select(CurrentMenu.GetSelected() + Delta);
 	}
 	
+	//if the user hits enter in a menu this performs a function depending on the 
+	//Selected button
 	public void SelectButton() {
 		buttonClick.playSound();
 		switch (CurrentMenu.CurrentButtonName()){
@@ -413,9 +374,11 @@ public class GameEngine implements ActionListener{
 		run();
 	}
 	
+	//this advances the player to the boss fight
+	//Initializing the boss room and teleporting the player to the room 
 	public void Cheat() {
 		Clear();
-		 tutorialRoom = false;
+		tutorialRoom = false;
 		MainMapDeltaX = MainMap.GetDeltaX();
 		MainMapDeltaY = MainMap.GetDeltaY();
 		House3MapInit();
@@ -429,10 +392,10 @@ public class GameEngine implements ActionListener{
 		
 	}
 	
+	//This moves the player depending on the user input
+	//it also does the camera movement and runs the player collisions
 	public void MovePlayer(int DeltaX,int DeltaY) {
 		boolean MoveMap = false;
-		int MapX=50;
-		int MapY=50;
 		boolean PlayerMove = !Physics.PlayerCollisions(DeltaX, DeltaY);
 		if(DeltaX !=0 && DeltaY!=0){
 			if(currentKeyPress == "Left" ||currentKeyPress == "Right") {
@@ -446,11 +409,6 @@ public class GameEngine implements ActionListener{
 		PlayerXDir = DeltaX;
 		PlayerYDir = DeltaY;
 		SetCurrentKey();
-		
-		if(CentreMap) {
-			MapX = (1024 - CurrentMap.GetMaxX())/2 +10;
-			MapY = (718- CurrentMap.GetMaxY())/2 + 25;
-		}
 		
 		Rectangle Rect = new Rectangle(PlayerOne.GetX() + DeltaX, PlayerOne.GetY() + DeltaY, PlayerOne.GetWidth(),PlayerOne.GetHeight());
 		if(Rect.intersects(new Rectangle(50,50,828,524))){	
@@ -488,6 +446,8 @@ public class GameEngine implements ActionListener{
 		}		
 	}
 	
+	//This checks which item the player is picking up
+	//and performs action depending the item.
 	public void PickupItem(int i) {
 		currentGameScore += ListOfPickups.get(i).getPickupValue();
 		pickupItem.playSound();
@@ -505,6 +465,8 @@ public class GameEngine implements ActionListener{
 		ListOfPickups.remove(i);
 	}
 	
+	//If the player collides with an object that has a special action
+	//this function determines what methods to call
 	public void ObstacleAction(String s) {
 		if(s == "LoadHouse1") {
 			Clear();
@@ -864,7 +826,6 @@ public class GameEngine implements ActionListener{
 		if (isPlayerAttacking) {
 		if(PlayerOne.getWeaponType() == "melee") {
 			meleeAttack.playSound();
-			//insert attack melee animation
 		} else {
 			if (PlayerOne.getAmmo() == 0) {
 				noAmmo.playSound();
@@ -872,7 +833,6 @@ public class GameEngine implements ActionListener{
 				return false;
 			} else {
 				rangedAttack.playSound();
-				//insert attack ranged animation
 			}
 		}
 		PlayerOne.attack();
@@ -942,6 +902,9 @@ public class GameEngine implements ActionListener{
 		return -1;
 	}
 
+	
+	//Timer action
+	//Computes the time remaining and acts on the time passed
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		remainingTime -= 1;
@@ -979,6 +942,10 @@ public class GameEngine implements ActionListener{
 		}
 	}
 	
+	//Init
+	//This is the Main Map init it calls methods from the map class
+	//to construct the map, objects, and enemies.
+	//below are methods that create the maps 
 	private void MainMapInit() {
 		int[][] Map = {
 				{0,0,0,0,0,0,0,0,1,4,33,3,3,3,3},
@@ -1223,6 +1190,7 @@ public class GameEngine implements ActionListener{
 		House3Map.init(Map,3,2);
 	}
 		
+	//These methods create the menu screens
 	private void MainMenuInit() {
 		MainMenu.AddButton("Play", (1024/2-100), 100);
 		MainMenu.AddButton("High Scores", (1024/2-100), 200);
@@ -1275,4 +1243,51 @@ public class GameEngine implements ActionListener{
 		CloseMenu.Select(0);
 	}
 
+	//this is for code that only needs e run once
+	public void init() {
+		PlayerOne = new Player();
+		MainMenuInit();
+		OptionsMenuInit();
+		ScoreMenuInit();
+		SoundMenuInit();
+		PauseMenuInit();
+		CloseMenuInit();
+		DeadMenuInit();
+	
+		tutorialRoom = true;
+		CentreMap = true;
+		House1MapInit();
+		CurrentMap = House1Map;	
+		
+		buttonClick.getSound("beep");
+		buttonSwitch.getSound("switchButton");
+		swapWeapon.getSound("Player_Swap_Weapons");
+		rangedAttack.getSound("Player_Ranged_Attack");
+		meleeAttack.getSound("Player_Melee_Attack");
+		pickupItem.getSound("pickup");
+		enterHouse.getSound("EnterDoor");
+		playerHurt.getSound("player_hurt");
+		enemyHurt.getSound("enemy_hit");
+		gameOver.getSound("gameOver");
+		noAmmo.getSound("noAmmo");
+		enemyDeath.getSound("enemy_die");
+		bossDeath.getSound("bossDeath");
+		deathCount3.getSound("bossCountdown3");
+		deathCount2.getSound("bossCountdown2");
+		deathCount1.getSound("bossCountdown1");
+		laserDeath.getSound("laserDeath");
+		win.getSound("win");
+		timeOut.getSound("timeOut");
+		MMMusic.getSound("MMMusic_forgotten-toys");
+		MMMusic.loopSound(Clip.LOOP_CONTINUOUSLY);
+		MMMusic.setVol( 0.50);
+		
+		State = GameState.MAINMENU;
+		currentGameScore = 0;
+		bossFightStarted = false;
+		bossLockedOn = false;
+		deathTimer = 0;
+		bossDefeated = false;
+		winTimer = 0;
+	}
 }
