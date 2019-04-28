@@ -316,6 +316,7 @@ public class RenderEngine extends JPanel implements ActionListener{
 				g2d.setColor(Color.BLACK);
 				g2d.setFont(titleFont);
 				g2d.drawString("GAME OVER ",1024/2-130,100);
+				g2d.drawString(Engine.GetPlayer().getDeathMessage(),1024/2-110,500);
 				g2d.drawString("Final Score: "+ Engine.GetScore(),1024/2-200,300);
 				//g.drawImage(img, x, y, observer)
 			}

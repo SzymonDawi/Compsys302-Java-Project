@@ -10,9 +10,11 @@ public class Player extends Character{
 	protected String currentWeapon;
 	private int MainMapX;
 	private int MainMapY;
+	private String deathMessage;
 	
 	public Player() {
 		initPlayerAnimations();
+		deathMessage = "YOU DIED";
 		hasKey = false;
 		maxAmmo = 20;
 		ammo = 20;
@@ -87,6 +89,10 @@ public class Player extends Character{
 		maxAmmo += MaxAmmoDelta;
 	}
 	
+	public void SetDeathMessage(String newDeathMessage) {
+		deathMessage = newDeathMessage;
+	}
+	
 	public void SetMainMapX() {
 		MainMapX = X;
 	}
@@ -114,6 +120,10 @@ public class Player extends Character{
 	
 	public int getAmmo () {
 		return ammo;
+	}
+	
+	public String getDeathMessage() {
+		return deathMessage;
 	}
 	
 	public String getWeaponType () {

@@ -27,7 +27,9 @@ public class GameEngine implements ActionListener{
 	private int remainingTime;
 	private boolean bossFightStarted;
 	private boolean bossLockedOn;
+	private boolean bossDefeated;
 	private int deathTimer;
+	private int winTimer;
 	
 	private Player PlayerOne;
 	private int PlayerXDir;
@@ -72,6 +74,8 @@ public class GameEngine implements ActionListener{
 	private Sound pickupItem = new Sound();
 	private Sound noAmmo = new Sound();
 	private Sound playerDetected = new Sound();
+	private Sound win = new Sound();
+	private Sound timeOut = new Sound();
 	private float prevousVolume;
 	
 	private GameState State;
@@ -227,6 +231,9 @@ public class GameEngine implements ActionListener{
 				
 			case DEAD:
 				Timer.stop();
+				bossFightStarted = false;
+				bossDefeated = false;
+				winTimer = 0;
 				CurrentMenu = DeadMenu;
 				if(LoadingMenu) {
 					CurrentMenu.Select(0);
@@ -253,6 +260,8 @@ public class GameEngine implements ActionListener{
 					bossDeath.playSound();
 					bossFightStarted = false;
 					currentGameScore+= 2000;
+					bossDefeated = true;
+					winTimer = 0;
 				}
 				ListOfEnemies.remove(i);
 			}
@@ -294,6 +303,8 @@ public class GameEngine implements ActionListener{
 		deathCount2.getSound("bossCountdown2");
 		deathCount1.getSound("bossCountdown1");
 		laserDeath.getSound("laserDeath");
+		win.getSound("win");
+		timeOut.getSound("timeOut");
 		MMMusic.getSound("MMMusic_forgotten-toys");
 		MMMusic.loopSound(Clip.LOOP_CONTINUOUSLY);
 		MMMusic.setVol( 0.50);
@@ -302,6 +313,8 @@ public class GameEngine implements ActionListener{
 		bossFightStarted = false;
 		bossLockedOn = false;
 		deathTimer = 0;
+		bossDefeated = false;
+		winTimer = 0;
 	}
 	
 	private void MainMapInit() {
@@ -622,6 +635,8 @@ public class GameEngine implements ActionListener{
 		
 			case "Play":
 				remainingTime = 300;
+				deathTimer = 0;
+				bossDefeated = false;
 				Timer = new Timer(1000, this);
 				State = GameState.SCENE;
 				MMMusic.stopSound();
@@ -703,6 +718,7 @@ public class GameEngine implements ActionListener{
 		PlayerOne.SetMainMapY();
 		PlayerOne.setX(500);
 		PlayerOne.setY(500);
+		
 	}
 	
 	public void MovePlayer(int DeltaX,int DeltaY) {
@@ -1193,6 +1209,11 @@ public class GameEngine implements ActionListener{
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		remainingTime -= 1;
+		if (remainingTime == 0) {
+			PlayerOne.SetDeathMessage("OUT OF TIME");
+			timeOut.playSound();
+			SetState(6);
+		}
 		if(bossLockedOn && bossFightStarted) {
 			deathTimer++;
 			if(deathTimer == 1) {
@@ -1210,6 +1231,16 @@ public class GameEngine implements ActionListener{
 			}
 		} else {
 			deathTimer = 0;
+		}
+		
+		if (bossDefeated) {
+			System.out.println("nice");
+			winTimer++;
+			if (winTimer == 3) {
+				PlayerOne.SetDeathMessage("YOU WIN!");
+				win.playSound();
+				SetState(6);
+			}
 		}
 	}
 }
