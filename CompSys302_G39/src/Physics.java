@@ -50,6 +50,7 @@ public class Physics {
 			Rectangle Rect = P.GetBounds();
 			if(Bounds.intersects(Rect)) {
 				E.TakeDamage(6);
+				ListofProjectiles.remove(i);
 			}
 		}
 		
