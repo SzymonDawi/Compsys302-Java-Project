@@ -111,7 +111,7 @@ public class Physics {
 					}
 					else {
 						if(PlayerOne.GetSpecialBounds().intersects(E.GetBounds())) {
-							E.TakeDamage(PlayerOne.GetDamage());
+							E.TakeDamage(PlayerOne.GetDamage(),"Melee");
 						}
 					}
 				}

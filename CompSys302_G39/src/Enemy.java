@@ -6,8 +6,7 @@ public class Enemy extends Character{
 	protected String type;
 
 	//pushes the enemy back when they are hit
-	@Override
-	public void TakeDamage(double i) {
+	public void TakeDamage(double i,String type) {
 		if(Direction.compareTo("Forward")==0) {
 			Move(0,+20);
 			Stop();
