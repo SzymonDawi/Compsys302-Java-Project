@@ -223,6 +223,31 @@ public class RenderEngine extends JPanel implements ActionListener{
 			g2d.drawString("TIME LEFT:", 25, 35);
 			g2d.drawString(Engine.GetRemainingTime(), 120, 35);
 			
+			if(Engine.GetTutorialRoom()) {
+				System.out.println("in the room");
+				currentIcon = iconLoader.loadSprite("MenusAndIcons/MovementKeys");
+				g2d.drawImage(currentIcon,30, 200, 75, 45,null); 
+				currentIcon = iconLoader.loadSprite("MenusAndIcons/attackKey");
+				g2d.drawImage(currentIcon,35, 350, 60, 30,null); 
+				currentIcon = iconLoader.loadSprite("MenusAndIcons/weaponKey");
+				g2d.drawImage(currentIcon,45, 500, 30, 30,null); 
+				currentIcon = iconLoader.loadSprite("MenusAndIcons/exitKey");
+				g2d.drawImage(currentIcon,950, 275, 30, 30,null); 
+				currentIcon = iconLoader.loadSprite("MenusAndIcons/pauseKey");
+				g2d.drawImage(currentIcon,950, 400, 30, 30,null); 
+				
+				g2d.setColor(Color.BLACK);
+				g2d.drawString("The robots have taken over the town!!!",340, 30); 
+				g2d.drawString("The boss has locked itself inside the house",335, 45); 
+				g2d.drawString("You must find the KEY and destroy the boss",335, 60); 
+				g2d.drawString(": MOVE",130, 230); 
+				g2d.drawString(": ATTACK",120, 370); 
+				g2d.drawString(": SWAP WEAPONS",100, 520); 
+				g2d.drawString("QUIT : ",870, 300); 
+				g2d.drawString("PAUSE : ",860, 415); 
+				
+			}
+			
 		}	
 		
 		else if(Engine.GetState() ==3) {

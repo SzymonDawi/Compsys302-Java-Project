@@ -12,6 +12,7 @@ public class Physics {
 	private Map Map = new Map();
 	private boolean Collision = false;
 	private boolean OtherCollision = false;
+	private boolean playerHit;
 	
 	private GameEngine Engine;
 	
@@ -26,6 +27,7 @@ public class Physics {
 	}
 	
 	public boolean OtherCollisions(Enemy E) {
+		playerHit = false;
 		int i;
 		OtherCollision = false;
 		Rectangle Bounds = new Rectangle(E.GetX()+E.GetDX(), E.GetY()+E.GetDY(), E.GetWidth(),E.GetHeight());
@@ -43,6 +45,7 @@ public class Physics {
 		Rectangle PlayerBounds = PlayerOne.GetBounds();
 		if(E.GetBounds().intersects(PlayerBounds)) {
 			OtherCollision =true;
+			playerHit = true;
 		}
 		
 		for(i = 0; i <ListofProjectiles.size(); i++) {
@@ -112,5 +115,9 @@ public class Physics {
 		}
 		
 		return Collision;
+	}
+	
+	public boolean getPlayerHit() {
+		return playerHit;
 	}
 }

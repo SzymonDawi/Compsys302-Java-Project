@@ -20,6 +20,7 @@ public class GameEngine implements ActionListener{
 	private String currentKeyPress = "Forward";
 	private boolean isPlayerAttacking = false;
 	private boolean standingStill = true;
+	private boolean tutorialRoom;
 	private String randomiseFile;
 	private int currentGameScore;  //do not make this private (yet)
 	private ScoreSaver ScoreEngine = new ScoreSaver();
@@ -159,6 +160,9 @@ public class GameEngine implements ActionListener{
 					}
 					
 					CheckIfDead();
+					if (isPlayerHit()) {
+						playerHurt.playSound();
+					}
 					for(int i = 0; i < ListOfEnemies.size(); i++) {
 						if (ListOfEnemies.get(i).getType() == "boss") {
 							boss B = (boss) ListOfEnemies.get(i);
@@ -792,6 +796,7 @@ public class GameEngine implements ActionListener{
 	public void ObstacleAction(String s) {
 		if(s == "LoadHouse1") {
 			Clear();
+			tutorialRoom = true;
 			MainMapDeltaX = MainMap.GetDeltaX();
 			MainMapDeltaY = MainMap.GetDeltaY();
 			House1MapInit();
@@ -805,6 +810,7 @@ public class GameEngine implements ActionListener{
 		}
 		else if(s.compareTo("ExitToMainMap") ==0){
 			Clear();
+			tutorialRoom = false;
 			enterHouse.playSound();
 			CentreMap = false;
 			MainMapInit();
@@ -814,6 +820,7 @@ public class GameEngine implements ActionListener{
 		}
 		else if(s == "LoadHouse2") {
 			Clear();
+			tutorialRoom = false;
 			MainMapDeltaX = MainMap.GetDeltaX();
 			MainMapDeltaY = MainMap.GetDeltaY();
 			House2MapInit();
@@ -827,6 +834,7 @@ public class GameEngine implements ActionListener{
 		}
 		else if(s == "LoadHouse3") {
 			Clear();
+			tutorialRoom = false;
 			MainMapDeltaX = MainMap.GetDeltaX();
 			MainMapDeltaY = MainMap.GetDeltaY();
 			House3MapInit();
@@ -1066,6 +1074,10 @@ public class GameEngine implements ActionListener{
 		return ListOfPickups.get(i);
 	}
 	
+	public boolean GetTutorialRoom() {
+		return tutorialRoom;
+	}
+	
 	public boolean GetBossFightStatus() {
 		return bossFightStarted;
 	}
@@ -1118,6 +1130,10 @@ public class GameEngine implements ActionListener{
 	public String GetRemainingTime() {
 		String TimeLeft = String.format("%03d", remainingTime);
 		return TimeLeft;
+	}
+	
+	public boolean isPlayerHit() {
+		return Physics.getPlayerHit();
 	}
 	
 	public boolean getPlayerAttacking() {
