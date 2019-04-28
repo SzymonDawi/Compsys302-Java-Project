@@ -22,18 +22,15 @@ public class boss extends Enemy{
 			W = 96;
 			H = 96;
 			aggro = false;
-			
-		 
 	}
 	
-	public void lockOnPlayer (int xTarget, int yTarget) {
+	public void lockOnPlayer (int xTarget, int yTarget, int TickCount) {
 		if (!aggro ) {
 			return;
 		}
 		
 		int Xdifference = crosshairX - xTarget;
 		int Ydifference =  crosshairY - yTarget;
-		
 		
 		String movementPriority;
 		
@@ -46,8 +43,7 @@ public class boss extends Enemy{
 		} else {
 			return;
 		}
-		
-		
+	
 		if (movementPriority == "x") {
 			if(Xdifference < 0) {
 				crosshairX +=5;
@@ -62,7 +58,6 @@ public class boss extends Enemy{
 				crosshairY-=5;
 			}
 		}	
-		
 	}
 	
 	public int getCrosshairX() {

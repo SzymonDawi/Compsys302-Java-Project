@@ -42,6 +42,7 @@ public class Controller implements ActionListener{
 		AddAction("Escape", 0,0,KeyEvent.VK_ESCAPE);
 		AddAction("Enter", 0,0,KeyEvent.VK_ENTER);
 		AddAction("Pause", 0,0,KeyEvent.VK_P);
+		AddAction("Cheat", 0,0,KeyEvent.VK_PAGE_UP);
 	}
 	
 	public void AddAction(String Name, int DeltaX, int DeltaY, int KeyCode) {
@@ -93,6 +94,11 @@ public class Controller implements ActionListener{
 			}
 			else if(CurrentKey == "Escape") {
 				Engine.SetState(7);
+				CurrentKey = null;
+			
+			}
+			else if(CurrentKey == "Cheat") {
+				Engine.Cheat();
 				CurrentKey = null;
 			
 			}

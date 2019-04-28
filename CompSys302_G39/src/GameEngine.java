@@ -38,6 +38,8 @@ public class GameEngine implements ActionListener{
 	private int MainMapDeltaX = 0;
 	private int MainMapDeltaY = 0;
 	private Map House1Map = new Map();
+	private Map House2Map = new Map();
+	private Map House3Map = new Map();
 	private Map CurrentMap;
 	private String PreviousMap;
 	
@@ -75,7 +77,7 @@ public class GameEngine implements ActionListener{
 	private GameState State;
 	private GameState previousState;
 	private Physics Physics = new Physics();
-	private boolean OtherCollision = false;
+	private boolean GameReset = true;
 	
 	enum GameState{
 		MAINMENU,
@@ -170,7 +172,7 @@ public class GameEngine implements ActionListener{
 								B.triangulatePlayer(PlayerOne.GetX(),PlayerOne.GetY(),TickCount);
 			
 							}
-							B.lockOnPlayer (PlayerOne.GetX(), PlayerOne.GetY());
+							B.lockOnPlayer (PlayerOne.GetX(), PlayerOne.GetY(),TickCount);
 							int crosshairDifferenceX = Math.abs(B.getCrosshairX()-PlayerOne.GetX());
 							int crosshairDifferenceY = Math.abs(B.getCrosshairY()-PlayerOne.GetY());
 							if (crosshairDifferenceX <10 && crosshairDifferenceY <10) {
@@ -317,9 +319,64 @@ public class GameEngine implements ActionListener{
 		MainMap.SetX(MainMapDeltaX);
 		MainMap.SetY(MainMapDeltaY);
 		
-		if(!PlayerOne.getHasKey()) {
-			AddPickup("key", 700,700);
+		if(GameReset) {
+			AddPickup("coin", 500-MainMapDeltaX, 500-MainMapDeltaY);
+			AddPickup("ammo", 400-MainMapDeltaX, 450-MainMapDeltaY);
+			AddPickup("health", 430-MainMapDeltaX, 470-MainMapDeltaY);
+			GameReset = false;
 		}
+		
+		if(!PlayerOne.getHasKey()) {
+			AddPickup("key", 700-MainMapDeltaX,700-MainMapDeltaY);
+		}
+		
+		AddEnemy(-100-MainMapDeltaX, -100-MainMapDeltaY,"Right","Meele");
+		AddEnemy(470-MainMapDeltaX, 510-MainMapDeltaY,"Right","Meele");
+		AddEnemy(200-MainMapDeltaX, 700-MainMapDeltaY, "Backward","Meele");
+		
+		AddObstacle("House_1",174,132,100-MainMapDeltaX,100-MainMapDeltaY,1);
+		AddObstacle("House_2",99,99,1000-MainMapDeltaX,1100-MainMapDeltaY,1);
+		AddObstacle("House_3",183,132,1600-MainMapDeltaX,1050-MainMapDeltaY,1);
+		
+		MainMap.LoadTile("Path_Up", 118, 232, 64);
+		MainMap.LoadTile("Path_Up", 118, 296, 64);
+		MainMap.LoadTile("Path_Up", 118, 360, 64);
+		MainMap.LoadTile("Path_Down_Right", 118, 424, 64);
+		MainMap.LoadTile("Path_Left", 182, 430, 64);
+		MainMap.LoadTile("Path_Left", 246, 430, 64);
+		MainMap.LoadTile("Path_Left", 310, 430, 64);
+		MainMap.LoadTile("Path_Left", 374, 430, 64);
+		MainMap.LoadTile("Path_Left", 438, 430, 64);
+		MainMap.LoadTile("Path_Left", 502, 430, 64);
+		MainMap.LoadTile("Path_Left", 566, 430, 64);
+		MainMap.LoadTile("Path_Left", 630, 430, 64);
+		MainMap.LoadTile("Path_Up_Left", 694, 440, 64);
+		MainMap.LoadTile("Path_Up", 694, 504, 64);
+		MainMap.LoadTile("Path_Up", 694, 905, 64);
+		MainMap.LoadTile("Bridge", 580, 490, 0);
+		MainMap.LoadTile("Path_Up", 694, 969, 64);
+		MainMap.LoadTile("Path_Up", 694, 1033, 64);
+		MainMap.LoadTile("Path_Up", 694, 1097, 64);
+		MainMap.LoadTile("Path_Up", 694, 1161, 64);
+		MainMap.LoadTile("Path_Down_Right", 694, 1225, 64);
+		MainMap.LoadTile("Path_Left", 758, 1225, 64);
+		MainMap.LoadTile("Path_Left", 822, 1225, 64);
+		MainMap.LoadTile("Path_Left", 886, 1225, 64);
+		MainMap.LoadTile("Path_Left", 950, 1225, 64);
+		MainMap.LoadTile("Path_Down_Left", 1014, 1225, 64);
+		MainMap.LoadTile("Path_Up", 1014, 1161, 64);
+		MainMap.LoadTile("Path_Left", 1046, 1225, 64);
+		MainMap.LoadTile("Path_Left", 1110, 1225, 64);
+		MainMap.LoadTile("Path_Left", 1174, 1225, 64);
+		MainMap.LoadTile("Path_Left", 1238, 1225, 64);
+		MainMap.LoadTile("Path_Left", 1302, 1225, 64);
+		MainMap.LoadTile("Path_Left", 1366, 1225, 64);
+		MainMap.LoadTile("Path_Left", 1430, 1225, 64);
+		MainMap.LoadTile("Path_Left", 1494, 1225, 64);
+		MainMap.LoadTile("Path_Left", 1558, 1225, 64);
+		MainMap.LoadTile("Path_Left", 1622, 1225, 64);
+		MainMap.LoadTile("Path_Down_Left", 1686, 1225, 64);
+		MainMap.LoadTile("Path_Up", 1686, 1193, 64);
 		
 		//Tile 14
 		AddObstacle("Wall", 256, 88, 0-MainMapDeltaX, 584-MainMapDeltaY, 0);
@@ -427,42 +484,20 @@ public class GameEngine implements ActionListener{
 		AddObstacle("Wall",	124, 8, 2439-MainMapDeltaX, 840-MainMapDeltaY, 0);
 		
 		//MapOutline
-		AddObstacle("Wall",	1, 2048, 0, 0, 0);
-		AddObstacle("Wall",	3840, 1, 0, 0, 0);
+		AddObstacle("Wall",	1, 2048, -MainMapDeltaX, -MainMapDeltaY, 0);
+		AddObstacle("Wall",	3840, 1, -MainMapDeltaX, -MainMapDeltaY, 0);
 		//AddObstacle("Wall",	1, 2048, 3840, 0, 0);
-		AddObstacle("Wall",	3840, 1, 0, 2048, 0);
-		
-		AddEnemy(-100-MainMapDeltaX, -100-MainMapDeltaY,"Right","Meele");
-		AddEnemy(450, 450,"Right","boss");
-		//AddEnemy(470-MainMapDeltaX, 510-MainMapDeltaY,"Right");
-		//AddEnemy(200-MainMapDeltaX, 700-MainMapDeltaY, "Backward");
-		
-		AddObstacle("House_1",174,132,100-MainMapDeltaX,100-MainMapDeltaY,1);
-		
-		MainMap.LoadTile("Path_Up", 118, 232, 64);
-		MainMap.LoadTile("Path_Up", 118, 296, 64);
-		MainMap.LoadTile("Path_Up", 118, 360, 64);
-		MainMap.LoadTile("Path_Down_Right", 118, 424, 64);
-		MainMap.LoadTile("Path_Left", 182, 430, 64);
-		MainMap.LoadTile("Path_Left", 246, 430, 64);
-		MainMap.LoadTile("Path_Left", 310, 430, 64);
-		MainMap.LoadTile("Path_Left", 374, 430, 64);
-		MainMap.LoadTile("Path_Left", 438, 430, 64);
-		MainMap.LoadTile("Path_Left", 502, 430, 64);
-		MainMap.LoadTile("Path_Left", 566, 430, 64);
-		MainMap.LoadTile("Path_Left", 630, 430, 64);
-		MainMap.LoadTile("Path_Up_Left", 694, 440, 64);
-		MainMap.LoadTile("Path_Up", 694, 504, 64);
-		MainMap.LoadTile("Path_Up", 694, 905, 64);
-		MainMap.LoadTile("Bridge", 580, 490, 0);
-		MainMap.LoadTile("Path_Up", 694, 969, 64);
-		MainMap.LoadTile("Path_Up", 694, 1033, 64);
-		MainMap.LoadTile("Path_Up", 694, 1097, 64);
-		MainMap.LoadTile("Path_Up", 694, 1161, 64);
+		AddObstacle("Wall",	3840, 1, -MainMapDeltaX, 2048 -MainMapDeltaY, 0);
 	}
 	
 	private void House1MapInit() {
 		AddEnemy(-100-MainMapDeltaX, -100-MainMapDeltaY,"Right","Meele");
+		
+		//MapOutline
+		AddObstacle("Wall",	1, 512, 248, 128, 0);
+		AddObstacle("Wall",	512, 1, 256,128, 0);
+		AddObstacle("Wall",	1, 512, 756, 128, 0);
+		AddObstacle("Wall",	512, 1, 256, 640, 0);
 		
 		PreviousMap = "MainMap";
 		AddObstacle("0", 50, 50, 430, 590, 0);
@@ -470,7 +505,45 @@ public class GameEngine implements ActionListener{
 					{20,3}};
 		House1Map.init(Map,2,2);
 	}
-			
+	
+	private void House2MapInit() {
+		AddEnemy(-100-MainMapDeltaX, -100-MainMapDeltaY,"Right","Meele");
+		
+		//MapOutline
+		AddObstacle("Wall",	1, 512, 248, 128, 0);
+		AddObstacle("Wall",	512, 1, 256,128, 0);
+		AddObstacle("Wall",	1, 512, 756, 128, 0);
+		AddObstacle("Wall",	512, 1, 256, 640, 0);
+		
+		AddPickup("coin",450, 400);
+		AddPickup("ammo", 400, 450);
+		AddPickup("health", 430, 470);
+		
+		PreviousMap = "MainMap";
+		AddObstacle("0", 50, 50, 430, 590, 0);
+		int[][] Map = {{3,3},
+					{20,3}};
+		House2Map.init(Map,2,2);
+	}
+	
+	private void House3MapInit() {
+		AddEnemy(-100-MainMapDeltaX, -100-MainMapDeltaY,"Right","Meele");
+		
+		//MapOutline
+		AddObstacle("Wall",	1, 512, 125, 128, 0);
+		AddObstacle("Wall",	768, 1, 125,128, 0);
+		AddObstacle("Wall",	1, 512, 895, 128, 0);
+		AddObstacle("Wall",	768, 1, 125, 640, 0);
+		
+		AddEnemy(450, 450,"Right","boss");
+		
+		PreviousMap = "MainMap";
+		//AddObstacle("0", 50, 50, 430, 590, 0);
+		int[][] Map = {{3,3,3},
+					  {3,20,3}};
+		House3Map.init(Map,3,2);
+	}
+	
 	private void MainMenuInit() {
 		MainMenu.AddButton("Play", (1024/2-100), 100);
 		MainMenu.AddButton("High Scores", (1024/2-100), 200);
@@ -576,6 +649,8 @@ public class GameEngine implements ActionListener{
 			case "Ok":
 				ScoreEngine.compareCurrentToHigh(currentGameScore);
 				Clear();
+				PlayerOne.setHasKey(false);
+				GameReset = true;
 				MainMapInit();
 				PlayerOne.SetHealth(PlayerOne.GetMaxHealth());
 				State = GameState.MAINMENU;
@@ -616,6 +691,20 @@ public class GameEngine implements ActionListener{
 		run();
 	}
 	
+	public void Cheat() {
+		Clear();
+		MainMapDeltaX = MainMap.GetDeltaX();
+		MainMapDeltaY = MainMap.GetDeltaY();
+		House3MapInit();
+		enterHouse.playSound();
+		CurrentMap = House3Map;
+		CentreMap = true;
+		PlayerOne.SetMainMapX();
+		PlayerOne.SetMainMapY();
+		PlayerOne.setX(500);
+		PlayerOne.setY(500);
+	}
+	
 	public void MovePlayer(int DeltaX,int DeltaY) {
 		boolean MoveMap = false;
 		int MapX=50;
@@ -640,8 +729,7 @@ public class GameEngine implements ActionListener{
 			MapY = (718- CurrentMap.GetMaxY())/2 + 25;
 		}
 		
-		Rectangle Rect = new Rectangle(PlayerOne.GetX() + CurrentMap.GetDeltaX() +DeltaX, PlayerOne.GetY() + CurrentMap.GetDeltaY()+ DeltaY, 25,25);
-		Rect = new Rectangle(PlayerOne.GetX() + DeltaX, PlayerOne.GetY() + DeltaY, PlayerOne.GetWidth(),PlayerOne.GetHeight());
+		Rectangle Rect = new Rectangle(PlayerOne.GetX() + DeltaX, PlayerOne.GetY() + DeltaY, PlayerOne.GetWidth(),PlayerOne.GetHeight());
 		if(Rect.intersects(new Rectangle(50,50,828,524))){	
 			if(PlayerMove) {
 					PlayerOne.Move(DeltaX, DeltaY);
@@ -665,7 +753,7 @@ public class GameEngine implements ActionListener{
 			MovePickups(DeltaX,DeltaY);
 			MoveEnemies(DeltaX,DeltaY);
 			CurrentMap.Update(DeltaX,DeltaY);
-		}	
+		}		
 	}
 	
 	public void PickupItem(int i) {
@@ -707,6 +795,32 @@ public class GameEngine implements ActionListener{
 			CurrentMap = MainMap;
 			PlayerOne.setX(PlayerOne.GetMainMapX());
 			PlayerOne.setY(PlayerOne.GetMainMapY());
+		}
+		else if(s == "LoadHouse2") {
+			Clear();
+			MainMapDeltaX = MainMap.GetDeltaX();
+			MainMapDeltaY = MainMap.GetDeltaY();
+			House2MapInit();
+			enterHouse.playSound();
+			CurrentMap = House2Map;
+			CentreMap = true;
+			PlayerOne.SetMainMapX();
+			PlayerOne.SetMainMapY();
+			PlayerOne.setX(500);
+			PlayerOne.setY(500);
+		}
+		else if(s == "LoadHouse3") {
+			Clear();
+			MainMapDeltaX = MainMap.GetDeltaX();
+			MainMapDeltaY = MainMap.GetDeltaY();
+			House3MapInit();
+			enterHouse.playSound();
+			CurrentMap = House3Map;
+			CentreMap = true;
+			PlayerOne.SetMainMapX();
+			PlayerOne.SetMainMapY();
+			PlayerOne.setX(500);
+			PlayerOne.setY(500);
 		}
 	}
 	
@@ -781,6 +895,16 @@ public class GameEngine implements ActionListener{
 		}
 		else if(s.compareTo("Wall") == 0) {
 			O.SetBounds(0, 0 , W, H);
+		}
+		else if(s.compareTo("House_2") == 0){
+			O.SetBounds(0, H/2-10 , W-20, H/2);
+			O.SetSpecialBounds(33, H-1, 20, 1);
+			O.SetAction("LoadHouse2");
+		}
+		else if(s.compareTo("House_3") == 0){
+			O.SetBounds(0, H/2-10 , W-20, H/2);
+			O.SetSpecialBounds(33, H-1, 20, 1);
+			O.SetAction("LoadHouse3");
 		}
 		ListOfObstacles.add(O);
 	}
@@ -1082,7 +1206,7 @@ public class GameEngine implements ActionListener{
 				
 			} else {
 				laserDeath.playSound();
-				PlayerOne.Kill();
+				PlayerOne.TakeDamage(5);
 			}
 		} else {
 			deathTimer = 0;
