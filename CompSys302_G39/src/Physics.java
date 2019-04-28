@@ -72,6 +72,7 @@ public class Physics {
 
 	public boolean PlayerCollisions(int X, int Y) {
 		Collision = false;
+		playerHit = false;
 		int i;
 		Rectangle PlayerBounds = new Rectangle(PlayerOne.GetBounds().x + X, PlayerOne.GetBounds().y + Y, PlayerOne.GetBounds().width,PlayerOne.GetBounds().height);
 		for(i=0; i < ListOfObstacles.size(); i++) {
@@ -91,6 +92,7 @@ public class Physics {
 			Enemy E = ListOfEnemies.get(i);		
 				if(E.GetBounds().intersects(PlayerBounds)) {
 				Collision = true;
+				playerHit = true;
 				}
 				if(PlayerOne.GetIsAttacking()) {
 					if(PlayerOne.getWeaponType().compareTo("ranged") == 0) {

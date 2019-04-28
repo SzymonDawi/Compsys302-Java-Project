@@ -639,6 +639,7 @@ public class GameEngine implements ActionListener{
 		switch (CurrentMenu.CurrentButtonName()){
 		
 			case "Play":
+				tutorialRoom = true;
 				remainingTime = 300;
 				deathTimer = 0;
 				bossDefeated = false;
@@ -713,6 +714,7 @@ public class GameEngine implements ActionListener{
 	
 	public void Cheat() {
 		Clear();
+		 tutorialRoom = false;
 		MainMapDeltaX = MainMap.GetDeltaX();
 		MainMapDeltaY = MainMap.GetDeltaY();
 		House3MapInit();
@@ -1260,7 +1262,6 @@ public class GameEngine implements ActionListener{
 		}
 		
 		if (bossDefeated) {
-			System.out.println("nice");
 			winTimer++;
 			if (winTimer == 3) {
 				PlayerOne.SetDeathMessage("YOU WIN!");
