@@ -190,8 +190,6 @@ public class GameEngine implements ActionListener{
 							}
 						} else {
 							Enemy E = ListOfEnemies.get(i);
-//							System.out.println(E.GetX());
-//							System.out.println(E.GetY());
 							if(E.detectPlayer(PlayerOne.GetX(),PlayerOne.GetY())) {
 								randomiseFile = String.valueOf((int)(Math.random() *5 +1));
 							

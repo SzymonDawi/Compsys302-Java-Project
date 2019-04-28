@@ -34,6 +34,11 @@ public class Player extends Character{
 		BoundsY= 0;
 		BoundsW= W;
 		BoundsH= H;
+		
+		SpecialX = 20 ;
+		SpecialY = 20;
+		SpecialW = 70;
+		SpecialH = 100;
 	}
 	
 	public void Kill() {

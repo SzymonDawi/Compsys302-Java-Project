@@ -43,7 +43,7 @@ public class boss extends Enemy{
 		} else {
 			return;
 		}
-	
+		
 		if (movementPriority == "x") {
 			if(Xdifference < 0) {
 				crosshairX +=5;
