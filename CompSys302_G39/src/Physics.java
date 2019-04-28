@@ -40,7 +40,7 @@ public class Physics {
 			}
 		}
 		
-		Rectangle PlayerBounds = new Rectangle(PlayerOne.GetX(), PlayerOne.GetY(), PlayerOne.GetWidth(),PlayerOne.GetHeight());
+		Rectangle PlayerBounds = PlayerOne.GetBounds();
 		if(E.GetBounds().intersects(PlayerBounds)) {
 			OtherCollision =true;
 		}
@@ -67,7 +67,7 @@ public class Physics {
 	public boolean PlayerCollisions(int X, int Y) {
 		Collision = false;
 		int i;
-		Rectangle PlayerBounds = new Rectangle(PlayerOne.GetX() + X, PlayerOne.GetY() + Y, PlayerOne.GetWidth(),PlayerOne.GetHeight());
+		Rectangle PlayerBounds = new Rectangle(PlayerOne.GetBounds().x + X, PlayerOne.GetBounds().y + Y, PlayerOne.GetBounds().width,PlayerOne.GetBounds().height);
 		for(i=0; i < ListOfObstacles.size(); i++) {
 			Obstacle O = ListOfObstacles.get(i);
 					Rectangle Rect2 = O.GetSpecialBounds();

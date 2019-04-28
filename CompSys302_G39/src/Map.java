@@ -163,6 +163,9 @@ public class Map {
 					else if(Map[i][j] == 19) {
 						LoadImage("sprites/River_Edge_Front1.png",i,j);
 					}
+					else if(Map[i][j] == 20) {
+						LoadImage("sprites/House_Floor.png",i,j);
+					}
 					else if(Map[i][j] == 31) {
 						LoadImage("sprites/Beach_1.png",i,j);
 					}
