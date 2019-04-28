@@ -28,7 +28,8 @@ public class RenderEngine extends JPanel implements ActionListener{
 	private BufferedImage meleeWeapon;
 	private BufferedImage rangedWeapon;
 	private attacks attacks = new attacks();
-	private Color HUD_Background = new Color(0f,0f,0f,.35f ); //new color of 25% opacity
+	private Color HUD_Background = new Color(0f,0f,0f,.35f ); //new color of 35% opacity
+	private Color hurt = new Color(1f,0f,0f,.50f ); //new color of 25% opacity
 	private Font buttonFont = new Font("Georgia", Font.BOLD,20);
 	private Font titleFont = new Font("Georgia", Font.BOLD,40);
 	private Font HUDFont = new Font("Georgia", Font.BOLD,15);
@@ -162,6 +163,10 @@ public class RenderEngine extends JPanel implements ActionListener{
 			g2d.drawImage(currentAnimation.Sprite, Engine.GetPlayer().GetX(),Engine.GetPlayer().GetY(), 64,64,null);
 			playerSprite = createImage(getWidth(),getHeight());
 			drawEntity(playerSprite.getGraphics(), currentAnimation);
+			if(Engine.isPlayerHit()) {
+				g2d.setColor(hurt);
+				g2d.fillRect(0,0,1024,768);
+			}
 			if (Engine.getPlayerAttacking()) {
 				if(Engine.GetPlayer().getWeaponType() == "melee" || Engine.GetPlayer().getAmmo() >0) {
 				g2d.drawImage(attacks.getAttackSprite("playerMeleeAttack", Engine.GetCurrentPlayerDirrection()), Engine.GetPlayerAttackLocation("x"),Engine.GetPlayerAttackLocation("y"), 64,64,null);

@@ -27,7 +27,7 @@ public class Physics {
 	}
 	
 	public boolean OtherCollisions(Enemy E) {
-		playerHit = false;
+		
 		int i;
 		OtherCollision = false;
 		Rectangle Bounds = new Rectangle(E.GetX()+E.GetDX(), E.GetY()+E.GetDY(), E.GetWidth(),E.GetHeight());
@@ -45,7 +45,7 @@ public class Physics {
 		Rectangle PlayerBounds = PlayerOne.GetBounds();
 		if(E.GetBounds().intersects(PlayerBounds)) {
 			OtherCollision =true;
-			playerHit = true;
+			
 		}
 		
 		for(i = 0; i <ListofProjectiles.size(); i++) {
@@ -70,6 +70,7 @@ public class Physics {
 
 	public boolean PlayerCollisions(int X, int Y) {
 		Collision = false;
+		playerHit = false;
 		int i;
 		Rectangle PlayerBounds = new Rectangle(PlayerOne.GetBounds().x + X, PlayerOne.GetBounds().y + Y, PlayerOne.GetBounds().width,PlayerOne.GetBounds().height);
 		for(i=0; i < ListOfObstacles.size(); i++) {
@@ -91,6 +92,7 @@ public class Physics {
 				Collision = true;
 				if(E.GetIsAttacking())
 					PlayerOne.TakeDamage(E.GetDamage());
+					playerHit = true;
 					E.Stop();
 					E.SetIsAttacking(false);
 				}
