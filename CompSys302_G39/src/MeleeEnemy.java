@@ -11,7 +11,7 @@ public class MeleeEnemy extends Enemy{
 		Direction = direction;
 		Health = 6;
 		MaxHealth = 6;
-		Damage = 1;
+		Damage = 0.05;
 		Alive = true;
 		Speed = 1;
 		X = x;

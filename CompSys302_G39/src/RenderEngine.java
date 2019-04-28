@@ -117,27 +117,30 @@ public class RenderEngine extends JPanel implements ActionListener{
 				
 				if(Engine.GetEnemy(i).getType() == "normal") {
 					Enemy E = Engine.GetEnemy(i);
+					
 					g2d.drawImage(E.getEnemyAnimation().Sprite, E.GetX(),E.GetY(), 64,64,null);
 					enemySprite = createImage(getWidth(),getHeight());
 					drawEntity(enemySprite.getGraphics(), E.getEnemyAnimation());
-					g2d.setColor(Color.yellow);
-					g2d.drawRect(E.GetBounds().x,E.GetBounds().y, E.GetWidth(), E.GetHeight());
 				}else {
 					boss B = (boss) Engine.GetEnemy(i);
+					
 					g2d.drawImage(B.getEnemyAnimation().Sprite, B.GetX(),B.GetY(), 64,64,null);
 					enemySprite = createImage(getWidth(),getHeight());
 					drawEntity(enemySprite.getGraphics(), B.getEnemyAnimation());
-					g2d.setColor(Color.yellow);
-					g2d.drawRect(B.GetBounds().x,B.GetBounds().y, B.GetWidth(), B.GetHeight());
+	
 					if(Engine.GetBossFightStatus()) {
 						g2d.setColor(Color.red);
 						g2d.fillRect(310,12,(int) (4.8*(((float)B.GetHealth()/(float)B.GetMaxHealth())*100)), 30);		
+						
 						currentIcon = iconLoader.loadSprite("MenusAndIcons/HUD_weaponBox");
 						g2d.drawImage(currentIcon,250, 6, 50, 50,null);
+						
 						currentIcon = iconLoader.loadSprite("MenusAndIcons/bossIcon");
 						g2d.drawImage(currentIcon,254, 10, 40, 40,null);
+						
 						currentIcon = iconLoader.loadSprite("MenusAndIcons/bossHealthBar");
 						g2d.drawImage(currentIcon,300, 12, 500, 30,null); //health icon
+						
 						if(Engine.GetBossLockedOnStatus()) {
 							currentIcon = iconLoader.loadSprite("Enemy/bossCrosshairLocked");
 							g2d.drawImage(currentIcon,B.getCrosshairX(),B.getCrosshairY(), 64, 64,null); 
@@ -172,64 +175,70 @@ public class RenderEngine extends JPanel implements ActionListener{
 				g2d.drawImage(attacks.getAttackSprite("playerMeleeAttack", Engine.GetCurrentPlayerDirrection()), Engine.GetPlayerAttackLocation("x"),Engine.GetPlayerAttackLocation("y"), 64,64,null);
 				}
 			}
-			g2d.setColor(Color.yellow);
-			g2d.drawRect(Engine.GetPlayer().GetSpecialBounds().x,Engine.GetPlayer().GetSpecialBounds().y, Engine.GetPlayer().GetSpecialBounds().width, Engine.GetPlayer().GetSpecialBounds().height);
 			
 			//Obstacles
 			for(i=0;i <Engine.GetNumberOfObstacles(); i++) {
 				Obstacle O = Engine.GetObstacle(i);
-				g2d.drawImage(O.GetCurrentSprite(), O.GetX(),O.GetY(), O.GetWidth(), O.GetHeight(),f);
-				g2d.setColor(Color.yellow);
-				g2d.drawRect(O.GetBounds().x,O.GetBounds().y, O.GetBounds().width, O.GetBounds().height);		
+				g2d.drawImage(O.GetCurrentSprite(), O.GetX(),O.GetY(), O.GetWidth(), O.GetHeight(),f);	
 			}
 			
 			friendlyProjectile = iconLoader.loadSprite("player/player_projectile");
 			enemyProjectile = iconLoader.loadSprite("enemy/enemy_projectile"); 
 			for(i =0 ; i <Engine.GetNumberOfProjectiles(); i++) {
 				Projectile P = Engine.GetProjectile(i);
-				if(Engine.GetProjectile(i).getFriendly()) {
-					g2d.drawImage(friendlyProjectile,P.GetX(),P.GetY(), P.GetWidth(), P.GetHeight(),null);
-				} else {
-					g2d.drawImage(enemyProjectile,P.GetX(),P.GetY(), P.GetWidth()+10, P.GetHeight()+10,null);
+				if(P.getExists()) {
+					if(Engine.GetProjectile(i).getFriendly()) {
+						g2d.drawImage(friendlyProjectile,P.GetX(),P.GetY(), P.GetWidth(), P.GetHeight(),null);
+					} else {
+						g2d.drawImage(enemyProjectile,P.GetX(),P.GetY(), P.GetWidth()+10, P.GetHeight()+10,null);
+					}
 				}
 			}
+			
 			//HUD
 			meleeWeapon = iconLoader.loadSprite("MenusAndIcons/HUD_weaponMelee");
 			rangedWeapon = iconLoader.loadSprite("MenusAndIcons/HUD_weaponRanged"); 
+			
 			currentIcon = iconLoader.loadSprite("MenusAndIcons/HUD_score");
 			g2d.setFont(HUDFont);
 			g2d.setColor(HUD_Background);
 			g2d.drawImage(currentIcon,850, 10, 160, 34,null); //score icon
+			
 			currentIcon = iconLoader.loadSprite("MenusAndIcons/HUD_health");
 			g2d.drawImage(currentIcon,15, 675, 190, 40,null); //health icon
+			
 			currentIcon = iconLoader.loadSprite("MenusAndIcons/HUD_weaponBox");
 			g2d.drawImage(currentIcon,680, 650, 70, 70,null); //weapon box icon
 			g2d.drawImage(currentIcon,610, 650, 70, 70,null); //inventory box icon
+			
 			if(Engine.GetPlayer().getHasKey() ) {
 				currentIcon = iconLoader.loadSprite("MenusAndIcons/Inventory_key");
 				g2d.drawImage(currentIcon,620, 660, 50, 50,null);
 			}
+			
 			currentIcon = iconLoader.loadSprite("MenusAndIcons/HUD_ammo");
 			g2d.drawImage(currentIcon,800, 675, 190, 40,null); //ammo icon
+			
 			currentIcon = iconLoader.loadSprite("MenusAndIcons/HUD_timer");
 			g2d.drawImage(currentIcon,15, 12, 190, 40,null); //timer icon
+			
 			if(Engine.GetPlayer().getWeaponType() == "melee") {   //to display weapons
 				g2d.drawImage(meleeWeapon,690, 660, 50, 50,null); //melee weapon icon
 			} else {
 				g2d.drawImage(rangedWeapon,690, 660, 50, 50,null); //ranged weapon icon
 			}
+			
 			g2d.setColor(Color.LIGHT_GRAY);
 			g2d.drawString("SCORE:", 878, 32);
 			g2d.drawString(Engine.GetScore(), 940, 32);
 			g2d.drawString("HEALTH", 55, 700);
-			g2d.drawString(Engine.GetPlayer().GetHealth() + "/" +  Engine.GetPlayer().GetMaxHealth(), 125, 700);
+			g2d.drawString((int)Engine.GetPlayer().GetHealth() + "/" +  Engine.GetPlayer().GetMaxHealth(), 125, 700);
 			g2d.drawString("AMMO", 850, 700);
 			g2d.drawString(Engine.GetPlayer().getAmmo() + "/" +  Engine.GetPlayer().getMaxAmmo(), 920, 700);
 			g2d.drawString("TIME LEFT:", 25, 35);
 			g2d.drawString(Engine.GetRemainingTime(), 120, 35);
 			
 			if(Engine.GetTutorialRoom()) {
-				System.out.println("in the room");
 				currentIcon = iconLoader.loadSprite("MenusAndIcons/MovementKeys");
 				g2d.drawImage(currentIcon,30, 200, 75, 45,null); 
 				currentIcon = iconLoader.loadSprite("MenusAndIcons/attackKey");

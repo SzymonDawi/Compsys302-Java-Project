@@ -20,7 +20,7 @@ public class Player extends Character{
 		ammo = 20;
 		Health = 20;
 		MaxHealth = 20;
-		Damage = 6;
+		Damage = 2;
 		Alive = true;
 		currentWeapon = "melee";
 		AttSpeed = 100;
@@ -45,7 +45,7 @@ public class Player extends Character{
 		return Alive;
 	}
 
-	public int attack() {
+	public double attack() {
 		if (currentWeapon == "ranged") {
 			if(ammo>0) {
 			ammo -= 1;
@@ -98,6 +98,14 @@ public class Player extends Character{
 	}
 	
 	public void SetMainMapY() {
+		MainMapY = Y;
+	}
+	
+	public void SetMainMapX(int X) {
+		MainMapX = X;
+	}
+	
+	public void SetMainMapY(int Y) {
 		MainMapY = Y;
 	}
 	

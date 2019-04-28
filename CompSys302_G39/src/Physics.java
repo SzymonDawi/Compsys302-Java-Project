@@ -25,9 +25,8 @@ public class Physics {
 		this.PlayerOne = Engine.GetPlayer();
 		this.Map = Engine.Getlevel();
 	}
-	
 	public boolean OtherCollisions(Enemy E) {
-		
+		playerHit = false;
 		int i;
 		OtherCollision = false;
 		Rectangle Bounds = new Rectangle(E.GetX()+E.GetDX(), E.GetY()+E.GetDY(), E.GetWidth(),E.GetHeight());
@@ -44,17 +43,21 @@ public class Physics {
 		
 		Rectangle PlayerBounds = PlayerOne.GetBounds();
 		if(E.GetBounds().intersects(PlayerBounds)) {
+			PlayerOne.TakeDamage(E.GetDamage());
+			playerHit = true;
+			E.Stop();
 			OtherCollision =true;
-			
 		}
 		
 		for(i = 0; i <ListofProjectiles.size(); i++) {
 			Projectile P = ListofProjectiles.get(i);
 			Rectangle Rect = P.GetBounds();
-			if(Bounds.intersects(Rect)) {
-				E.TakeDamage(6);
-				ListofProjectiles.remove(i);
-			}
+				if(P.getExists()) {
+					if(Bounds.intersects(Rect)) {
+						E.TakeDamage((float) 0.3);
+						P.setExists(false);
+					}
+				}
 		}
 		
 		for(i=0; i < ListOfObstacles.size(); i++) {
@@ -62,15 +65,13 @@ public class Physics {
 			Rectangle Rect = O.GetBounds();
 			if(Bounds.intersects(Rect)) {
 			OtherCollision = true;
-			}
-			
+			}	
 		}
 		return OtherCollision;
 	}
 
 	public boolean PlayerCollisions(int X, int Y) {
 		Collision = false;
-		playerHit = false;
 		int i;
 		Rectangle PlayerBounds = new Rectangle(PlayerOne.GetBounds().x + X, PlayerOne.GetBounds().y + Y, PlayerOne.GetBounds().width,PlayerOne.GetBounds().height);
 		for(i=0; i < ListOfObstacles.size(); i++) {
@@ -90,11 +91,6 @@ public class Physics {
 			Enemy E = ListOfEnemies.get(i);		
 				if(E.GetBounds().intersects(PlayerBounds)) {
 				Collision = true;
-				if(E.GetIsAttacking())
-					PlayerOne.TakeDamage(E.GetDamage());
-					playerHit = true;
-					E.Stop();
-					E.SetIsAttacking(false);
 				}
 				if(PlayerOne.GetIsAttacking()) {
 					if(PlayerOne.getWeaponType().compareTo("ranged") == 0) {
@@ -118,6 +114,7 @@ public class Physics {
 		
 		return Collision;
 	}
+
 	
 	public boolean getPlayerHit() {
 		return playerHit;

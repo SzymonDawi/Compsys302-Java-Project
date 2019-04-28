@@ -1,17 +1,12 @@
 
 public class Enemy extends Character{
 	protected boolean aggro;
-	private int StartReload = 0;
 	private int StopCounter = 0;
 	private boolean Stop= false;
 	protected String type;
 
 	public void setAggro(boolean NewAggro) {
 		aggro = NewAggro;
-	}
-
-	public void SetStartReload(int Count) {
-		StartReload = Count;
 	}
 	
 	public void Stop() {
@@ -34,19 +29,6 @@ public class Enemy extends Character{
 		
 		int Xdifference = X - xTarget;
 		int Ydifference =  Y - yTarget;
-		
-		if(StartReload != AttSpeed) {
-			StartReload++;
-		}
-		else {	
-			StartReload = 0;
-			Reloading = false;
-		}
-
-		if(!Reloading) {
-			isAttacking = true;
-			Reloading = true;
-		}
 		
 		String movementPriority;
 		

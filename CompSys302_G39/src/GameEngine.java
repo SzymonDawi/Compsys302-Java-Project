@@ -95,8 +95,6 @@ public class GameEngine implements ActionListener{
 		CLOSE
 	}
 	
-	private int CurrentTime = 0;
-	private int LastTime = 0;
 	private boolean IsRunning = true;
 	private boolean tick= false;
 	private boolean PreviousTick = false;
@@ -108,6 +106,10 @@ public class GameEngine implements ActionListener{
 		switch (State){
 			case MAINMENU:
 				PlayerOne = new Player();
+				PlayerOne.SetMainMapX(140);
+				PlayerOne.SetMainMapY(250);
+				CentreMap = true;
+				
 				CurrentMenu = MainMenu;	
 				if(LoadingMenu) {
 					CurrentMenu.Select(0);
@@ -158,7 +160,6 @@ public class GameEngine implements ActionListener{
 						Projectile P = ListofProjectiles.get(i);
 						P.Move();
 					}
-					
 					CheckIfDead();
 					if (isPlayerHit()) {
 						playerHurt.playSound();
@@ -167,8 +168,7 @@ public class GameEngine implements ActionListener{
 						if (ListOfEnemies.get(i).getType() == "boss") {
 							boss B = (boss) ListOfEnemies.get(i);
 							
-							if(B.detectPlayer(PlayerOne.GetX(),PlayerOne.GetY())) {
-							
+							if(B.detectPlayer(PlayerOne.GetX(),PlayerOne.GetY())) {			
 								playerDetected.getSound("bossWakeup");
 								playerDetected.setVol(0.4);
 								playerDetected.playSound();
@@ -281,14 +281,11 @@ public class GameEngine implements ActionListener{
 		PauseMenuInit();
 		CloseMenuInit();
 		DeadMenuInit();
-		
-		AddPickup("coin", 500, 500);
-		AddPickup("key", 700,700);
-		AddPickup("ammo", 400, 450);
-		AddPickup("health", 430, 470);
-		
-		MainMapInit();
-		CurrentMap = MainMap;
+	
+		tutorialRoom = true;
+		CentreMap = true;
+		House1MapInit();
+		CurrentMap = House1Map;	
 		
 		buttonClick.getSound("beep");
 		buttonSwitch.getSound("switchButton");
@@ -320,7 +317,6 @@ public class GameEngine implements ActionListener{
 		bossDefeated = false;
 		winTimer = 0;
 	}
-	
 	private void MainMapInit() {
 		int[][] Map = {
 				{0,0,0,0,0,0,0,0,1,4,33,3,3,3,3},
@@ -343,18 +339,20 @@ public class GameEngine implements ActionListener{
 			GameReset = false;
 		}
 		
-		if(!PlayerOne.getHasKey()) {
-			AddPickup("key", 700-MainMapDeltaX,700-MainMapDeltaY);
-		}
-		
 		AddEnemy(-100-MainMapDeltaX, -100-MainMapDeltaY,"Right","Meele");
-		AddEnemy(470-MainMapDeltaX, 510-MainMapDeltaY,"Right","Meele");
-		AddEnemy(200-MainMapDeltaX, 700-MainMapDeltaY, "Backward","Meele");
+		AddEnemy(470-MainMapDeltaX, 500-MainMapDeltaY,"Right","Meele");
+		AddEnemy(400-MainMapDeltaX, 300-MainMapDeltaY, "Left","Meele");
+		AddEnemy(1000-MainMapDeltaX, 300-MainMapDeltaY,"Left","Meele");
+		AddEnemy(750-MainMapDeltaX, 1000-MainMapDeltaY, "Backward","Meele");
+		AddEnemy(900-MainMapDeltaX, 1150-MainMapDeltaY, "Backward","Meele");
+		AddEnemy(900-MainMapDeltaX, 1300-MainMapDeltaY, "Backward","Meele");
 		
 		AddObstacle("House_1",174,132,100-MainMapDeltaX,100-MainMapDeltaY,1);
 		AddObstacle("House_2",99,99,1000-MainMapDeltaX,1100-MainMapDeltaY,1);
+		AddObstacle("House_3_Unlocked",183,132,1600-MainMapDeltaX,1050-MainMapDeltaY,1);
 		AddObstacle("House_3",183,132,1600-MainMapDeltaX,1050-MainMapDeltaY,1);
 		
+		//MainMap.LoadTile("Locked_Door", 1650, 1100, 32);
 		MainMap.LoadTile("Path_Up", 118, 232, 64);
 		MainMap.LoadTile("Path_Up", 118, 296, 64);
 		MainMap.LoadTile("Path_Up", 118, 360, 64);
@@ -536,6 +534,10 @@ public class GameEngine implements ActionListener{
 		AddPickup("ammo", 400, 450);
 		AddPickup("health", 430, 470);
 		
+		if(!PlayerOne.getHasKey()) {
+			AddPickup("key", 400, 400);
+		}
+		
 		PreviousMap = "MainMap";
 		AddObstacle("0", 50, 50, 430, 590, 0);
 		int[][] Map = {{3,3},
@@ -553,14 +555,12 @@ public class GameEngine implements ActionListener{
 		AddObstacle("Wall",	768, 1, 125, 640, 0);
 		
 		AddEnemy(450, 450,"Right","boss");
-		
 		PreviousMap = "MainMap";
-		//AddObstacle("0", 50, 50, 430, 590, 0);
 		int[][] Map = {{3,3,3},
 					  {3,20,3}};
 		House3Map.init(Map,3,2);
 	}
-	
+		
 	private void MainMenuInit() {
 		MainMenu.AddButton("Play", (1024/2-100), 100);
 		MainMenu.AddButton("High Scores", (1024/2-100), 200);
@@ -620,6 +620,7 @@ public class GameEngine implements ActionListener{
 		ListOfEnemies.clear();
 		ListOfObstacles.clear();
 		ListOfPickups.clear();
+		ListofProjectiles.clear();
 	}
 	
 	public void SwitchButton(int Delta) {
@@ -669,8 +670,8 @@ public class GameEngine implements ActionListener{
 				Clear();
 				PlayerOne.setHasKey(false);
 				CentreMap = false;
-				MainMapInit();
-				CurrentMap = MainMap;
+				House1MapInit();
+				CurrentMap = House1Map;
 				PlayerOne.SetHealth(PlayerOne.GetMaxHealth());
 				State = GameState.MAINMENU;
 				break;	
@@ -769,6 +770,7 @@ public class GameEngine implements ActionListener{
 				DeltaY = 0;
 			}
 			
+			MoveProjectiles(DeltaX,DeltaY);
 			MoveObstacles(DeltaX,DeltaY);
 			MovePickups(DeltaX,DeltaY);
 			MoveEnemies(DeltaX,DeltaY);
@@ -796,7 +798,6 @@ public class GameEngine implements ActionListener{
 	public void ObstacleAction(String s) {
 		if(s == "LoadHouse1") {
 			Clear();
-			tutorialRoom = true;
 			MainMapDeltaX = MainMap.GetDeltaX();
 			MainMapDeltaY = MainMap.GetDeltaY();
 			House1MapInit();
@@ -833,18 +834,19 @@ public class GameEngine implements ActionListener{
 			PlayerOne.setY(500);
 		}
 		else if(s == "LoadHouse3") {
-			Clear();
-			tutorialRoom = false;
-			MainMapDeltaX = MainMap.GetDeltaX();
-			MainMapDeltaY = MainMap.GetDeltaY();
-			House3MapInit();
-			enterHouse.playSound();
-			CurrentMap = House3Map;
-			CentreMap = true;
-			PlayerOne.SetMainMapX();
-			PlayerOne.SetMainMapY();
-			PlayerOne.setX(500);
-			PlayerOne.setY(500);
+			if(PlayerOne.getHasKey()) {
+				Clear();
+				MainMapDeltaX = MainMap.GetDeltaX();
+				MainMapDeltaY = MainMap.GetDeltaY();
+				House3MapInit();
+				enterHouse.playSound();
+				CurrentMap = House3Map;
+				CentreMap = true;
+				PlayerOne.SetMainMapX();
+				PlayerOne.SetMainMapY();
+				PlayerOne.setX(500);
+				PlayerOne.setY(500);
+			}
 		}
 	}
 	
@@ -859,6 +861,13 @@ public class GameEngine implements ActionListener{
 	private void MovePickups(int DeltaX, int DeltaY) {
 		for(int i = 0; i < ListOfPickups.size(); i++) {
 			pickups P = ListOfPickups.get(i);
+			P.Move(-DeltaX, -DeltaY);
+		}
+	}
+	
+	private void MoveProjectiles(int DeltaX, int DeltaY) {
+		for(int i = 0; i < ListofProjectiles.size(); i++) {
+			Projectile P = ListofProjectiles.get(i);
 			P.Move(-DeltaX, -DeltaY);
 		}
 	}
@@ -887,6 +896,7 @@ public class GameEngine implements ActionListener{
 	public void AddProjectile(boolean Friendly, int X, int Y, int W, int H,String s) {
 		Projectile P = new Projectile(Friendly, X, Y, W, H);
 		P.SetBounds(0, 0, W, H);
+		P.setExists(true);
 		int Dx=0;
 		int Dy=0;
 		if(currentKeyPress.compareTo("Forward")==0) {
@@ -927,7 +937,7 @@ public class GameEngine implements ActionListener{
 		}
 		else if(s.compareTo("House_3") == 0){
 			O.SetBounds(0, H/2-10 , W-20, H/2);
-			O.SetSpecialBounds(33, H-1, 20, 1);
+			O.SetSpecialBounds(80, H, 40, 1);
 			O.SetAction("LoadHouse3");
 		}
 		ListOfObstacles.add(O);

@@ -1,7 +1,7 @@
 
 public class Character extends Entity{
-	protected int Health;
-	protected int Damage;
+	protected double Health;
+	protected double Damage;
 	protected int Speed;
 	protected int AttSpeed;
 	protected int MaxHealth;
@@ -25,7 +25,7 @@ public class Character extends Entity{
 	Animation standRight;
 
 
-	public void TakeDamage(int i) {
+	public void TakeDamage(double i) {
 		Health = Health - i;
 		if (Health < 0) {
 			Health = 0;	
@@ -33,7 +33,7 @@ public class Character extends Entity{
 	}
 	
 	//getters
-	public int GetHealth() {
+	public double GetHealth() {
 		return Health;
 	}
 	
@@ -41,7 +41,7 @@ public class Character extends Entity{
 		return MaxHealth;
 	}
 
-	public int GetDamage() {
+	public double GetDamage() {
 		return Damage;
 	}
 	
@@ -70,7 +70,7 @@ public class Character extends Entity{
 		isAttacking = b;
 	}
 	
-	public void SetHealth(int NewHealth) {
+	public void SetHealth(double NewHealth) {
 		Health = NewHealth;
 		if (Health > MaxHealth){
 			Health = MaxHealth;
@@ -81,7 +81,7 @@ public class Character extends Entity{
 		MaxHealth = NewMaxHealth;
 	}
 	
-	public void SetDamage(int NewDamage) {
+	public void SetDamage(double NewDamage) {
 		Damage = NewDamage;
 	}
 	
