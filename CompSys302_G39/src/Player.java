@@ -145,19 +145,6 @@ public class Player extends Character{
 	
 	@Override
 	public Rectangle GetSpecialBounds() {
-//		if(Direction.compareTo("Forward")==0) {
-//			return new Rectangle(X,Y-5,W,H/2);
-//		}
-//		else if(Direction.compareTo("Backwards")==0) {
-//			return new Rectangle(X,Y+5,W,5);
-//		}
-//		else if(Direction.compareTo("Left")==0) {
-//			return new Rectangle(X-5,Y,5,H);
-//		}
-//		else if(Direction.compareTo("Right")==0) {
-//			System.out.println("nice");
-//			return new Rectangle(X+W,Y,10,H);
-//		}
 		return new Rectangle(X-10,Y-10,W+50,H+40);
 	}
 	public Animation getCurrentSprite(String Dirrection, boolean standingStill, boolean isAttacking) {

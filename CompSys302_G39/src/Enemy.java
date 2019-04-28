@@ -5,6 +5,31 @@ public class Enemy extends Character{
 	private boolean Stop= false;
 	protected String type;
 
+	@Override
+	public void TakeDamage(double i) {
+		if(Direction.compareTo("Forward")==0) {
+			Move(0,+20);
+			Stop();
+		}
+		else if(Direction.compareTo("Backwards")==0) {
+			Move(0,-20);
+			Stop();
+		}
+		else if(Direction.compareTo("Left")==0) {
+			Move(+20,0);
+			Stop();
+		}
+		else if(Direction.compareTo("Right")==0) {
+			Move(-20,0);
+			Stop();
+		}
+		
+		Health = Health - i;
+		if (Health < 0) {
+			Health = 0;	
+		}
+	}
+	
 	public void setAggro(boolean NewAggro) {
 		aggro = NewAggro;
 	}
@@ -42,7 +67,7 @@ public class Enemy extends Character{
 			return;
 		}
 		
-		if(StopCounter != 5) {
+		if(StopCounter != 20) {
 			StopCounter++;
 		}
 		else {	
