@@ -411,7 +411,7 @@ public class GameEngine implements ActionListener{
 		SetCurrentKey();
 		
 		Rectangle Rect = new Rectangle(PlayerOne.GetX() + DeltaX, PlayerOne.GetY() + DeltaY, PlayerOne.GetWidth(),PlayerOne.GetHeight());
-		if(Rect.intersects(new Rectangle(50,50,828,524))){	
+		if(Rect.intersects(new Rectangle(150,150,730,430))){	
 			if(PlayerMove) {
 					PlayerOne.Move(DeltaX, DeltaY);
 				}
@@ -423,14 +423,14 @@ public class GameEngine implements ActionListener{
 		}
 		
 		if(MoveMap && PlayerMove) {
-			if(CurrentMap.GetX() > CurrentMap.GetMaxX()-1024) {
+			if(CurrentMap.GetX()+DeltaX > CurrentMap.GetMaxX()-1024) {
 				DeltaX = 0;
 			}
 			else if(CurrentMap.GetX()+DeltaX < 0) {
 				DeltaX = 0;
 			}
 			
-			if(CurrentMap.GetY() > CurrentMap.GetMaxY()-768) {
+			if(CurrentMap.GetY()+DeltaY > CurrentMap.GetMaxY()-768) {
 				DeltaY = 0;
 			}
 			else if(CurrentMap.GetY()+DeltaY < 0) {
