@@ -15,7 +15,7 @@ public class Map {
 	private BufferedImage FullMap = new BufferedImage(3840,3072, BufferedImage.TYPE_INT_ARGB);
 	private BufferedImage Img1;
 	private Graphics g = FullMap.getGraphics();
-	private int Height=12;
+	private int Height=8;
 	private int Width=15;
 	private int dX,dY;
 
@@ -40,6 +40,7 @@ public class Map {
 	}
 	
 	public void Update(int dX, int dY) {
+		
 		X += dX;
 		Y += dY;
 		this.dX += dX;

@@ -640,26 +640,31 @@ public class GameEngine implements ActionListener{
 		}
 		
 		Rectangle Rect = new Rectangle(PlayerOne.GetX() + CurrentMap.GetDeltaX() +DeltaX, PlayerOne.GetY() + CurrentMap.GetDeltaY()+ DeltaY, 25,25);
-		if(Rect.intersects(new Rectangle(MapX, MapY, CurrentMap.GetMaxX()-64, CurrentMap.GetMaxY()-62)))	{	
-			Rect = new Rectangle(PlayerOne.GetX() + DeltaX, PlayerOne.GetY() + DeltaY, PlayerOne.GetWidth(),PlayerOne.GetHeight());
-				if(Rect.intersects(new Rectangle(50,50,828,524))){	
-					if(PlayerMove) {
-							PlayerOne.Move(DeltaX, DeltaY);
-						}
+		Rect = new Rectangle(PlayerOne.GetX() + DeltaX, PlayerOne.GetY() + DeltaY, PlayerOne.GetWidth(),PlayerOne.GetHeight());
+		if(Rect.intersects(new Rectangle(50,50,828,524))){	
+			if(PlayerMove) {
+					PlayerOne.Move(DeltaX, DeltaY);
 				}
-				else {
-					if(CurrentMap.GetDeltaX() >= 0 || CurrentMap.GetDeltaY() >= 0 ) {
-						MoveMap = true;
-					}
-				}
-				
-				if(MoveMap && PlayerMove) {
-					MoveObstacles(DeltaX,DeltaY);
-					MovePickups(DeltaX,DeltaY);
-					MoveEnemies(DeltaX,DeltaY);
-					CurrentMap.Update(DeltaX,DeltaY);	
-				}	
 		}
+		else {
+			if(CurrentMap.GetDeltaX() >= 0 || CurrentMap.GetDeltaY() >= 0 ) {
+				MoveMap = true;
+			}
+		}
+		
+		if(MoveMap && PlayerMove) {
+			if(CurrentMap.GetX() > CurrentMap.GetMaxX()-1024) {
+				DeltaX = 0;
+			}	
+			if(CurrentMap.GetY() > CurrentMap.GetMaxY()-768) {
+				DeltaY = 0;
+			}
+			
+			MoveObstacles(DeltaX,DeltaY);
+			MovePickups(DeltaX,DeltaY);
+			MoveEnemies(DeltaX,DeltaY);
+			CurrentMap.Update(DeltaX,DeltaY);
+		}	
 	}
 	
 	public void PickupItem(int i) {
